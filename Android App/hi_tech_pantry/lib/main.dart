@@ -1,0 +1,163 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+import 'screens/home_page.dart';
+import 'screens/login_page.dart';
+import 'screens/splash_page.dart';
+import 'screens/register_page.dart';
+import 'screens/forgot_password_page.dart';
+
+import 'utils/app_state.dart';
+import 'utils/notification_services.dart';
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+    switch (message.data['type']) {
+      case 'newProduct':
+        NotificationServices.showNotification(
+          title: message.data['name'],
+          content: 'Click to change product information and add an expiration date',
+          channelInfo: NotificationServices.newProductsChannel,
+        );
+        break;
+      case 'expiredProduct':
+        NotificationServices.showNotification(
+          title: message.data['name'],
+          content: 'Expired on ${message.data['expiryDate']}',
+          channelInfo: NotificationServices.expiredProductsChannel,
+        );
+        break;
+      case 'expireSoon':
+        String days = '';
+        switch(message.data['days']) {
+            case '0':
+              days = 'Expires today';
+              break;
+            case '1':
+              days = 'Expires tomorrow';
+              break;
+            default:
+              days = 'Expires in ${message.data['days']} days';
+              break;
+        }
+        NotificationServices.showNotification(
+          title: message.data['name'],
+          content: days,
+          channelInfo: NotificationServices.expireSoonChannel,
+        );
+        break;
+      case 'runningLow':
+        NotificationServices.showNotification(
+          title: message.data['name'],
+          content: 'You only have ${message.data['quantity']} left',
+          channelInfo: NotificationServices.runningLowChannel,
+        );
+        break;
+    }
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationServices.init();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  runApp(ChangeNotifierProvider(
+    create: (context) => ApplicationState(),
+    builder: ((context, child) => const MainApp()),
+  ));
+}
+
+final goRouter = GoRouter(
+    initialLocation: '/splash',
+    routes: [
+      GoRoute(
+        path: '/splash',
+        name: SplashPage.splashName,
+        builder: (context, state) => const SplashPage(),
+      ),
+      GoRoute(
+        path: '/home',
+        name: HomePage.homeName,
+        builder: (context, state) => const HomePage(),
+      ),
+      GoRoute(
+        path: '/login',
+        name: LoginPage.loginName,
+        builder: (context, state) => const LoginPage(),
+        routes: [
+          GoRoute(
+            path: 'forgot-password',
+            name: ForgotPasswordPage.forgotPasswordName,
+            builder: (context, state) => const ForgotPasswordPage(),
+          ),
+          GoRoute(
+            path: 'register',
+            name: RegisterPage.registerName,
+            builder: (context, state) => const RegisterPage(),
+          ),
+        ]
+      )
+    ],
+  );
+
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      title: 'Hi-Tech Pantry',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        brightness: Brightness.light,
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.blue.shade100,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            elevation: 10,
+            textStyle: const TextStyle(
+              fontSize: 24.0,
+              fontWeight: FontWeight.w600,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            minimumSize: const Size(double.infinity, 60),
+          ),
+        ),
+        textTheme: TextTheme(
+          displayLarge: TextStyle(
+            fontSize: 46.0,
+            color: Colors.blue.shade700,
+            fontWeight: FontWeight.w500,
+          ),
+          bodyLarge: const TextStyle(fontSize: 18.0),
+        ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.blue.shade50,
+          shadowColor: Colors.blue.shade900,
+          elevation: 3,
+          centerTitle: true,
+          titleSpacing: 0.0,
+          toolbarHeight: 60,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(25)
+            ),
+          ),
+          titleTextStyle: TextStyle(
+            fontSize: 24.0,
+            fontWeight: FontWeight.w500,
+            color: Colors.blue.shade700,
+          ),
+        ),
+      ),
+      routerConfig: goRouter,
+    );
+  }
+}
