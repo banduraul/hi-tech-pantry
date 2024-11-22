@@ -22,4 +22,4 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - lib/service_account/credentials.json
+    - lib/assets/credentials.json
