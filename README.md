@@ -1,2 +1,3 @@
-# hi-tech-pantry
-A dual-application system for an automated pantry inventory
+# Hi-Tech Pantry
+
+A dual-application system for an automated pantry inventory.
