@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 import '../utils/firebase_admin.dart';
 
@@ -135,17 +134,13 @@ class _BarcodeScanPageState extends State<BarcodeScanPage> {
             flex: 2,
             child: Container(
               color: Colors.blue.shade300,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  QrImageView(
-                    data: 'Deposit/Withdraw',
-                    version: QrVersions.auto,
-                    size: 150.0,
-                  ),
-                  const Text('Deposit/Withdraw', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
-                ],
-              ),
+              child: const Center(
+                child: Image(
+                  image: AssetImage('lib/assets/icon.png'),
+                  width: 300,
+                  height: 300,
+                ),
+              )
             )
           )
         ],
