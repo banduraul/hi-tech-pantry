@@ -65,9 +65,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         builder: (context, constraints) => Column(children: [
           Expanded(child: mainArea),
           SafeArea(
+            top: false,
             child: BottomNavigationBar(
               selectedItemColor: Colors.black,
-              backgroundColor: Colors.blue.shade200,
+              backgroundColor: Colors.blue.shade300,
               items: const [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.local_grocery_store_rounded),

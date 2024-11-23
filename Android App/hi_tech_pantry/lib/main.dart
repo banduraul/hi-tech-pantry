@@ -18,7 +18,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       case 'newProduct':
         NotificationServices.showNotification(
           title: message.data['name'],
-          content: 'Click to change product information and add an expiration date',
+          content: 'Click to add an expiration date and change product information if needed',
           channelInfo: NotificationServices.newProductsChannel,
         );
         break;
@@ -115,6 +115,13 @@ class MainApp extends StatelessWidget {
         brightness: Brightness.light,
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.blue.shade100,
+        cardTheme: CardTheme(
+          color: Colors.grey.shade200,
+          elevation: 10,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             elevation: 10,

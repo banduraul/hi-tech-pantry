@@ -49,10 +49,6 @@ class _LoginPageState extends State<LoginPage> {
           _focusPassword.unfocus();
         },
         child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: const Text('Hi-Tech Pantry'),
-          ),
           body: Padding(
             padding: const EdgeInsets.only(left: 24.0, right: 24.0),
             child: Column(

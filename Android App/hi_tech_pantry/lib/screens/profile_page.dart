@@ -34,11 +34,11 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Hi-Tech Pantry - Profile'),
+        title: const Text('Profile'),
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10, top: 100),
+          padding: const EdgeInsets.only(left: 10, right: 10, top: 100, bottom: 10),
           child: Column(
             children: [
               QrImageView(

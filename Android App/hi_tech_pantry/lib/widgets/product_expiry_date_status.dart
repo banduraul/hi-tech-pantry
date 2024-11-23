@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ProductExpiryDateStatus extends StatelessWidget {
-  const ProductExpiryDateStatus({super.key, required this.icon, required this.expiryDate, required this.color});
+  const ProductExpiryDateStatus({
+    super.key,
+    required this.icon,
+    required this.expiryDate,
+    required this.color
+  });
 
   final IconData icon;
   final String expiryDate;

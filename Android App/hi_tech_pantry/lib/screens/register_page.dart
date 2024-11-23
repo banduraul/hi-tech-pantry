@@ -43,7 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: const Text('Hi-Tech Pantry - Register'),
+          title: const Text('Create Account'),
         ),
         body: SingleChildScrollView(
           reverse: true,

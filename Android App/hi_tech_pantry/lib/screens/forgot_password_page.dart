@@ -31,7 +31,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Hi-Tech Pantry - Reset Password'),
+          title: const Text('Reset Password'),
         ),
         body: Padding(
           padding: const EdgeInsets.only(left: 24.0, right: 24.0),
