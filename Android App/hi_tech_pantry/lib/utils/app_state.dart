@@ -24,6 +24,9 @@ class ApplicationState extends ChangeNotifier {
   List<ProductInfo> _productInfo = [];
   List<ProductInfo> get productInfo => _productInfo;
 
+  bool _hasExpiredProducts = false;
+  bool get hasExpiredProducts => _hasExpiredProducts;
+
   Future<void> init() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform
@@ -47,10 +50,13 @@ class ApplicationState extends ChangeNotifier {
                   finishedEditing: document.data()['finishedEditing'] as bool,
                   quantity: document.data()['quantity'] as int,
                   expiryDate: document.data()['expiryDate']?.toDate() as DateTime?,
-                  docId: document.id
+                  docId: document.id,
+                  isExpired: document.data()['isExpired'] as bool
                 ),
               );
             }
+            
+            _hasExpiredProducts = _productInfo.any((product) => product.isExpired);
 
             _productInfo.sort((a, b) {
               if (a.expiryDate == null && b.expiryDate == null) {

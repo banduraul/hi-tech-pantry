@@ -21,12 +21,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     if (productInfo.finishedEditing) {
       final expiryDate = DateFormat('dd/MM/yyyy').format(productInfo.expiryDate!);
-      final isBefore = productInfo.expiryDate!.isBefore(
-        DateFormat('dd/MM/yyyy').parse(
-          DateFormat('dd/MM/yyyy').format(DateTime.now())
-        )
-      );
-      if (isBefore) {
+      if (productInfo.isExpired) {
         return Dismissible(
           background: Container(
             decoration: BoxDecoration(
@@ -66,7 +61,7 @@ class ProductCard extends StatelessWidget {
               trailing: Text(
                 productInfo.quantity.toString(),
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold,
                   color: Colors.black
                 )
@@ -100,9 +95,9 @@ class ProductCard extends StatelessWidget {
           trailing: Text(
             productInfo.quantity.toString(),
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 25,
               fontWeight: FontWeight.bold,
-              color: Colors.black
+              color: productInfo.quantity > 3 ? Colors.black : Colors.red.shade900
             )
           ),
         ),

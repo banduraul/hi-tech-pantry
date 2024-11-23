@@ -20,6 +20,7 @@ class ProductExpiryDateStatus extends StatelessWidget {
           icon,
           color: color,
         ),
+        const SizedBox(width: 5.0),
         Text(
           expiryDate,
           style: TextStyle(color: color),

@@ -5,7 +5,8 @@ class ProductInfo {
     required this.finishedEditing,
     required this.quantity,
     required this.expiryDate,
-    this.docId = ""
+    this.docId = "",
+    this.isExpired = false
   });
 
   final String eancode;
@@ -14,6 +15,7 @@ class ProductInfo {
   final int quantity;
   final DateTime? expiryDate;
   String docId = "";
+  bool isExpired = false;
 
   Map<String, dynamic> toFirestore() {
     return {
@@ -21,14 +23,8 @@ class ProductInfo {
       'name': name,
       'finishedEditing': finishedEditing,
       'quantity': quantity,
-      'expiryDate': expiryDate
+      'expiryDate': expiryDate,
+      'isExpired': isExpired
     };
   }
-
-  ProductInfo.fromMap(Map<dynamic, dynamic> data)
-    : eancode = data['eancode'],
-      name = data['name'],
-      finishedEditing = data['finishedEditing'],
-      quantity = data['quantity'],
-      expiryDate = data['expiryDate'] == null ? null : DateTime.fromMillisecondsSinceEpoch(data['expiryDate'].seconds * 1000);
 }
