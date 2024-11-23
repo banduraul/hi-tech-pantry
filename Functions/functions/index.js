@@ -144,3 +144,33 @@ exports.productsRunningLowNotification = onSchedule({schedule: "every day 10:00"
             })
         });
 });
+
+exports.checkExpiredProducts = onSchedule({schedule: "every day 00:00", region: "europe-west1", timeZone: "Europe/London"}, () => {
+    getFirestore()
+        .collection("users")
+        .get().then((snapshot) => {
+            snapshot.forEach(async (doc) => {
+                const today = new Date();
+                today.setUTCHours(0, 0, 0, 0);
+
+                const expiredProducts = await getFirestore()
+                    .collection("users")
+                    .doc(doc.id)
+                    .collection("products")
+                    .where("expiryDate", "<", today)
+                    .get();
+                if (expiredProducts.docs.length > 0) {
+                    expiredProducts.docs.forEach(async (document) => {
+                        await getFirestore()
+                            .collection("users")
+                            .doc(doc.id)
+                            .collection("products")
+                            .doc(document.id)
+                            .set({
+                                isExpired: true,
+                            }, {merge: true});
+                    });
+                }
+            })
+        });
+});
