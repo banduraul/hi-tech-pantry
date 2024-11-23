@@ -31,14 +31,11 @@ exports.expiredProductsNotification = onSchedule({schedule: "every day 09:00", r
         .collection("users")
         .get().then((snapshot) => {
             snapshot.forEach(async (doc) => {
-                const today = new Date();
-                today.setUTCHours(0, 0, 0, 0);
-
                 const expiredProducts = await getFirestore()
                     .collection("users")
                     .doc(doc.id)
                     .collection("products")
-                    .where("expiryDate", "<", today)
+                    .where("isExpired", "==", true)
                     .get();
                 if (expiredProducts.docs.length > 0) {
                     const document = await getFirestore()
