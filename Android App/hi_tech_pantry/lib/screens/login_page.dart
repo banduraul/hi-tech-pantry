@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hi_tech_pantry/screens/products_page.dart';
 
-import 'home_page.dart';
 import 'register_page.dart';
 import 'forgot_password_page.dart';
 
@@ -151,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                                         if (message != null) {
                                           if (message.contains('Success')) {
                                             if (context.mounted) {
-                                              context.goNamed(HomePage.homeName);
+                                              context.goNamed(ProductsPage.productsName);
                                             }
                                           } else {
                                               Fluttertoast.showToast(

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
-import 'home_page.dart';
 import 'login_page.dart';
+import 'products_page.dart';
 
 import '../utils/app_state.dart';
 
@@ -22,7 +22,7 @@ class SplashPage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (appState.isLoggedIn) {
-              context.goNamed(HomePage.homeName);
+              context.goNamed(ProductsPage.productsName);
             } else {
               context.goNamed(LoginPage.loginName);
             }

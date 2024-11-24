@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+
+import '../screens/profile_page.dart';
 
 import '../utils/app_state.dart';
 
@@ -7,6 +10,8 @@ import '../widgets/product_card.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
+
+  static const String productsName = 'products';
 
   @override
   State<ProductsPage> createState() => _ProductsPageState();
@@ -66,7 +71,7 @@ class _ProductsPageState extends State<ProductsPage> {
                       ),
                     AppBar(
                       title: Padding(
-                        padding: const EdgeInsets.only(left: 70),
+                        padding: const EdgeInsets.only(left: 20),
                         child: AnimatedSwitcher(
                           duration: const Duration(milliseconds: 400),
                           transitionBuilder: (child, animation) {
@@ -98,24 +103,34 @@ class _ProductsPageState extends State<ProductsPage> {
                               ),
                         ),
                       ),
+                      leading: IconButton(
+                        icon: Icon(
+                          _isSearching
+                            ? Icons.close
+                            : Icons.search,
+                          color: Colors.black,
+                          size: 27,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isSearching = !_isSearching;
+                            if (!_isSearching) {
+                              _searchQuery = '';
+                            }
+                          });
+                        },
+                      ),
                       actions: [
                         Padding(
                           padding: const EdgeInsets.only(right: 10),
                           child: IconButton(
                             icon: Icon(
-                              _isSearching
-                                ? Icons.close
-                                : Icons.search,
+                              Icons.person_rounded,
                               color: Colors.black,
                               size: 27,
                             ),
                             onPressed: () {
-                              setState(() {
-                                _isSearching = !_isSearching;
-                                if (!_isSearching) {
-                                  _searchQuery = '';
-                                }
-                              });
+                              context.pushNamed(ProfilePage.profileName);
                             },
                           ),
                         ),

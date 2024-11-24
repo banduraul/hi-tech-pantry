@@ -14,6 +14,8 @@ import '../widgets/delete_account_dialog.dart';
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
+  static const String profileName = 'profile';
+
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }

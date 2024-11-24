@@ -3,10 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'screens/home_page.dart';
 import 'screens/login_page.dart';
 import 'screens/splash_page.dart';
+import 'screens/profile_page.dart';
 import 'screens/register_page.dart';
+import 'screens/products_page.dart';
 import 'screens/forgot_password_page.dart';
 
 import 'utils/app_state.dart';
@@ -78,9 +79,16 @@ final goRouter = GoRouter(
         builder: (context, state) => const SplashPage(),
       ),
       GoRoute(
-        path: '/home',
-        name: HomePage.homeName,
-        builder: (context, state) => const HomePage(),
+        path: '/products',
+        name: ProductsPage.productsName,
+        builder: (context, state) => const ProductsPage(),
+        routes: [
+          GoRoute(
+            path: 'profile',
+            name: ProfilePage.profileName,
+            builder: (context, state) => const ProfilePage(),
+          ), 
+        ]
       ),
       GoRoute(
         path: '/login',

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'home_page.dart';
+import 'products_page.dart';
 
 import '../utils/database.dart';
 import '../utils/validator.dart';
@@ -189,7 +189,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           if (message != null) {
                                             if (message.contains('Success')) {
                                               if (context.mounted) {
-                                                context.goNamed(HomePage.homeName);
+                                                context.goNamed(ProductsPage.productsName);
                                               }
                                             } else {
                                               Fluttertoast.showToast(
