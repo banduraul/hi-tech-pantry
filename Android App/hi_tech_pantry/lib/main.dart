@@ -151,12 +151,13 @@ class MainApp extends StatelessWidget {
           elevation: 3,
           centerTitle: true,
           titleSpacing: 0.0,
-          toolbarHeight: 60,
+          toolbarHeight: 50,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(25)
             ),
           ),
+          foregroundColor: Colors.blue.shade700,
           titleTextStyle: TextStyle(
             fontSize: 24.0,
             fontWeight: FontWeight.w500,
