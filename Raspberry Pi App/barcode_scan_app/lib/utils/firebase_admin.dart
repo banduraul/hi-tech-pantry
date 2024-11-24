@@ -16,7 +16,7 @@ class FirebaseAdmin {
   static late String tokenAPI;
 
   static Future<void> init() async {
-    final credentialsFile = await rootBundle.loadString('lib/service_account/credentials.json');
+    final credentialsFile = await rootBundle.loadString('lib/assets/credentials.json');
     final credentials = jsonDecode(credentialsFile) as Map<String, dynamic>;
     admin = FirebaseAdminApp.initializeApp(
       credentials['projectId'],
