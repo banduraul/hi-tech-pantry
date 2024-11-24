@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../screens/profile_page.dart';
 
 import '../utils/app_state.dart';
+import '../utils/notification_services.dart';
 
 import '../widgets/product_card.dart';
 
@@ -20,6 +21,25 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   bool _isSearching = false;
   String _searchQuery = '';
+
+  late final AppLifecycleListener _appLifecycleListener;
+
+  @override
+  void initState() {
+    super.initState();
+    NotificationServices.flutterLocalNotificationsPlugin.cancelAll();
+    _appLifecycleListener = AppLifecycleListener(
+      onResume: () {
+        NotificationServices.flutterLocalNotificationsPlugin.cancelAll();
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _appLifecycleListener.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
