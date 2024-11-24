@@ -164,6 +164,17 @@ class Database {
       
       await FirebaseFirestore.instance
         .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('products')
+        .get()
+        .then((snapshot) {
+          for (DocumentSnapshot doc in snapshot.docs) {
+            doc.reference.delete();
+          }
+        });
+
+      await FirebaseFirestore.instance
+        .collection('users')
         .doc(auth.currentUser!.uid).delete();
 
       await FirebaseFirestore.instance
