@@ -110,15 +110,12 @@ exports.productsRunningLowNotification = onSchedule({schedule: "every day 10:00"
         .collection("users")
         .get().then((snapshot) => {
             snapshot.forEach(async (doc) => {
-                const today = new Date();
-                today.setUTCHours(0, 0, 0, 0);
-                
                 const runningLowProducts = await getFirestore()
                     .collection("users")
                     .doc(doc.id)
                     .collection("products")
+                    .where("isExpired", "==", false)
                     .where("quantity", "<=", 3)
-                    .where("expiryDate", ">=", today)
                     .get();
                 if (runningLowProducts.docs.length > 0) {
                     const document = await getFirestore()
