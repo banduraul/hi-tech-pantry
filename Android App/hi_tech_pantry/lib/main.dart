@@ -81,29 +81,84 @@ final goRouter = GoRouter(
       GoRoute(
         path: '/products',
         name: ProductsPage.productsName,
-        builder: (context, state) => const ProductsPage(),
+        pageBuilder: (context, state) => CustomTransitionPage<void>(
+          key: state.pageKey,
+          child: const ProductsPage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) => ScaleTransition(
+            scale: animation,
+            child: child,
+          ),
+          transitionDuration: const Duration(milliseconds: 400),
+        ),
         routes: [
           GoRoute(
             path: 'profile',
             name: ProfilePage.profileName,
-            builder: (context, state) => const ProfilePage(),
+            pageBuilder: (context, state) => CustomTransitionPage<void>(
+              key: state.pageKey,
+              child: const ProfilePage(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) => SlideTransition(
+                position: animation.drive(
+                  Tween<Offset>(
+                    begin: const Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).chain(CurveTween(curve: Curves.easeIn)),
+                ),
+                child: child,
+              ),
+              transitionDuration: const Duration(milliseconds: 400),
+            ),
           ), 
         ]
       ),
       GoRoute(
         path: '/login',
         name: LoginPage.loginName,
-        builder: (context, state) => const LoginPage(),
+        pageBuilder: (context, state) => CustomTransitionPage<void>(
+              key: state.pageKey,
+              child: const LoginPage(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) => ScaleTransition(
+                scale: animation,
+                child: child,
+              ),
+              transitionDuration: const Duration(milliseconds: 400),
+        ),
         routes: [
           GoRoute(
             path: 'forgot-password',
             name: ForgotPasswordPage.forgotPasswordName,
-            builder: (context, state) => const ForgotPasswordPage(),
+            pageBuilder: (context, state) => CustomTransitionPage<void>(
+              key: state.pageKey,
+              child: const ForgotPasswordPage(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) => SlideTransition(
+                position: animation.drive(
+                  Tween<Offset>(
+                    begin: const Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).chain(CurveTween(curve: Curves.easeIn)),
+                ),
+                child: child,
+              ),
+              transitionDuration: const Duration(milliseconds: 400),
+            ),
           ),
           GoRoute(
             path: 'register',
             name: RegisterPage.registerName,
-            builder: (context, state) => const RegisterPage(),
+            pageBuilder: (context, state) => CustomTransitionPage<void>(
+              key: state.pageKey,
+              child: const RegisterPage(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) => SlideTransition(
+                position: animation.drive(
+                  Tween<Offset>(
+                    begin: const Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).chain(CurveTween(curve: Curves.easeIn)),
+                ),
+                child: child,
+              ),
+              transitionDuration: const Duration(milliseconds: 400),
+            ),
           ),
         ]
       )
