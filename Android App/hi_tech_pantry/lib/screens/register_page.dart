@@ -19,10 +19,12 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _registerFormKey = GlobalKey<FormState>();
 
+  final _usernameTextController = TextEditingController();
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
   final _confirmPasswordTextController = TextEditingController();
 
+  final _focusUsername = FocusNode();
   final _focusEmail = FocusNode();
   final _focusPassword = FocusNode();
   final _focusConfirmPassword = FocusNode();
@@ -64,6 +66,23 @@ class _RegisterPageState extends State<RegisterPage> {
                     key: _registerFormKey,
                     child: Column(
                       children: [
+                        TextFormField(
+                          controller: _usernameTextController,
+                          focusNode: _focusUsername,
+                          validator: (value) => Validator.validateUsername(
+                              username: value,
+                          ),
+                          decoration: InputDecoration(
+                            labelText: 'Username',
+                            hintText: 'Username',
+                            alignLabelWithHint: false,
+                            filled: true,
+                            fillColor: Colors.blue.shade50,
+                            border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+                            prefixIcon: const Icon(Icons.person_rounded, size: 24)
+                          ),
+                        ),
+                        const SizedBox(height: 16.0),
                         TextFormField(
                           controller: _emailTextController,
                           focusNode: _focusEmail,
@@ -177,10 +196,25 @@ class _RegisterPageState extends State<RegisterPage> {
                                           setState(() {
                                             _isProcessing = true;
                                           });
+                                          final isUsernameAvailable = await Database
+                                              .isUsernameAvailable(
+                                            username: _usernameTextController.text,
+                                          );
+                                          if (!isUsernameAvailable) {
+                                            Fluttertoast.showToast(
+                                              msg: 'Username is already taken',
+                                              toastLength: Toast.LENGTH_SHORT,
+                                            );
+                                            setState(() {
+                                              _isProcessing = false;
+                                            });
+                                            return;
+                                          }
                                           final message = await Database
                                               .registerUsingEmailPassword(
                                             email: _emailTextController.text,
                                             password: _passwordTextController.text,
+                                            username: _usernameTextController.text,
                                           );
           
                                           setState(() {

@@ -10,6 +10,7 @@ class Database {
   static Future<String?> registerUsingEmailPassword({
     required String email,
     required String password,
+    required String username,
   }) async {
     FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -30,6 +31,15 @@ class Database {
           'pushTokens': [fcmToken],
         });
 
+      await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userCredential.user!.uid)
+        .set({
+          'username': username,
+        });
+
+      await userCredential.user!.updateDisplayName(username);
+
       message = 'Success';
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
@@ -40,6 +50,15 @@ class Database {
     }
 
     return message;
+  }
+
+  static Future<bool> isUsernameAvailable({required String username}) async {
+    final snapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .where('username', isEqualTo: username)
+      .get();
+
+    return snapshot.docs.isEmpty;
   }
 
   static Future<String?> signInUsingEmailPassword({
