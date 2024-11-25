@@ -54,6 +54,21 @@ class _ProductsPageState extends State<ProductsPage> {
               children: [
                 AppBar(
                   title: Text('Products'),
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.person_rounded,
+                          color: Colors.black,
+                          size: 27,
+                        ),
+                        onPressed: () {
+                          context.pushNamed(ProfilePage.profileName);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 Expanded(
                   child: Center(
