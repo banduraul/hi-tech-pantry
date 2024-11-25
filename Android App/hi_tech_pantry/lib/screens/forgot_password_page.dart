@@ -61,7 +61,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           filled: true,
                           fillColor: Colors.blue.shade50,
                           border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-                          prefixIcon: const Icon(Icons.person_rounded, size: 24),
+                          prefixIcon: const Icon(Icons.email_rounded, size: 24),
                         ),
                       ),
                       const SizedBox(height: 32.0),
