@@ -40,6 +40,8 @@ class Database {
 
       await userCredential.user!.updateDisplayName(username);
 
+      await userCredential.user!.sendEmailVerification();
+
       message = 'Success';
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {

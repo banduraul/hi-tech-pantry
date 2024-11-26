@@ -27,10 +27,44 @@ class ApplicationState extends ChangeNotifier {
   bool _hasExpiredProducts = false;
   bool get hasExpiredProducts => _hasExpiredProducts;
 
+  String _userEmail = '';
+  String get userEmail => _userEmail;
+
+  bool _isUserEmailVerified = false;
+  bool get isUserEmailVerified => _isUserEmailVerified;
+
+  String _userDisplayName = '';
+  String get userDisplayName => _userDisplayName;
+
+  Future<void> sendEmailVerification() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await user.sendEmailVerification();
+    }
+  }
+
+  static Future<void> refreshUser() async {
+    await FirebaseAuth.instance.currentUser!.reload();
+  }
+
   Future<void> init() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform
     );
+
+    FirebaseAuth.instance.userChanges().listen((user) async {
+      if (user != null) {
+        _userEmail = user.email ?? '';
+        _isUserEmailVerified = user.emailVerified;
+        _userDisplayName = user.displayName ?? '';
+      } else {
+        _userEmail = '';
+        _isUserEmailVerified = false;
+        _userDisplayName = '';
+      }
+
+      notifyListeners();
+    });
 
     FirebaseAuth.instance.authStateChanges().listen((user) async {
       if (user != null) {
