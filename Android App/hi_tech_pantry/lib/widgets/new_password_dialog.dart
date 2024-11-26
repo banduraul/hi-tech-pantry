@@ -36,7 +36,7 @@ class _NewPasswordDialogState extends State<NewPasswordDialog> {
       content: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(
-          height: 182,
+          height: 230,
           width: 300,
           child: Form(
             key: _formKey,
@@ -109,44 +109,43 @@ class _NewPasswordDialogState extends State<NewPasswordDialog> {
                   validator: (value) => Validator.validateConfirmPassword(password: _newPasswordController.text, confirmPassword: _confirmNewPasswordController.text),
                   focusNode: _focusConfirmNewPassword,
                 ),
+                const Spacer(),
+                _isProcessing
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            _isProcessing = true;
+                          });
+                          final message = await Database.updatePassword(newPassword: _newPasswordController.text);
+                          setState(() {
+                            _isProcessing = false;
+                          });
+                          if (message.contains('Success')) {
+                            Fluttertoast.showToast(
+                              msg: 'Password updated successfully',
+                              toastLength: Toast.LENGTH_SHORT,
+                            );
+                            final message = await Database.signOut();
+                            if (message.contains('Success')) {
+                              if (context.mounted) {
+                                context.goNamed(LoginPage.loginName);
+                              }
+                            }
+                          }
+                        }
+                      },
+                      child: const Text(
+                        'Change',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
               ],
             ),
           ),
         ),
       ),
-      actions: [
-        _isProcessing
-        ? const CircularProgressIndicator(color: Colors.blue)
-        : ElevatedButton(
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                setState(() {
-                  _isProcessing = true;
-                });
-                final message = await Database.updatePassword(newPassword: _newPasswordController.text);
-                setState(() {
-                  _isProcessing = false;
-                });
-                if (message.contains('Success')) {
-                  Fluttertoast.showToast(
-                    msg: 'Password updated successfully',
-                    toastLength: Toast.LENGTH_SHORT,
-                  );
-                  final message = await Database.signOut();
-                  if (message.contains('Success')) {
-                    if (context.mounted) {
-                      context.goNamed(LoginPage.loginName);
-                    }
-                  }
-                }
-              }
-            },
-            child: const Text(
-              'Change',
-              style: TextStyle(color: Colors.white),
-            ),
-          )
-      ],
     );
   }
 }

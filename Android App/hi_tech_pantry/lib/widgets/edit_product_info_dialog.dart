@@ -53,7 +53,7 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(
           width: 300,
-          height: 200,
+          height: 280,
           child: Form(
             key: _formKey,
             child: Column(
@@ -118,56 +118,55 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
                     }
                   },
                 ),
+                const Spacer(),
+                _isProcessing
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            _isProcessing = true;
+                          });
+
+                          final message = await Database.updateProductInfo(
+                            productInfo: ProductInfo(
+                              docId: widget.productInfo.docId,
+                              eancode: widget.productInfo.eancode,
+                              name: _nameController.text,
+                              finishedEditing: true,
+                              quantity: int.parse(_quantityController.text),
+                              expiryDate: DateFormat('dd/MM/yyyy').parse(_expiryDateController.text)
+                            )
+                          );
+                          setState(() {
+                            _isProcessing = false;
+                          });
+                          if (message.contains('Success')) {
+                            Fluttertoast.showToast(
+                              msg: 'Product info updated successfully',
+                              toastLength: Toast.LENGTH_SHORT,
+                            );
+                            if (context.mounted) {
+                              context.pop();
+                            }
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: 'Failed to update product info. Please try again',
+                              toastLength: Toast.LENGTH_SHORT,
+                            );
+                          }
+                        }
+                      },
+                      child: const Text(
+                        'Update',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
               ],
             ),
           ),
         ),
       ),
-      actions: [
-        _isProcessing
-        ? const CircularProgressIndicator(color: Colors.blue)
-        : ElevatedButton(
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                setState(() {
-                  _isProcessing = true;
-                });
-
-                final message = await Database.updateProductInfo(
-                  productInfo: ProductInfo(
-                    docId: widget.productInfo.docId,
-                    eancode: widget.productInfo.eancode,
-                    name: _nameController.text,
-                    finishedEditing: true,
-                    quantity: int.parse(_quantityController.text),
-                    expiryDate: DateFormat('dd/MM/yyyy').parse(_expiryDateController.text)
-                  )
-                );
-                setState(() {
-                  _isProcessing = false;
-                });
-                if (message.contains('Success')) {
-                  Fluttertoast.showToast(
-                    msg: 'Product info updated successfully',
-                    toastLength: Toast.LENGTH_SHORT,
-                  );
-                  if (context.mounted) {
-                    context.pop();
-                  }
-                } else {
-                  Fluttertoast.showToast(
-                    msg: 'Failed to update product info. Please try again',
-                    toastLength: Toast.LENGTH_SHORT,
-                  );
-                }
-              }
-            },
-            child: const Text(
-              'Update',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-      ],
     );
   }
 }

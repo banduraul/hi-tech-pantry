@@ -60,7 +60,6 @@ class _ProductsPageState extends State<ProductsPage> {
                       child: IconButton(
                         icon: Icon(
                           Icons.person_rounded,
-                          color: Colors.black,
                           size: 27,
                         ),
                         onPressed: () {
@@ -134,7 +133,6 @@ class _ProductsPageState extends State<ProductsPage> {
                             : Text(
                                 'Products',
                                 key: ValueKey('title'),
-                                style: TextStyle(color: Colors.blue.shade700)
                               ),
                         ),
                       ),
@@ -143,7 +141,6 @@ class _ProductsPageState extends State<ProductsPage> {
                           _isSearching
                             ? Icons.close
                             : Icons.search,
-                          color: Colors.black,
                           size: 27,
                         ),
                         onPressed: () {
@@ -161,7 +158,6 @@ class _ProductsPageState extends State<ProductsPage> {
                           child: IconButton(
                             icon: Icon(
                               Icons.person_rounded,
-                              color: Colors.black,
                               size: 27,
                             ),
                             onPressed: () {
