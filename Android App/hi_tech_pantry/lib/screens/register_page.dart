@@ -38,6 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     return GestureDetector(
       onTap: () {
+        _focusUsername.unfocus();
         _focusEmail.unfocus();
         _focusPassword.unfocus();
         _focusConfirmPassword.unfocus();
