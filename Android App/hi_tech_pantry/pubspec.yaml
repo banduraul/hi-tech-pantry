@@ -20,6 +20,11 @@ dependencies:
   firebase_messaging: ^15.1.4
   flutter_local_notifications: ^18.0.0
   bad_words: ^0.3.0
+  firebase_storage: ^12.3.6
+  image_picker: ^1.1.2
+  image_picker_android: ^0.8.12+17
+  image_picker_platform_interface: ^2.10.0
+  app_settings: ^5.1.1
 
 dev_dependencies:
   flutter_test:
@@ -28,3 +33,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/

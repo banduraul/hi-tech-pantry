@@ -36,6 +36,9 @@ class ApplicationState extends ChangeNotifier {
   String _userDisplayName = '';
   String get userDisplayName => _userDisplayName;
 
+  String _userPhotoUrl = '';
+  String get userPhotoUrl => _userPhotoUrl;
+
   Future<void> sendEmailVerification() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -57,10 +60,12 @@ class ApplicationState extends ChangeNotifier {
         _userEmail = user.email ?? '';
         _isUserEmailVerified = user.emailVerified;
         _userDisplayName = user.displayName ?? '';
+        _userPhotoUrl = user.photoURL ?? '';
       } else {
         _userEmail = '';
         _isUserEmailVerified = false;
         _userDisplayName = '';
+        _userPhotoUrl = '';
       }
 
       notifyListeners();

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:image_picker_android/image_picker_android.dart';
+import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 
 import 'screens/login_page.dart';
 import 'screens/splash_page.dart';
@@ -63,6 +65,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationServices.init();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  final ImagePickerPlatform imagePickerPlatform = ImagePickerPlatform.instance;
+  if (imagePickerPlatform is ImagePickerAndroid) {
+    imagePickerPlatform.useAndroidPhotoPicker = true;
+  }
 
   runApp(ChangeNotifierProvider(
     create: (context) => ApplicationState(),
