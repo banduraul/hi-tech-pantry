@@ -119,8 +119,8 @@ class _DeleteAccountDialog extends State<DeleteAccountDialog> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red.shade700,
-                        foregroundColor: Colors.white,
+                        backgroundColor: isDarkMode ? Colors.red.shade900 : Colors.red.shade700,
+                        foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
                       ),
                       child: const Text('Delete'),
                     )
