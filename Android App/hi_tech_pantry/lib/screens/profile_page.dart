@@ -13,9 +13,9 @@ import '../utils/theme_provider.dart';
 import '../widgets/qr_code_dialog.dart';
 import '../widgets/bottom_modal_sheet.dart';
 import '../widgets/change_theme_dialog.dart';
-import '../widgets/check_password_dialog.dart';
 import '../widgets/delete_account_dialog.dart';
 import '../widgets/change_username_dialog.dart';
+import '../widgets/reauthenticate_user_dialog.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -222,34 +222,6 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 10),
             Consumer<ApplicationState>(
-              builder: (context, appState, _) => GestureDetector(
-                onTap: () {
-                  Fluttertoast.showToast(
-                    msg: 'Email needs to be verified first',
-                    toastLength: Toast.LENGTH_SHORT,
-                  );
-                },
-                child: ElevatedButton(
-                  onPressed: appState.isUserEmailVerified ? () {
-                    debugPrint('Two-Factor Authentication');
-                  } : null,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Row(
-                      children: [
-                        Icon(Icons.lock_person_rounded),
-                        SizedBox(width: 40),
-                        Text('Two-Factor Authentication', style: TextStyle(fontSize: 20)),
-                        Spacer(),
-                        Icon(Icons.arrow_right_rounded, size: 40)
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Consumer<ApplicationState>(
               builder: (context, appState, _) => ElevatedButton(
                 onPressed: () {
                   showDialog(
@@ -274,7 +246,7 @@ class _ProfilePageState extends State<ProfilePage> {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (context) => const CheckPasswordDialog()
+                  builder: (context) => const ReauthenticateUserDialog()
                 );
               },
               child: const Padding(

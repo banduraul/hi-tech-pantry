@@ -1,12 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/services.dart';
 
 import '../data_classes/product_info.dart';
 
@@ -207,9 +205,7 @@ class Database {
         .collection('fcmTokens')
         .doc(auth.currentUser!.uid).delete();
 
-      final credentialsFile = await rootBundle.loadString('assets/credentials.json');
-      final credentials = jsonDecode(credentialsFile) as Map<String, dynamic>;
-      final storageRef = FirebaseStorage.instanceFor(bucket: credentials['bucket']).ref(auth.currentUser!.uid);
+      final storageRef = FirebaseStorage.instance.ref(auth.currentUser!.uid);
 
       await storageRef.child('picture.jpg').delete();
 
@@ -297,9 +293,7 @@ class Database {
 
     try {
       final auth = FirebaseAuth.instance;
-      final credentialsFile = await rootBundle.loadString('assets/credentials.json');
-      final credentials = jsonDecode(credentialsFile) as Map<String, dynamic>;
-      final storageRef = FirebaseStorage.instanceFor(bucket: credentials['bucket']).ref(auth.currentUser!.uid);
+      final storageRef = FirebaseStorage.instance.ref(auth.currentUser!.uid);
       await storageRef.child('picture.jpg').putFile(image);
       final downloadURL = await storageRef.child('picture.jpg').getDownloadURL();
       await auth.currentUser!.updatePhotoURL(downloadURL);

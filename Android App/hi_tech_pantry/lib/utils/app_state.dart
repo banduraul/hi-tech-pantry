@@ -52,6 +52,7 @@ class ApplicationState extends ChangeNotifier {
 
   Future<void> init() async {
     await Firebase.initializeApp(
+      name: 'barcode-application-252b9',
       options: DefaultFirebaseOptions.currentPlatform
     );
 

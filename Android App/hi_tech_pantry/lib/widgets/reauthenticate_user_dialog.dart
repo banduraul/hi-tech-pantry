@@ -7,14 +7,14 @@ import '../widgets/new_password_dialog.dart';
 import '../utils/database.dart';
 import '../utils/validator.dart';
 
-class CheckPasswordDialog extends StatefulWidget {
-  const CheckPasswordDialog({super.key});
+class ReauthenticateUserDialog extends StatefulWidget {
+  const ReauthenticateUserDialog({super.key});
 
   @override
-  State<CheckPasswordDialog> createState() => _CheckPasswordDialogState();
+  State<ReauthenticateUserDialog> createState() => _ReauthenticateUserDialogState();
 }
 
-class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
+class _ReauthenticateUserDialogState extends State<ReauthenticateUserDialog> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
 
@@ -107,7 +107,7 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
                           }
                         }
                       },
-                      child: const Text('Change'),
+                      child: const Text('Continue'),
                   )
               ],
             ),
