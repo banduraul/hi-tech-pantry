@@ -88,7 +88,7 @@ class BottomModalSheet extends StatelessWidget {
               await getImageFromCamera();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.blue,
               foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
             ),
             child: const Text('Take a picture', style: TextStyle(fontSize: 20)),
