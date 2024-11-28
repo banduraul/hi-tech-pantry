@@ -22,40 +22,47 @@ class ProductCard extends StatelessWidget {
     if (productInfo.finishedEditing) {
       final expiryDate = DateFormat('dd/MM/yyyy').format(productInfo.expiryDate!);
       if (productInfo.isExpired) {
-        return Dismissible(
-          background: Container(
-            decoration: BoxDecoration(
-              color: Colors.blue.shade100,
-              borderRadius: BorderRadius.circular(25.0)
-            ),
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.only(right: 20.0),
-            child: Icon(Icons.delete_forever_rounded, color: Colors.red.shade900),
-          ),
-          key: Key(productInfo.docId),
-          direction: DismissDirection.endToStart,
-          onDismissed: (_) async {
-            final message = await Database.deleteProduct(docId: productInfo.docId);
-            if (message.contains('Success')) {
-              Fluttertoast.showToast(
-                msg: 'Product deleted successfully',
-                toastLength: Toast.LENGTH_SHORT,
-              );
-            }
-          },
-          child: Card(
-            child: ListTile(
-              title: Text(productInfo.name),
-              subtitle: ProductExpiryDateStatus(
-                icon: Icons.error_outline_rounded,
-                expiryDate: 'Expired On: $expiryDate',
-                color: Colors.red.shade600
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(30.0),
+          child: Dismissible(
+            background: Container(
+              decoration: BoxDecoration(
+                color: Colors.red.shade900,
               ),
-              trailing: Text(
-                productInfo.quantity.toString(),
-                style: TextStyle(
-                  color: productInfo.quantity <= 3 ? Colors.red.shade900 : null
-                )
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(right: 20.0),
+              child: Icon(Icons.delete_forever_rounded, color: Colors.white),
+            ),
+            key: Key(productInfo.docId),
+            direction: DismissDirection.endToStart,
+            onDismissed: (_) async {
+              final message = await Database.deleteProduct(docId: productInfo.docId);
+              if (message.contains('Success')) {
+                Fluttertoast.showToast(
+                  msg: 'Product deleted successfully',
+                  toastLength: Toast.LENGTH_SHORT,
+                );
+              }
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.red.shade900,
+              ),
+              child: Card(
+                child: ListTile(
+                  title: Text(productInfo.name),
+                  subtitle: ProductExpiryDateStatus(
+                    icon: Icons.error_outline_rounded,
+                    expiryDate: 'Expired On: $expiryDate',
+                    color: Colors.red.shade900
+                  ),
+                  trailing: Text(
+                    productInfo.quantity.toString(),
+                    style: TextStyle(
+                      color: productInfo.quantity <= 3 ? Colors.red.shade900 : null
+                    )
+                  ),
+                ),
               ),
             ),
           ),

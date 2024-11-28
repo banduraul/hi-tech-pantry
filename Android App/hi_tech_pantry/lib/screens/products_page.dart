@@ -95,7 +95,7 @@ class _ProductsPageState extends State<ProductsPage> {
                           width: double.infinity,
                           height: 105,
                           decoration: BoxDecoration(
-                            color: Colors.red.shade700,
+                            color: Colors.red.shade900,
                             borderRadius: BorderRadius.circular(16.0),
                           ),
                           alignment: Alignment.bottomCenter,
