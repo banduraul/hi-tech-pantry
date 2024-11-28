@@ -71,7 +71,14 @@ class _ProductsPageState extends State<ProductsPage> {
                 ),
                 Expanded(
                   child: Center(
-                    child: Text('No products found')
+                    child: Text(
+                      'No products found',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.blue.shade700,
+                      )
+                    )
                   )
                 ),
               ],
