@@ -1,18 +1,18 @@
-import 'dart:io';
-
-import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
+import 'package:app_settings/app_settings.dart';
 
 import 'login_page.dart';
 
 import '../utils/database.dart';
 import '../utils/app_state.dart';
+import '../utils/theme_provider.dart';
 
 import '../widgets/qr_code_dialog.dart';
+import '../widgets/bottom_modal_sheet.dart';
+import '../widgets/change_theme_dialog.dart';
 import '../widgets/check_password_dialog.dart';
 import '../widgets/delete_account_dialog.dart';
 import '../widgets/change_username_dialog.dart';
@@ -29,41 +29,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
 
   late final AppLifecycleListener _appLifecycleListener;
-  
-  final picker = ImagePicker();
-
-  Future<void> getImageFromGallery() async {
-    final pickedFile = await picker.pickImage(
-      source: ImageSource.gallery,
-    );
-
-    if (pickedFile != null) {
-      final message = await Database.uploadProfilePicture(image: File(pickedFile.path));
-      if (message.contains('Success')) {
-        Fluttertoast.showToast(
-          msg: 'Profile picture updated',
-          toastLength: Toast.LENGTH_SHORT,
-        );
-      }
-    }
-  }
-
-  Future<void> getImageFromCamera() async {
-    final pickedFile = await picker.pickImage(
-      source: ImageSource.camera,
-      preferredCameraDevice: CameraDevice.front,
-    );
-
-    if (pickedFile != null) {
-      final message = await Database.uploadProfilePicture(image: File(pickedFile.path));
-      if (message.contains('Success')) {
-        Fluttertoast.showToast(
-          msg: 'Profile picture updated',
-          toastLength: Toast.LENGTH_SHORT,
-        );
-      }
-    }
-  }
 
   @override
   void initState() {
@@ -84,6 +49,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    bool isDarkMode = theme.brightness == Brightness.dark;
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -98,7 +67,6 @@ class _ProfilePageState extends State<ProfilePage> {
               height: 90,
               child: Consumer<ApplicationState>(
                 builder: (context, appState, _) => Card(
-                  elevation: 10,
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Row(
@@ -112,44 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   top: Radius.circular(20),
                                 ),
                               ),
-                              builder: (context) => Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.blue.shade100,
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20),
-                                  ),
-                                ),
-                                height: 150,
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () async {
-                                        Navigator.pop(context);
-                                        await getImageFromGallery();
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        foregroundColor: const Color.fromARGB(255, 68, 68, 68),
-                                      ),
-                                      child: const Text('Choose picture from gallery', style: TextStyle(fontSize: 20)),
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () async {
-                                        Navigator.pop(context);
-                                        await getImageFromCamera();
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        foregroundColor: const Color.fromARGB(255, 68, 68, 68),
-                                      ),
-                                      child: const Text('Take a picture', style: TextStyle(fontSize: 20)),
-                                    ),
-                                  ],
-                                )
-                              )
+                              builder: (context) => BottomModalSheet()
                             );
                           },
                           child: appState.userPhotoUrl.isEmpty
@@ -173,10 +104,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
+                                  color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68)
                                 ),
                               ),
                               IconButton(
-                                icon: Icon(Icons.edit_rounded),
+                                icon: Icon(Icons.edit_rounded, color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68)),
                                 onPressed: () {
                                   showDialog(
                                     context: context,
@@ -198,7 +130,6 @@ class _ProfilePageState extends State<ProfilePage> {
               height: 90,
               child: Consumer<ApplicationState>(
                 builder: (context, appState, _) => Card(
-                  elevation: 10,
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Row(
@@ -208,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Email: ${appState.userEmail}', style: TextStyle(fontSize: 17, color: Colors.grey.shade800)),
+                            Text('Email: ${appState.userEmail}', style: TextStyle(fontSize: 17, color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68))),
                             Row(
                               children: [
                                 Icon(appState.isUserEmailVerified ? Icons.check_circle_rounded : Icons.error_rounded, color: appState.isUserEmailVerified ? Colors.green.shade600 : Colors.red.shade600),
@@ -239,13 +170,45 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
+            SizedBox(
+              width: double.infinity,
+              height: 90,
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => const ChangeThemeDialog()
+                  );
+                },
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
+                    child: Row(
+                      children: [
+                        Icon(Icons.brightness_6_outlined, size: 30, color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68)),
+                        SizedBox(width: 40),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Theme', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68))),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                themeProvider.currentThemeMode == ThemeMode.system ? 'System Default'
+                                  : isDarkMode ? 'Dark' : 'Light',
+                                style: TextStyle(fontSize: 15, color: isDarkMode ? Colors.grey.shade700 : const Color.fromARGB(255, 110, 107, 107))),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
             const Spacer(),
             ElevatedButton(
               onPressed: () => AppSettings.openAppSettings(type: AppSettingsType.notification),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: const Color.fromARGB(255, 68, 68, 68),
-              ),
               child: Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Row(
@@ -270,10 +233,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   onPressed: appState.isUserEmailVerified ? () {
                     debugPrint('Two-Factor Authentication');
                   } : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: const Color.fromARGB(255, 68, 68, 68),
-                  ),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20),
                     child: Row(
@@ -298,10 +257,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     builder: (context) => QRCodeDialog(email: appState.userEmail)
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: const Color.fromARGB(255, 68, 68, 68),
-                ),
                 child: const Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: Row(
@@ -322,10 +277,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   builder: (context) => const CheckPasswordDialog()
                 );
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: const Color.fromARGB(255, 68, 68, 68),
-              ),
               child: const Padding(
                 padding: EdgeInsets.only(left: 20),
                 child: Row(
@@ -352,8 +303,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.red.shade700,
+                backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+                foregroundColor: isDarkMode ? Colors.red.shade900 : Colors.red.shade700,
               ),
               child: const Padding(
                 padding: EdgeInsets.only(left: 20),
@@ -375,8 +326,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red.shade700,
-                foregroundColor: Colors.white,
+                backgroundColor: Colors.red.shade900,
+                foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),

@@ -88,7 +88,7 @@ class _ProductsPageState extends State<ProductsPage> {
                           width: double.infinity,
                           height: 105,
                           decoration: BoxDecoration(
-                            color: Colors.teal.shade400,
+                            color: Colors.red.shade700,
                             borderRadius: BorderRadius.circular(16.0),
                           ),
                           alignment: Alignment.bottomCenter,
@@ -123,10 +123,16 @@ class _ProductsPageState extends State<ProductsPage> {
                                     _searchQuery = value;
                                   });
                                 },
+                                style: TextStyle(
+                                  color: Colors.blue.shade700,
+                                  fontWeight: FontWeight.w500,
+                                ),
                                 decoration: InputDecoration(
                                   hintText: 'Search products...',
                                   border: InputBorder.none,
-                                  hintStyle: TextStyle(color: Colors.grey.shade700),
+                                  focusedBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  filled: false,
                                 ),
                                 autofocus: true,
                               )
@@ -161,7 +167,16 @@ class _ProductsPageState extends State<ProductsPage> {
                               size: 27,
                             ),
                             onPressed: () {
-                              context.pushNamed(ProfilePage.profileName);
+                              if (!_isSearching) {
+                                context.pushNamed(ProfilePage.profileName);
+                              } else {
+                                setState(() {
+                                  _isSearching = !_isSearching;
+                                  _searchQuery = '';
+                                });
+                                Future.delayed(Duration(milliseconds: 600));
+                                context.pushNamed(ProfilePage.profileName);
+                              }
                             },
                           ),
                         ),

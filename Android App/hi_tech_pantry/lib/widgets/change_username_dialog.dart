@@ -22,7 +22,11 @@ class _ChangeUsernameDialogState extends State<ChangeUsernameDialog> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    bool isDarkMode = theme.brightness == Brightness.dark;
+
     return AlertDialog(
+      backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.blue.shade100,
       title: const Text(
         'Insert new username',
         style: TextStyle(color: Colors.blue),
@@ -40,11 +44,10 @@ class _ChangeUsernameDialogState extends State<ChangeUsernameDialog> {
                   decoration: InputDecoration(
                     labelText: 'Username',
                     hintText: 'Username',
-                    alignLabelWithHint: false,
-                    filled: true,
-                    fillColor: Colors.blue.shade50,
-                    border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-                    prefixIcon: const Icon(Icons.person_rounded, size: 24),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    prefixIcon: Icon(Icons.person_rounded, size: 24, color: isDarkMode ? Color.fromARGB(255, 110, 107, 107) : null),
                   ),
                   controller: _usernameController,
                   validator: (value) => Validator.validateUsername(username: _usernameController.text),
@@ -52,8 +55,12 @@ class _ChangeUsernameDialogState extends State<ChangeUsernameDialog> {
                 ),
                 const Spacer(),
                 _isProcessing
-                  ? const CircularProgressIndicator()
+                  ? CircularProgressIndicator(color: Colors.blue.shade700)
                   : ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+                    ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                           setState(() {

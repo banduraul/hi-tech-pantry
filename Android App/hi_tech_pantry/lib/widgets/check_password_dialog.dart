@@ -25,7 +25,11 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    bool isDarkMode = theme.brightness == Brightness.dark;
+
     return AlertDialog(
+      backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.blue.shade100,
       title: const Text(
         'Insert current password to continue',
         style: TextStyle(color: Colors.blue),
@@ -44,10 +48,6 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
                   decoration: InputDecoration(
                     labelText: 'Password',
                     hintText: 'Password',
-                    alignLabelWithHint: false,
-                    filled: true,
-                    fillColor: Colors.blue.shade50,
-                    border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                     prefixIcon: const Icon(Icons.lock_rounded, size: 24),
                     suffixIcon: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
@@ -74,8 +74,12 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
                 ),
                 const Spacer(),
                 _isProcessing
-                  ? const CircularProgressIndicator()
+                  ? CircularProgressIndicator(color: Colors.blue.shade700)
                   : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+                      ),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           setState(() {
@@ -103,10 +107,7 @@ class _CheckPasswordDialogState extends State<CheckPasswordDialog> {
                           }
                         }
                       },
-                      child: const Text(
-                        'Change',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      child: const Text('Change'),
                   )
               ],
             ),

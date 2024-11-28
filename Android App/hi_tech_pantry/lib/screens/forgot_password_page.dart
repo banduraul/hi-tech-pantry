@@ -57,20 +57,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         decoration: InputDecoration(
                           labelText: 'Email',
                           hintText: 'Email',
-                          alignLabelWithHint: false,
-                          filled: true,
-                          fillColor: Colors.blue.shade50,
-                          border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                           prefixIcon: const Icon(Icons.email_rounded, size: 24),
                         ),
                       ),
                       const SizedBox(height: 32.0),
                       _isProcessing
-                        ? const CircularProgressIndicator()
+                        ? CircularProgressIndicator(color: Colors.blue.shade700)
                         : Row(
                           children: [
                             Expanded(
                               child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                  foregroundColor: Colors.white,
+                                ),
                                 onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
                                     setState(() {

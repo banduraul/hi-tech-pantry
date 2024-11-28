@@ -28,7 +28,11 @@ class _NewPasswordDialogState extends State<NewPasswordDialog> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    bool isDarkMode = theme.brightness == Brightness.dark;
+
     return AlertDialog(
+      backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.blue.shade100,
       title: const Text(
         'Insert New Password',
         style: TextStyle(color: Colors.blue),
@@ -47,10 +51,6 @@ class _NewPasswordDialogState extends State<NewPasswordDialog> {
                   decoration: InputDecoration(
                     labelText: 'Password',
                     hintText: 'Password',
-                    alignLabelWithHint: false,
-                    filled: true,
-                    fillColor: Colors.blue.shade50,
-                    border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                     prefixIcon: const Icon(Icons.lock_rounded, size: 24),
                     suffixIcon: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
@@ -81,10 +81,6 @@ class _NewPasswordDialogState extends State<NewPasswordDialog> {
                   decoration: InputDecoration(
                     labelText: 'Confirm Password',
                     hintText: 'Confirm Password',
-                    alignLabelWithHint: false,
-                    filled: true,
-                    fillColor: Colors.blue.shade50,
-                    border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                     prefixIcon: const Icon(Icons.lock_rounded, size: 24),
                     suffixIcon: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
@@ -111,8 +107,12 @@ class _NewPasswordDialogState extends State<NewPasswordDialog> {
                 ),
                 const Spacer(),
                 _isProcessing
-                  ? const CircularProgressIndicator()
+                  ? CircularProgressIndicator(color: Colors.blue.shade700)
                   : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+                      ),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           setState(() {
@@ -136,10 +136,7 @@ class _NewPasswordDialogState extends State<NewPasswordDialog> {
                           }
                         }
                       },
-                      child: const Text(
-                        'Change',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      child: const Text('Change'),
                     )
               ],
             ),

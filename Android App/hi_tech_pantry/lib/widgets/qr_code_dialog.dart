@@ -8,7 +8,11 @@ class QRCodeDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    bool isDarkMode = theme.brightness == Brightness.dark;
+
     return AlertDialog(
+      backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.blue.shade100,
       title: const Text('Scan to link your account', style: TextStyle(color: Colors.blue)),
       content: SizedBox(
         width: 200,
@@ -16,6 +20,7 @@ class QRCodeDialog extends StatelessWidget {
         child: Align(
           alignment: Alignment.center,
           child: QrImageView(
+            backgroundColor: Colors.white,
             data: email.replaceFirst('@', '"'),
             version: QrVersions.auto,
             size: 200.0,

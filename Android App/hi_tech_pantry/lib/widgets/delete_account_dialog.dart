@@ -25,7 +25,11 @@ class _DeleteAccountDialog extends State<DeleteAccountDialog> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    bool isDarkMode = theme.brightness == Brightness.dark;
+
     return AlertDialog(
+      backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.blue.shade100,
       title: Column(
         children: [
           Text(
@@ -52,10 +56,6 @@ class _DeleteAccountDialog extends State<DeleteAccountDialog> {
                   decoration: InputDecoration(
                     labelText: 'Password',
                     hintText: 'Password',
-                    alignLabelWithHint: false,
-                    filled: true,
-                    fillColor: Colors.blue.shade50,
-                    border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                     prefixIcon: const Icon(Icons.lock_rounded, size: 24),
                     suffixIcon: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),

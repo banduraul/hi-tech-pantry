@@ -35,6 +35,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    bool isDarkMode = theme.brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: () {
         _focusUsername.unfocus();
@@ -75,10 +78,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           decoration: InputDecoration(
                             labelText: 'Username',
                             hintText: 'Username',
-                            alignLabelWithHint: false,
-                            filled: true,
-                            fillColor: Colors.blue.shade50,
-                            border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                             prefixIcon: const Icon(Icons.person_rounded, size: 24)
                           ),
                         ),
@@ -92,10 +91,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           decoration: InputDecoration(
                             labelText: 'Email',
                             hintText: 'Email',
-                            alignLabelWithHint: false,
-                            filled: true,
-                            fillColor: Colors.blue.shade50,
-                            border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                             prefixIcon: const Icon(Icons.email_rounded, size: 24)
                           ),
                         ),
@@ -110,10 +105,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           decoration: InputDecoration(
                             labelText: 'Password',
                             hintText: 'Password',
-                            alignLabelWithHint: false,
-                            filled: true,
-                            fillColor: Colors.blue.shade50,
-                            border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                             prefixIcon: const Icon(Icons.lock_rounded, size: 24),
                             suffixIcon: Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
@@ -147,10 +138,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           decoration: InputDecoration(
                             labelText: 'Confirm Password',
                             hintText: 'Confirm Password',
-                            alignLabelWithHint: false,
-                            filled: true,
-                            fillColor: Colors.blue.shade50,
-                            border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                             prefixIcon: const Icon(Icons.lock_rounded, size: 24),
                             suffixIcon: Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
@@ -174,7 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         const SizedBox(height: 32.0),
                         _isProcessing
-                            ? const CircularProgressIndicator()
+                            ? CircularProgressIndicator(color: Colors.blue.shade700)
                             : Row(
                                 children: [
                                   Expanded(
@@ -187,7 +174,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             width: 3
                                           ),
                                         ),
-                                        backgroundColor: Colors.white,
+                                        backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
                                         foregroundColor: Colors.blue,
                                       ),
                                       onPressed: () async {

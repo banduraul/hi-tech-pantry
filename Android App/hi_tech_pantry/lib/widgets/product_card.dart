@@ -45,14 +45,7 @@ class ProductCard extends StatelessWidget {
           },
           child: Card(
             child: ListTile(
-              title: Text(
-                productInfo.name,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black
-                ),
-              ),
+              title: Text(productInfo.name),
               subtitle: ProductExpiryDateStatus(
                 icon: Icons.error_outline_rounded,
                 expiryDate: 'Expired On: $expiryDate',
@@ -61,9 +54,7 @@ class ProductCard extends StatelessWidget {
               trailing: Text(
                 productInfo.quantity.toString(),
                 style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: productInfo.quantity > 3 ? Colors.black : Colors.red.shade900
+                  color: productInfo.quantity <= 3 ? Colors.red.shade900 : null
                 )
               ),
             ),
@@ -77,14 +68,7 @@ class ProductCard extends StatelessWidget {
       );
       return Card(
         child: ListTile(
-          title: Text(
-            productInfo.name,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.black
-            ),
-          ),
+          title: Text(productInfo.name),
           subtitle: ProductExpiryDateStatus(
             icon: isAfter ? Icons.check_circle_outline_rounded
                           : Icons.warning_amber_rounded,
@@ -95,9 +79,7 @@ class ProductCard extends StatelessWidget {
           trailing: Text(
             productInfo.quantity.toString(),
             style: TextStyle(
-              fontSize: 25,
-              fontWeight: FontWeight.bold,
-              color: productInfo.quantity > 3 ? Colors.black : Colors.red.shade900
+              color: productInfo.quantity <= 3 ? Colors.red.shade900 : null
             )
           ),
         ),
@@ -105,14 +87,7 @@ class ProductCard extends StatelessWidget {
     }
     return Card(
       child: ListTile(
-        title: Text(
-          productInfo.name,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.black
-          ),
-        ),
+        title: Text(productInfo.name),
         subtitle: Text(
           'Add an expiry date for this product and change product information if needed',
           style: TextStyle(color: Colors.blue.shade900)

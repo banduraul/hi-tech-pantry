@@ -32,6 +32,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    bool isDarkMode = theme.brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: () {
         _focusEmail.unfocus();
@@ -66,10 +69,6 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: InputDecoration(
                         labelText: 'Email',
                         hintText: 'Email',
-                        alignLabelWithHint: false,
-                        filled: true,
-                        fillColor: Colors.blue.shade50,
-                        border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                         prefixIcon: const Icon(Icons.email_rounded, size: 24),
                       ),
                     ),
@@ -84,10 +83,6 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: InputDecoration(
                         labelText: 'Password',
                         hintText: 'Password',
-                        alignLabelWithHint: false,
-                        filled: true,
-                        fillColor: Colors.blue.shade50,
-                        border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                         prefixIcon: const Icon(Icons.lock_rounded, size: 24),
                         suffixIcon: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
@@ -111,13 +106,17 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 24.0),
                     _isProcessing
-                        ? const CircularProgressIndicator()
+                        ? CircularProgressIndicator(color: Colors.blue.shade700)
                         : Row(
                             mainAxisAlignment:
                                 MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue,
+                                    foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+                                  ),
                                   onPressed: () async {
                                     _focusEmail.unfocus();
                                     _focusPassword.unfocus();
@@ -165,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                                         width: 3
                                       ),
                                     ),
-                                    backgroundColor: Colors.white,
+                                    backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
                                     foregroundColor: Colors.blue,
                                   ),
                                   onPressed: () => context.pushNamed(RegisterPage.registerName),
