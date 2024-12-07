@@ -8,7 +8,7 @@ class ThemeProvider extends ChangeNotifier {
 
   void _loadThemeFromSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String theme = prefs.getString('theme') ?? 'light';
+    String theme = prefs.getString('theme') ?? 'system';
     switch (theme) {
       case 'light':
         _currentThemeMode = ThemeMode.light;
@@ -44,7 +44,7 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  ThemeMode _currentThemeMode = ThemeMode.light;
+  ThemeMode _currentThemeMode = ThemeMode.system;
   ThemeMode get currentThemeMode => _currentThemeMode;
 
   static ThemeData lightTheme = ThemeData(
@@ -89,7 +89,6 @@ class ThemeProvider extends ChangeNotifier {
       elevation: 3,
       centerTitle: true,
       titleSpacing: 0.0,
-      toolbarHeight: 50,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           bottom: Radius.circular(25)
@@ -164,7 +163,6 @@ class ThemeProvider extends ChangeNotifier {
       elevation: 3,
       centerTitle: true,
       titleSpacing: 0.0,
-      toolbarHeight: 50,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           bottom: Radius.circular(25)
