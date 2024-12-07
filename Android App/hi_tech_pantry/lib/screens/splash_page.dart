@@ -1,16 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'login_page.dart';
 import 'products_page.dart';
 
 import '../utils/app_state.dart';
+import '../utils/notification_services.dart';
 
-class SplashPage extends StatelessWidget {
+class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 
   static const String splashName = 'splash';
+
+  @override
+  State<SplashPage> createState() => _SplashPageState();
+}
+
+class _SplashPageState extends State<SplashPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    _checkForPermission();
+  }
+
+  Future<void> _checkForPermission() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    final hasAskedForPermission = sharedPrefs.getBool('hasAskedForPermission') ?? false;
+
+    if (!hasAskedForPermission) {
+      NotificationServices.flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!.requestNotificationsPermission();
+      sharedPrefs.setBool('hasAskedForPermission', true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
