@@ -93,7 +93,7 @@ class _ProductsPageState extends State<ProductsPage> {
                         borderRadius: BorderRadius.circular(16.0),
                         child: Container(
                           width: double.infinity,
-                          height: kToolbarHeight + 50,
+                          height: 110,
                           decoration: BoxDecoration(
                             color: Colors.red.shade900,
                             borderRadius: BorderRadius.circular(16.0),

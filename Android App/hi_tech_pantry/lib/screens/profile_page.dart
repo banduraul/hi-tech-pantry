@@ -213,7 +213,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.only(left: 20),
                 child: Row(
                   children: [
-                    Icon(Icons.notifications_rounded),
+                    Icon(Icons.notifications_rounded, size: 25, color: isDarkMode ? Color.fromARGB(255, 110, 107, 107) : Colors.grey.shade800),
                     SizedBox(width: 40),
                     Text('Notifications', style: TextStyle(fontSize: 20)),
                   ],
@@ -229,11 +229,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     builder: (context) => QRCodeDialog(email: appState.userEmail)
                   );
                 },
-                child: const Padding(
+                child: Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: Row(
                     children: [
-                      Icon(Icons.qr_code_rounded),
+                      Icon(Icons.qr_code_rounded, size: 25, color: isDarkMode ? Color.fromARGB(255, 110, 107, 107) : Colors.grey.shade800),
                       SizedBox(width: 40),
                       Text('Link to Raspberry Pi App', style: TextStyle(fontSize: 20)),
                     ],
@@ -249,11 +249,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   builder: (context) => const ReauthenticateUserDialog()
                 );
               },
-              child: const Padding(
+              child: Padding(
                 padding: EdgeInsets.only(left: 20),
                 child: Row(
                   children: [
-                    Icon(Icons.key_rounded),
+                    Icon(Icons.key_rounded, size: 25, color: isDarkMode ? Color.fromARGB(255, 110, 107, 107) : Colors.grey.shade800),
                     SizedBox(width: 40),
                     Text('Change password', style: TextStyle(fontSize: 20)),
                   ],
@@ -278,11 +278,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
                 foregroundColor: isDarkMode ? Colors.red.shade900 : Colors.red.shade700,
               ),
-              child: const Padding(
+              child: Padding(
                 padding: EdgeInsets.only(left: 20),
                 child: Row(
                   children: [
-                    Icon(Icons.logout_rounded),
+                    Icon(Icons.logout_rounded, size: 25, color: isDarkMode ? Colors.red.shade900 : Colors.red.shade700),
                     SizedBox(width: 40),
                     Text('Log out', style: TextStyle(fontSize: 20)),
                   ],
@@ -304,11 +304,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
-              child: const Padding(
+              child: Padding(
                 padding: EdgeInsets.only(left: 20),
                 child: Row(
                   children: [
-                    Icon(Icons.delete_forever_rounded),
+                    Icon(Icons.delete_forever_rounded, size: 25, color: isDarkMode ? Colors.grey.shade900 : Colors.white),
                     SizedBox(width: 40),
                     Text('Delete account', style: TextStyle(fontSize: 20)),
                   ],
