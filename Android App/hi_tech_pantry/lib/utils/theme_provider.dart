@@ -108,6 +108,7 @@ class ThemeProvider extends ChangeNotifier {
       border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
     ),
     listTileTheme: ListTileThemeData(
+      iconColor: Colors.black,
       titleTextStyle: const TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.bold,
@@ -204,6 +205,7 @@ class ThemeProvider extends ChangeNotifier {
       ),
     ),
     listTileTheme: ListTileThemeData(
+      iconColor: Color.fromARGB(255, 110, 107, 107),
       titleTextStyle: const TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.bold,
