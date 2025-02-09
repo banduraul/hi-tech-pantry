@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../screens/profile_page.dart';
 
+import '../utils/database.dart';
 import '../utils/app_state.dart';
 import '../utils/notification_services.dart';
 
 import '../widgets/product_card.dart';
+import '../widgets/edit_product_info_dialog.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -48,7 +51,6 @@ class _ProductsPageState extends State<ProductsPage> {
       body: Consumer<ApplicationState>(
         builder: (context, appState, _) {
           final filteredProducts = appState.productInfo.where((product) => product.name.toLowerCase().contains(_searchQuery)).toList();
-          final filteredProductsHasExpired = filteredProducts.any((product) => product.isExpired);
           return appState.productInfo.isEmpty
             ? Column(
               children: [
@@ -72,9 +74,9 @@ class _ProductsPageState extends State<ProductsPage> {
                 Expanded(
                   child: Center(
                     child: Text(
-                      'No products found',
+                      'You have no products in your pantry',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                         color: Colors.blue.shade700,
                       )
@@ -87,26 +89,23 @@ class _ProductsPageState extends State<ProductsPage> {
               children: [
                 Stack(
                   children: [
-                    if (filteredProductsHasExpired)
+                    if (filteredProducts.isNotEmpty)
                       Material(
                         elevation: 3,
                         borderRadius: BorderRadius.circular(16.0),
                         child: Container(
                           width: double.infinity,
-                          height: 110,
+                          height: 115,
                           decoration: BoxDecoration(
-                            color: Colors.red.shade900,
+                            color: Colors.blue,
                             borderRadius: BorderRadius.circular(16.0),
                           ),
                           alignment: Alignment.bottomCenter,
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Swipe left on the expired products to delete them',
+                            'Swipe left on any product to delete it',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold
-                            ),
+                            style: Theme.of(context).textTheme.headlineMedium,
                           ),
                         ),
                       ),
@@ -192,17 +191,57 @@ class _ProductsPageState extends State<ProductsPage> {
                   ],
                 ),
                 Expanded(
-                    child: ListView.builder(
-                      padding: EdgeInsets.only(top: 0.0),
-                      itemCount: filteredProducts.length,
-                      itemBuilder: (context, index) {
-                        final productInfo = filteredProducts[index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-                          child: ProductCard(productInfo: productInfo),
-                        );
-                      }
-                    ),
+                    child: filteredProducts.isNotEmpty 
+                    ? ListView.builder(
+                        padding: EdgeInsets.only(top: 0.0),
+                        itemCount: filteredProducts.length,
+                        itemBuilder: (context, index) {
+                          final productInfo = filteredProducts[index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                            child: Dismissible(
+                              key: Key(productInfo.docId),
+                              direction: DismissDirection.endToStart,
+                              background: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                ),
+                                alignment: Alignment.centerRight,
+                                padding: const EdgeInsets.only(right: 20.0),
+                                child: Icon(Icons.delete_forever_rounded, color: Colors.red.shade900),
+                              ),
+                              onDismissed: (_) async {
+                                final message = await Database.deleteProduct(docId: productInfo.docId);
+                                if (message.contains('Success')) {
+                                  Fluttertoast.showToast(
+                                    msg: 'Product deleted successfully',
+                                    toastLength: Toast.LENGTH_SHORT,
+                                  );
+                                }
+                              },
+                              child: GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => EditProductInfoDialog(productInfo: productInfo),
+                                  );
+                                },
+                                child: ProductCard(productInfo: productInfo)
+                              ),
+                            ),
+                          );
+                        }
+                      )
+                    : Center(
+                        child: Text(
+                          'No products match your search criteria',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.blue.shade700,
+                          )
+                        )
+                      )
                   ),
               ],
             );

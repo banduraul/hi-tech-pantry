@@ -82,6 +82,11 @@ class ThemeProvider extends ChangeNotifier {
         fontWeight: FontWeight.w500,
       ),
       bodyLarge: const TextStyle(fontSize: 18.0),
+      headlineMedium: const TextStyle(
+        fontSize: 18.0,
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+      )
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.blue.shade50,
@@ -157,6 +162,11 @@ class ThemeProvider extends ChangeNotifier {
         fontWeight: FontWeight.w500,
       ),
       bodyLarge: const TextStyle(fontSize: 18.0),
+      headlineMedium: TextStyle(
+        fontSize: 18.0,
+        color: Colors.grey.shade900,
+        fontWeight: FontWeight.bold,
+      )
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.grey.shade900,

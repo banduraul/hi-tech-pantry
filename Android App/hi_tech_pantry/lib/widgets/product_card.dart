@@ -1,10 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../data_classes/product_info.dart';
-
-import '../utils/database.dart';
 
 import 'edit_product_info_dialog.dart';
 import 'product_expiry_date_status.dart';
@@ -22,49 +19,30 @@ class ProductCard extends StatelessWidget {
     if (productInfo.finishedEditing) {
       final expiryDate = DateFormat('dd/MM/yyyy').format(productInfo.expiryDate!);
       if (productInfo.isExpired) {
-        return Dismissible(
-          background: Container(
-            decoration: BoxDecoration(
-              color: Colors.transparent,
+        return Card(
+          child: ListTile(
+            title: Text(productInfo.name),
+            subtitle: ProductExpiryDateStatus(
+              icon: Icons.error_outline_rounded,
+              expiryDate: 'Expired On: $expiryDate',
+              color: Colors.red.shade900
             ),
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.only(right: 20.0),
-            child: Icon(Icons.delete_forever_rounded, color: Colors.red.shade900),
-          ),
-          key: Key(productInfo.docId),
-          direction: DismissDirection.endToStart,
-          onDismissed: (_) async {
-            final message = await Database.deleteProduct(docId: productInfo.docId);
-            if (message.contains('Success')) {
-              Fluttertoast.showToast(
-                msg: 'Product deleted successfully',
-                toastLength: Toast.LENGTH_SHORT,
-              );
-            }
-          },
-          child: Card(
-            child: ListTile(
-              title: Text(productInfo.name),
-              subtitle: ProductExpiryDateStatus(
-                icon: Icons.error_outline_rounded,
-                expiryDate: 'Expired On: $expiryDate',
-                color: Colors.red.shade900
-              ),
-              trailing: Text(
-                productInfo.quantity.toString(),
-                style: TextStyle(
-                  color: productInfo.quantity <= 3 ? Colors.red.shade900 : null
-                )
-              ),
+            trailing: Text(
+              productInfo.quantity.toString(),
+              style: TextStyle(
+                color: productInfo.quantity <= 3 ? Colors.red.shade900 : null
+              )
             ),
           ),
         );
       }
+
       final isAfter = productInfo.expiryDate!.isAfter(
         DateFormat('dd/MM/yyyy').parse(
           DateFormat('dd/MM/yyyy').format(DateTime.now().add(Duration(days: 3)))
         )
       );
+
       return Card(
         child: ListTile(
           title: Text(productInfo.name),
@@ -84,6 +62,7 @@ class ProductCard extends StatelessWidget {
         ),
       );
     }
+    
     return Card(
       child: ListTile(
         title: Text(productInfo.name.isEmpty ? 'Unknown Product' : productInfo.name),
