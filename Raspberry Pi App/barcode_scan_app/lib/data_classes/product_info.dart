@@ -4,6 +4,7 @@ class ProductInfo {
   final String eancode;
   final String name;
   bool finishedEditing = false;
+  bool isExpired = false;
   int quantity = 1;
   DateTime? expiryDate;
 
@@ -13,7 +14,8 @@ class ProductInfo {
       'name': name,
       'finishedEditing': finishedEditing,
       'quantity': quantity,
-      'expiryDate': expiryDate
+      'expiryDate': expiryDate,
+      'isExpired': isExpired
     };
   }
 }
