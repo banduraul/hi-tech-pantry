@@ -49,9 +49,17 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
 
     return AlertDialog(
       backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.blue.shade100,
-      title: const Text(
-        'Edit Product Info',
-        style: TextStyle(color: Colors.blue),
+      title: Column(
+        children: [
+          const Text(
+            'Edit Product Info',
+            style: TextStyle(color: Colors.blue),
+          ),
+          Text(
+            'EAN Code: ${widget.productInfo.eancode}',
+            style: TextStyle(color: Colors.blue),
+          ),
+        ],
       ),
       content: Padding(
         padding: const EdgeInsets.all(8.0),

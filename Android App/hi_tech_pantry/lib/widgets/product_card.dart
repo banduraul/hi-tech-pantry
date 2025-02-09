@@ -86,7 +86,7 @@ class ProductCard extends StatelessWidget {
     }
     return Card(
       child: ListTile(
-        title: Text(productInfo.name),
+        title: Text(productInfo.name.isEmpty ? 'Unknown Product' : productInfo.name),
         subtitle: Text(
           'Add an expiry date for this product and change product information if needed',
           style: TextStyle(color: Colors.blue.shade900)

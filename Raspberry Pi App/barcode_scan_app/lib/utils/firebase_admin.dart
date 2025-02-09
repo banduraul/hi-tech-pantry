@@ -50,7 +50,12 @@ class FirebaseAdmin {
       if (snapshot.docs.isNotEmpty) {
         final document = snapshot.docs[0];
         await document.ref.update({ 'quantity': const FieldValue.increment(1) });
-        title = document.data()['name'].toString();
+        String name = document.data()['name'].toString();
+        if (name != '') {
+          title = name;
+        } else {
+          title = 'Unknown Product';
+        }
         message = 'Success';
       } else {
         final response = await get(Uri.parse('https://api.ean-search.org/api?op=barcode-lookup&format=json&token=$tokenAPI&ean=$eancode'));
@@ -60,7 +65,8 @@ class FirebaseAdmin {
           title = products[0]['name'];
           message = 'Success';
         } else {
-          message = products[0]['error'];
+          await firestore.collection('users').doc(uid).collection('products').add(ProductInfo(eancode: eancode, name: '').toFirestore());
+          message = 'The product information has not been found using the API. The product has been added to the pantry as a Unknown product. Please add a name to the product using the Mobile Application.';
         }
       }
     } on Exception catch(_) {
