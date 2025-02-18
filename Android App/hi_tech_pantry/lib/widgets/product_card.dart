@@ -17,15 +17,42 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (productInfo.finishedEditing) {
-      final expiryDate = DateFormat('dd/MM/yyyy').format(productInfo.expiryDate!);
-      if (productInfo.isExpired) {
+      if (productInfo.expiryDate != null) {
+        final expiryDate = DateFormat('dd/MM/yyyy').format(productInfo.expiryDate!);
+        if (productInfo.isExpired) {
+          return Card(
+            child: ListTile(
+              title: Text(productInfo.name),
+              subtitle: ProductExpiryDateStatus(
+                icon: Icons.error_outline_rounded,
+                expiryDate: 'Expired On: $expiryDate',
+                color: Colors.red.shade900
+              ),
+              trailing: Text(
+                productInfo.quantity.toString(),
+                style: TextStyle(
+                  color: productInfo.quantity <= 3 ? Colors.red.shade900 : null
+                )
+              ),
+            ),
+          );
+        }
+
+        final isAfter = productInfo.expiryDate!.isAfter(
+          DateFormat('dd/MM/yyyy').parse(
+            DateFormat('dd/MM/yyyy').format(DateTime.now().add(Duration(days: 3)))
+          )
+        );
+
         return Card(
           child: ListTile(
             title: Text(productInfo.name),
             subtitle: ProductExpiryDateStatus(
-              icon: Icons.error_outline_rounded,
-              expiryDate: 'Expired On: $expiryDate',
-              color: Colors.red.shade900
+              icon: isAfter ? Icons.check_circle_outline_rounded
+                            : Icons.warning_amber_rounded,
+              expiryDate: 'Expiry Date: $expiryDate',
+              color: isAfter ? Colors.green.shade600
+                             : Colors.orange.shade600
             ),
             trailing: Text(
               productInfo.quantity.toString(),
@@ -37,21 +64,12 @@ class ProductCard extends StatelessWidget {
         );
       }
 
-      final isAfter = productInfo.expiryDate!.isAfter(
-        DateFormat('dd/MM/yyyy').parse(
-          DateFormat('dd/MM/yyyy').format(DateTime.now().add(Duration(days: 3)))
-        )
-      );
-
       return Card(
         child: ListTile(
           title: Text(productInfo.name),
-          subtitle: ProductExpiryDateStatus(
-            icon: isAfter ? Icons.check_circle_outline_rounded
-                          : Icons.warning_amber_rounded,
-            expiryDate: 'Expiry Date: $expiryDate',
-            color: isAfter ? Colors.green.shade600
-                           : Colors.orange.shade600
+          subtitle: Text(
+            'No expiry date set for this product',
+            style: TextStyle(color: Colors.blue.shade700)
           ),
           trailing: Text(
             productInfo.quantity.toString(),
@@ -68,7 +86,7 @@ class ProductCard extends StatelessWidget {
         title: Text(productInfo.name.isEmpty ? 'Unknown Product' : productInfo.name),
         subtitle: Text(
           'Add an expiry date for this product and change product information if needed',
-          style: TextStyle(color: Colors.blue.shade900)
+          style: TextStyle(color: Colors.blue.shade700)
         ),
         trailing: IconButton(
           icon: const Icon(Icons.edit_rounded),

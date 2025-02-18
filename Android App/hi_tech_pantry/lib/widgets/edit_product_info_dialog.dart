@@ -28,6 +28,7 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
   final _focusQuantity = FocusNode();
 
   bool _isProcessing = false;
+  bool doesItHaveExpiryDate = false;
 
   int _quantity = 0;
 
@@ -38,6 +39,7 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
     _nameController.text = widget.productInfo.name;
     _quantityController.text = _quantity.toString();
     if (widget.productInfo.expiryDate != null) {
+      doesItHaveExpiryDate = true;
       _expiryDateController.text = DateFormat('dd/MM/yyyy').format(widget.productInfo.expiryDate!);
     }
   }
@@ -51,24 +53,26 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
       backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.blue.shade100,
       title: Column(
         children: [
-          const Text(
-            'Edit Product Info',
-            style: TextStyle(color: Colors.blue),
-          ),
           Text(
-            'EAN Code: ${widget.productInfo.eancode}',
-            style: TextStyle(color: Colors.blue),
+            'Edit Product Info',
+            style: TextStyle(color: Colors.blue.shade700),
           ),
+          if (widget.productInfo.name.isEmpty)
+            Text(
+              'EAN Code: ${widget.productInfo.eancode}',
+              style: TextStyle(color: Colors.blue),
+            ),
         ],
       ),
       content: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(
           width: 300,
-          height: 280,
+          height: 310,
           child: Form(
             key: _formKey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextFormField(
                   decoration: InputDecoration(
@@ -93,20 +97,35 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 ),
-                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: doesItHaveExpiryDate,
+                      onChanged: (value) {
+                        setState(() {
+                          doesItHaveExpiryDate = value!;
+                          if (!doesItHaveExpiryDate) {
+                            _expiryDateController.clear();
+                          }
+                        });
+                      }
+                    ),
+                    Text('Expiry Date', style: TextStyle(fontSize: 18, color: Colors.blue.shade700, fontWeight: doesItHaveExpiryDate ? FontWeight.bold : FontWeight.normal)),
+                  ],
+                ),
                 TextFormField(
+                  enabled: doesItHaveExpiryDate,
                   decoration: InputDecoration(
                     labelText: 'Expiry Date',
                     hintText: 'Expiry Date',
                     prefixIcon: const Icon(Icons.calendar_today_rounded, size: 24),
                   ),
                   controller: _expiryDateController,
-                  validator: (value) => Validator.validateExpiryDate(expiryDate: value),
                   readOnly: true,
                   onTap: () async {
                     DateTime? expiryDate = await showDatePicker(
                       context: context,
-                      initialDate: widget.productInfo.expiryDate,
+                      initialDate: widget.productInfo.expiryDate != null ? DateTime.now() : null,
                       firstDate: DateTime.now(),
                       lastDate: DateTime(2040),
                     );
@@ -138,9 +157,9 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
                               eancode: widget.productInfo.eancode,
                               name: _nameController.text,
                               finishedEditing: true,
-                              isExpired: _expiryDateController.text == DateFormat('dd/MM/yyyy').format(widget.productInfo.expiryDate!) ? widget.productInfo.isExpired : false,
+                              isExpired: widget.productInfo.expiryDate != null ? _expiryDateController.text == DateFormat('dd/MM/yyyy').format(widget.productInfo.expiryDate!) ? widget.productInfo.isExpired : false : false,
                               quantity: int.parse(_quantityController.text),
-                              expiryDate: DateFormat('dd/MM/yyyy').parse(_expiryDateController.text)
+                              expiryDate: _expiryDateController.text.isNotEmpty ? DateFormat('dd/MM/yyyy').parse(_expiryDateController.text) : null,
                             )
                           );
                           setState(() {

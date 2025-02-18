@@ -125,6 +125,15 @@ class ThemeProvider extends ChangeNotifier {
         color: Colors.black
       ),
     ),
+    checkboxTheme: CheckboxThemeData(
+      fillColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
+          return Colors.blue;
+        }
+        return Colors.transparent;
+      }),
+      checkColor: WidgetStateProperty.all(Colors.blue.shade50),
+    ),
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -226,6 +235,15 @@ class ThemeProvider extends ChangeNotifier {
         fontWeight: FontWeight.bold,
         color: Color.fromARGB(255, 110, 107, 107)
       ),
+    ),
+    checkboxTheme: CheckboxThemeData(
+      fillColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
+          return Colors.blue;
+        }
+        return Colors.transparent;
+      }),
+      checkColor: WidgetStateProperty.all(Colors.grey.shade900),
     ),
   );
 }
