@@ -6,7 +6,7 @@ class ProductInfo {
     required this.quantity,
     required this.expiryDate,
     this.docId = "",
-    this.isExpired = false
+    required this.isExpired
   });
 
   final String eancode;
@@ -15,7 +15,7 @@ class ProductInfo {
   final int quantity;
   final DateTime? expiryDate;
   String docId = "";
-  bool isExpired = false;
+  final bool isExpired;
 
   Map<String, dynamic> toFirestore() {
     return {

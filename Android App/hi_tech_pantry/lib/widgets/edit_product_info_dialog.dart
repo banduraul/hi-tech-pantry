@@ -138,6 +138,7 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
                               eancode: widget.productInfo.eancode,
                               name: _nameController.text,
                               finishedEditing: true,
+                              isExpired: _expiryDateController.text == DateFormat('dd/MM/yyyy').format(widget.productInfo.expiryDate!) ? widget.productInfo.isExpired : false,
                               quantity: int.parse(_quantityController.text),
                               expiryDate: DateFormat('dd/MM/yyyy').parse(_expiryDateController.text)
                             )
