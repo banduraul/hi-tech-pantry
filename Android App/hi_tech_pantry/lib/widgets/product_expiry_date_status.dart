@@ -23,7 +23,7 @@ class ProductExpiryDateStatus extends StatelessWidget {
         const SizedBox(width: 5.0),
         Text(
           expiryDate,
-          style: TextStyle(color: color),
+          style: TextStyle(color: color, fontWeight: FontWeight.w900),
         ),
       ],
     );

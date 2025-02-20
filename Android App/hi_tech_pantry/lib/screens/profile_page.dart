@@ -105,11 +105,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
-                                  color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68)
+                                  color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800
                                 ),
                               ),
                               IconButton(
-                                icon: Icon(Icons.edit_rounded, color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68)),
+                                icon: Icon(Icons.edit_rounded, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800),
                                 onPressed: () {
                                   showDialog(
                                     context: context,
@@ -140,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Email: ${appState.userEmail}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68))),
+                            Text('Email: ${appState.userEmail}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800)),
                             Row(
                               children: [
                                 Icon(appState.isUserEmailVerified ? Icons.check_circle_rounded : Icons.error_rounded, color: appState.isUserEmailVerified ? Colors.green.shade600 : Colors.red.shade600),
@@ -186,18 +186,18 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
                     child: Row(
                       children: [
-                        Icon(Icons.brightness_6_outlined, size: 30, color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68)),
+                        Icon(Icons.brightness_6_outlined, size: 30, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800),
                         SizedBox(width: 40),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Theme', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68))),
+                            Text('Theme', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800)),
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
                               child: Text(
                                 themeProvider.currentThemeMode == ThemeMode.system ? 'System Default'
                                   : isDarkMode ? 'Dark' : 'Light',
-                                style: TextStyle(fontSize: 15, color: isDarkMode ? Colors.grey.shade700 : const Color.fromARGB(255, 110, 107, 107))),
+                                style: TextStyle(fontSize: 18, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800)),
                             ),
                           ],
                         ),
@@ -223,7 +223,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Pantry', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68))),
+                              Text('Pantry', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800)),
                               Padding(
                                 padding: const EdgeInsets.only(left: 20.0),
                                 child: Row(
@@ -232,8 +232,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.end,
                                       children: [
-                                        Text('Status:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68))),
-                                        Text('Mode:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68)))
+                                        Text('Status:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800)),
+                                        Text('Mode:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800))
                                       ],
                                     ),
                                     const SizedBox(width: 10),
@@ -241,7 +241,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text('Connected', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.green.shade600)),
-                                        Text(appState.pantryMode, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.blue.shade700)),
+                                        Text(appState.pantryMode, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: isDarkMode ? Colors.yellow : Colors.orange)),
                                       ],
                                     ),
                                   ],
@@ -270,7 +270,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red.shade900,
-                                  foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+                                  foregroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -303,7 +303,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding: EdgeInsets.only(left: 20),
                       child: Row(
                         children: [
-                          Icon(Icons.qr_code_rounded, size: 25, color: isDarkMode ? Color.fromARGB(255, 110, 107, 107) : Colors.grey.shade800),
+                          Icon(Icons.qr_code_rounded, size: 25, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800),
                           SizedBox(width: 40),
                           Text('Connect to your Pantry', style: TextStyle(fontSize: 20)),
                         ],
@@ -319,7 +319,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.only(left: 20),
                 child: Row(
                   children: [
-                    Icon(Icons.notifications_rounded, size: 25, color: isDarkMode ? Color.fromARGB(255, 110, 107, 107) : Colors.grey.shade800),
+                    Icon(Icons.notifications_rounded, size: 25, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800),
                     SizedBox(width: 40),
                     Text('Notifications', style: TextStyle(fontSize: 20)),
                   ],
@@ -338,7 +338,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: EdgeInsets.only(left: 20),
                 child: Row(
                   children: [
-                    Icon(Icons.key_rounded, size: 25, color: isDarkMode ? Color.fromARGB(255, 110, 107, 107) : Colors.grey.shade800),
+                    Icon(Icons.key_rounded, size: 25, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800),
                     SizedBox(width: 40),
                     Text('Change password', style: TextStyle(fontSize: 20)),
                   ],
@@ -360,14 +360,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
-                foregroundColor: isDarkMode ? Colors.red.shade900 : Colors.red.shade700,
+                backgroundColor: isDarkMode ? Colors.grey[850] : Colors.white,
+                foregroundColor: Colors.red.shade800,
               ),
               child: Padding(
                 padding: EdgeInsets.only(left: 20),
                 child: Row(
                   children: [
-                    Icon(Icons.logout_rounded, size: 25, color: isDarkMode ? Colors.red.shade900 : Colors.red.shade700),
+                    Icon(Icons.logout_rounded, size: 25, color: Colors.red.shade800),
                     SizedBox(width: 40),
                     Text('Log out', style: TextStyle(fontSize: 20)),
                   ],
@@ -384,7 +384,7 @@ class _ProfilePageState extends State<ProfilePage> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red.shade900,
-                foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+                foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -393,7 +393,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: EdgeInsets.only(left: 20),
                 child: Row(
                   children: [
-                    Icon(Icons.delete_forever_rounded, size: 25, color: isDarkMode ? Colors.grey.shade900 : Colors.white),
+                    Icon(Icons.delete_forever_rounded, size: 25, color: Colors.white),
                     SizedBox(width: 40),
                     Text('Delete account', style: TextStyle(fontSize: 20)),
                   ],

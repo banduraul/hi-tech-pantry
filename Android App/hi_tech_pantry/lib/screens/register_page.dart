@@ -169,13 +169,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                       style: ElevatedButton.styleFrom(
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(20),
-                                          side: const BorderSide(
-                                            color: Colors.blue,
+                                          side: BorderSide(
+                                            color: Colors.blue.shade700,
                                             width: 3
                                           ),
                                         ),
                                         backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
-                                        foregroundColor: Colors.blue,
+                                        foregroundColor: Colors.blue.shade700,
                                       ),
                                       onPressed: () async {
                                         if (_registerFormKey.currentState!

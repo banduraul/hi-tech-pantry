@@ -55,7 +55,7 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
         children: [
           Text(
             'Edit Product Info',
-            style: TextStyle(color: Colors.blue.shade700),
+            style: TextStyle(color: Colors.blue.shade700, fontWeight: FontWeight.w500),
           ),
           if (widget.productInfo.name.isEmpty)
             Text(
@@ -142,7 +142,7 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
                   ? CircularProgressIndicator(color: Colors.blue.shade700)
                   : ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: Colors.blue.shade700,
                         foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
                       ),
                       onPressed: () async {

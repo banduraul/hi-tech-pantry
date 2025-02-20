@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blue,
+                                    backgroundColor: Colors.blue.shade700,
                                     foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
                                   ),
                                   onPressed: () async {
@@ -159,13 +159,13 @@ class _LoginPageState extends State<LoginPage> {
                                   style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20),
-                                      side: const BorderSide(
-                                        color: Colors.blue,
+                                      side: BorderSide(
+                                        color: Colors.blue.shade700,
                                         width: 3
                                       ),
                                     ),
                                     backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
-                                    foregroundColor: Colors.blue,
+                                    foregroundColor: Colors.blue.shade700,
                                   ),
                                   onPressed: () => context.pushNamed(RegisterPage.registerName),
                                   child: const Text('Register')
@@ -181,8 +181,8 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextStyle(
                             fontSize: 18,
                             decoration: TextDecoration.underline,
-                            decorationColor: Colors.blue.shade600,
-                            color: Colors.blue.shade600
+                            decorationColor: Colors.blue.shade700,
+                            color: Colors.blue.shade700
                           ),
                         ),
                       ),

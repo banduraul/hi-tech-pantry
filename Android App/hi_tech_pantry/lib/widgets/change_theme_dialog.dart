@@ -40,7 +40,7 @@ class _ChangeThemeDialogState extends State<ChangeThemeDialog> {
 
     return AlertDialog(
       backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.blue.shade100,
-      title: const Text('Change Theme', style: TextStyle(color: Colors.blue)),
+      title: Text('Change Theme', style: TextStyle(color: Colors.blue.shade700, fontWeight: FontWeight.w500)),
       contentTextStyle: TextStyle(color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : Colors.black),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +48,7 @@ class _ChangeThemeDialogState extends State<ChangeThemeDialog> {
         children: [
           RadioListTile(
             contentPadding: EdgeInsets.zero,
-            activeColor: Colors.blue,
+            activeColor: Colors.blue.shade700,
             value: 'system',
             groupValue: selectedTheme,
             onChanged: (value) {
@@ -61,7 +61,7 @@ class _ChangeThemeDialogState extends State<ChangeThemeDialog> {
           ),
           RadioListTile(
             contentPadding: EdgeInsets.zero,
-            activeColor: Colors.blue,
+            activeColor: Colors.blue.shade700,
             value: 'light',
             groupValue: selectedTheme,
             onChanged: (value) {
@@ -74,7 +74,7 @@ class _ChangeThemeDialogState extends State<ChangeThemeDialog> {
           ),
           RadioListTile(
             contentPadding: EdgeInsets.zero,
-            activeColor: Colors.blue,
+            activeColor: Colors.blue.shade700,
             value: 'dark',
             groupValue: selectedTheme,
             onChanged: (value) {
@@ -87,7 +87,7 @@ class _ChangeThemeDialogState extends State<ChangeThemeDialog> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
+              backgroundColor: Colors.blue.shade700,
               foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
             ),
             onPressed: () {

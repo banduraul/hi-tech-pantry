@@ -27,9 +27,9 @@ class _ChangeUsernameDialogState extends State<ChangeUsernameDialog> {
 
     return AlertDialog(
       backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.blue.shade100,
-      title: const Text(
+      title: Text(
         'Insert new username',
-        style: TextStyle(color: Colors.blue),
+        style: TextStyle(color: Colors.blue.shade700, fontWeight: FontWeight.w500),
       ),
       content: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -58,7 +58,7 @@ class _ChangeUsernameDialogState extends State<ChangeUsernameDialog> {
                   ? CircularProgressIndicator(color: Colors.blue.shade700)
                   : ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: Colors.blue.shade700,
                       foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
                     ),
                     onPressed: () async {

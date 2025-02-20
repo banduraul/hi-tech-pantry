@@ -33,9 +33,9 @@ class _NewPasswordDialogState extends State<NewPasswordDialog> {
 
     return AlertDialog(
       backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.blue.shade100,
-      title: const Text(
+      title: Text(
         'Insert New Password',
-        style: TextStyle(color: Colors.blue),
+        style: TextStyle(color: Colors.blue.shade700, fontWeight: FontWeight.w500),
       ),
       content: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -110,7 +110,7 @@ class _NewPasswordDialogState extends State<NewPasswordDialog> {
                   ? CircularProgressIndicator(color: Colors.blue.shade700)
                   : ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
+                          backgroundColor: Colors.blue.shade700,
                           foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
                       ),
                       onPressed: () async {

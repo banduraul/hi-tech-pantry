@@ -16,17 +16,20 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    bool isDarkMode = theme.brightness == Brightness.dark;
+
     if (productInfo.finishedEditing) {
       if (productInfo.expiryDate != null) {
         final expiryDate = DateFormat('dd/MM/yyyy').format(productInfo.expiryDate!);
         if (productInfo.isExpired) {
           return Card(
             child: ListTile(
-              title: Text(productInfo.name),
+              title: Text(productInfo.name, style: TextStyle(color: isDarkMode ? Colors.white : null)),
               subtitle: ProductExpiryDateStatus(
-                icon: Icons.error_outline_rounded,
+                icon: Icons.cancel_outlined,
                 expiryDate: 'Expired On: $expiryDate',
-                color: Colors.red.shade900
+                color: Colors.red.shade800
               ),
               trailing: Text(
                 productInfo.quantity.toString(),
@@ -46,10 +49,10 @@ class ProductCard extends StatelessWidget {
 
         return Card(
           child: ListTile(
-            title: Text(productInfo.name),
+            title: Text(productInfo.name, style: TextStyle(color: isDarkMode ? Colors.white : null)),
             subtitle: ProductExpiryDateStatus(
               icon: isAfter ? Icons.check_circle_outline_rounded
-                            : Icons.warning_amber_rounded,
+                            : Icons.access_time_rounded,
               expiryDate: 'Expiry Date: $expiryDate',
               color: isAfter ? Colors.green.shade600
                              : Colors.orange.shade600
@@ -57,7 +60,7 @@ class ProductCard extends StatelessWidget {
             trailing: Text(
               productInfo.quantity.toString(),
               style: TextStyle(
-                color: productInfo.quantity <= 3 ? Colors.red.shade900 : null
+                color: productInfo.quantity <= 3 ? Colors.red.shade800 : null
               )
             ),
           ),
@@ -66,7 +69,7 @@ class ProductCard extends StatelessWidget {
 
       return Card(
         child: ListTile(
-          title: Text(productInfo.name),
+          title: Text(productInfo.name, style: TextStyle(color: isDarkMode ? Colors.white : null)),
           subtitle: Text(
             'No expiry date set for this product',
             style: TextStyle(color: Colors.blue.shade700)
@@ -83,10 +86,10 @@ class ProductCard extends StatelessWidget {
     
     return Card(
       child: ListTile(
-        title: Text(productInfo.name.isEmpty ? 'Unknown Product' : productInfo.name),
+        title: Text(productInfo.name.isEmpty ? 'Unknown Product' : productInfo.name, style: TextStyle(color: isDarkMode ? Colors.white : null)),
         subtitle: Text(
-          'Add an expiry date for this product and change product information if needed',
-          style: TextStyle(color: Colors.blue.shade700)
+          'New product. Tap to edit',
+          style: TextStyle(color: Colors.blue.shade700, fontWeight: FontWeight.w900)
         ),
         trailing: IconButton(
           icon: const Icon(Icons.edit_rounded),

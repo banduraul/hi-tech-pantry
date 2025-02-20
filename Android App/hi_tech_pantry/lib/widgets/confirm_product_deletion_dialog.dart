@@ -13,7 +13,7 @@ class ConfirmProductDeletionDialog extends StatelessWidget {
     return AlertDialog(
       backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.blue.shade100,
       icon: Icon(Icons.warning_rounded, color: Colors.red.shade800),
-      title: Text('Please confirm', style: TextStyle(color: Colors.blue.shade700)),
+      title: Text('Please confirm', style: TextStyle(color: Colors.blue.shade700, fontWeight: FontWeight.w500)),
       content: Text('Are you sure you want to delete $productName?',
         style: TextStyle(
           fontSize: 20,
@@ -26,11 +26,11 @@ class ConfirmProductDeletionDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: Text('No', style: TextStyle(fontSize: 18, color: Colors.red.shade800)),
+          child: Text('No', style: TextStyle(fontSize: 18, color: Colors.red.shade800, fontWeight: FontWeight.w500)),
         ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(true),
-          child: Text('Yes', style: TextStyle(fontSize: 18, color: Colors.green.shade700)),
+          child: Text('Yes', style: TextStyle(fontSize: 18, color: Colors.green.shade700, fontWeight: FontWeight.w500)),
         ),
       ],
     );

@@ -111,6 +111,24 @@ class ThemeProvider extends ChangeNotifier {
       filled: true,
       fillColor: Colors.blue.shade50,
       border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.blue.shade700, width: 2),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.blue.shade700),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+      ),
+      floatingLabelStyle: TextStyle(color: Colors.blue.shade700),
+      errorStyle: const TextStyle(color: Colors.red),
+      errorBorder: const OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.blue.shade700, width: 2),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+      ),
     ),
     listTileTheme: ListTileThemeData(
       iconColor: Colors.black,
@@ -128,7 +146,7 @@ class ThemeProvider extends ChangeNotifier {
     checkboxTheme: CheckboxThemeData(
       fillColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
         if (states.contains(WidgetState.selected)) {
-          return Colors.blue;
+          return Colors.blue.shade700;
         }
         return Colors.transparent;
       }),
@@ -143,7 +161,7 @@ class ThemeProvider extends ChangeNotifier {
     primarySwatch: Colors.blue,
     scaffoldBackgroundColor: Colors.grey.shade900,
     cardTheme: CardTheme(
-      color: Colors.grey.shade900,
+      color: Colors.grey[850],
       elevation: 10,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(25.0),
@@ -159,8 +177,8 @@ class ThemeProvider extends ChangeNotifier {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        backgroundColor: Colors.grey.shade900,
-        foregroundColor: const Color.fromARGB(255, 110, 107, 107),
+        backgroundColor: Colors.grey[850],
+        foregroundColor: Colors.blue.shade700,
         minimumSize: const Size(double.infinity, 50),
       ),
     ),
@@ -173,12 +191,12 @@ class ThemeProvider extends ChangeNotifier {
       bodyLarge: const TextStyle(fontSize: 18.0),
       headlineMedium: TextStyle(
         fontSize: 18.0,
-        color: Colors.grey.shade900,
+        color: Colors.grey[850],
         fontWeight: FontWeight.bold,
       )
     ),
     appBarTheme: AppBarTheme(
-      backgroundColor: Colors.grey.shade900,
+      backgroundColor: Colors.grey[850],
       shadowColor: Colors.white10,
       elevation: 3,
       centerTitle: true,
@@ -198,52 +216,52 @@ class ThemeProvider extends ChangeNotifier {
     inputDecorationTheme: InputDecorationTheme(
       alignLabelWithHint: false,
       filled: true,
-      fillColor: Colors.grey.shade900,
+      fillColor: Colors.grey[850],
       border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
       labelStyle: const TextStyle(color: Color.fromARGB(255, 110, 107, 107)),
-      focusedBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.blue, width: 2),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.blue.shade700, width: 2),
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
-      enabledBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.blue),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.blue.shade700),
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
       prefixIconColor: const Color.fromARGB(255, 110, 107, 107),
       suffixIconColor: const Color.fromARGB(255, 110, 107, 107),
       hintStyle: const TextStyle(color: Color.fromARGB(255, 110, 107, 107)),
-      floatingLabelStyle: const TextStyle(color: Colors.blue),
+      floatingLabelStyle: TextStyle(color: Colors.blue.shade700),
       errorStyle: const TextStyle(color: Colors.red),
       errorBorder: const OutlineInputBorder(
         borderSide: BorderSide(color: Colors.red),
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
-      focusedErrorBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.blue, width: 2),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.blue.shade700, width: 2),
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
     ),
     listTileTheme: ListTileThemeData(
-      iconColor: Color.fromARGB(255, 110, 107, 107),
-      titleTextStyle: const TextStyle(
+      iconColor: Colors.white,
+      titleTextStyle: TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.bold,
         color: Color.fromARGB(255, 110, 107, 107)
       ),
-      leadingAndTrailingTextStyle: const TextStyle(
+      leadingAndTrailingTextStyle: TextStyle(
         fontSize: 25,
         fontWeight: FontWeight.bold,
-        color: Color.fromARGB(255, 110, 107, 107)
+        color: Colors.white
       ),
     ),
     checkboxTheme: CheckboxThemeData(
       fillColor: WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {
         if (states.contains(WidgetState.selected)) {
-          return Colors.blue;
+          return Colors.blue.shade700;
         }
         return Colors.transparent;
       }),
-      checkColor: WidgetStateProperty.all(Colors.grey.shade900),
+      checkColor: WidgetStateProperty.all(Colors.grey[850]),
     ),
   );
 }

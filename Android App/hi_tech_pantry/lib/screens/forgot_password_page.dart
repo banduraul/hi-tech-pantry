@@ -25,6 +25,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    bool isDarkMode = theme.brightness == Brightness.dark;
+    
     return GestureDetector(
       onTap: () {
         _focusEmail.unfocus();
@@ -69,7 +72,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.blue,
-                                  foregroundColor: Colors.white,
+                                  foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
                                 ),
                                 onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
