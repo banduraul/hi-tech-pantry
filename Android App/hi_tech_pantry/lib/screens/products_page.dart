@@ -11,6 +11,7 @@ import '../utils/notification_services.dart';
 
 import '../widgets/product_card.dart';
 import '../widgets/edit_product_info_dialog.dart';
+import '../widgets/confirm_product_deletion_dialog.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -179,6 +180,12 @@ class _ProductsPageState extends State<ProductsPage> {
                               padding: const EdgeInsets.only(right: 20.0),
                               child: Icon(Icons.delete_forever_rounded, color: Colors.red.shade900),
                             ),
+                            confirmDismiss: (_) async {
+                              return await showDialog(
+                                context: context,
+                                builder: (context) => ConfirmProductDeletionDialog(productName: productInfo.name),
+                              );
+                            },
                             onDismissed: (_) async {
                               final message = await Database.deleteProduct(docId: productInfo.docId);
                               if (message.contains('Success')) {
