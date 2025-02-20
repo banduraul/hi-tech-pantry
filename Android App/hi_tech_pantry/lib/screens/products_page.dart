@@ -50,105 +50,73 @@ class _ProductsPageState extends State<ProductsPage> {
       resizeToAvoidBottomInset: false,
       body: Consumer<ApplicationState>(
         builder: (context, appState, _) {
-          final filteredProducts = appState.productInfo.where((product) => product.name.toLowerCase().contains(_searchQuery)).toList();
-          return appState.productInfo.isEmpty
-            ? Column(
-              children: [
-                AppBar(
-                  title: Text('Products'),
-                  actions: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.person_rounded,
-                          size: 27,
+          final filteredProducts = appState.isConnectedToPantry ? appState.productInfo.where((product) => product.name.toLowerCase().contains(_searchQuery)).toList() : [];
+          return Column(
+            children: [
+              Stack(
+                children: [
+                  if (filteredProducts.isNotEmpty)
+                    Material(
+                      elevation: 3,
+                      borderRadius: BorderRadius.circular(16.0),
+                      child: Container(
+                        width: double.infinity,
+                        height: 115,
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(16.0),
                         ),
-                        onPressed: () {
-                          context.pushNamed(ProfilePage.profileName);
-                        },
+                        alignment: Alignment.bottomCenter,
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Swipe left on any product to delete it',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
                       ),
                     ),
-                  ],
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'You have no products in your pantry',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.blue.shade700,
-                      )
-                    )
-                  )
-                ),
-              ],
-            )
-            : Column(
-              children: [
-                Stack(
-                  children: [
-                    if (filteredProducts.isNotEmpty)
-                      Material(
-                        elevation: 3,
-                        borderRadius: BorderRadius.circular(16.0),
-                        child: Container(
-                          width: double.infinity,
-                          height: 115,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(16.0),
-                          ),
-                          alignment: Alignment.bottomCenter,
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Swipe left on any product to delete it',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
-                        ),
-                      ),
-                    AppBar(
-                      title: Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 400),
-                          transitionBuilder: (child, animation) {
-                            return SizeTransition(
-                              sizeFactor: animation,
-                              axisAlignment: -1.0,
-                              child: child
-                            );
-                          },
-                          child: _isSearching
-                            ? TextField(
-                                key: ValueKey('searchField'),
-                                onChanged: (value) {
-                                  setState(() {
-                                    _searchQuery = value;
-                                  });
-                                },
-                                style: TextStyle(
-                                  color: Colors.blue.shade700,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                decoration: InputDecoration(
-                                  hintText: 'Search products...',
-                                  border: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  filled: false,
-                                ),
-                                autofocus: true,
-                              )
-                            : Text(
-                                'Products',
-                                key: ValueKey('title'),
+                  AppBar(
+                    title: Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 400),
+                        transitionBuilder: (child, animation) {
+                          return SizeTransition(
+                            sizeFactor: animation,
+                            axisAlignment: -1.0,
+                            child: child
+                          );
+                        },
+                        child: _isSearching
+                          ? TextField(
+                              key: ValueKey('searchField'),
+                              onChanged: (value) {
+                                setState(() {
+                                  _searchQuery = value;
+                                });
+                              },
+                              style: TextStyle(
+                                color: Colors.blue.shade700,
+                                fontWeight: FontWeight.w500,
                               ),
-                        ),
+                              decoration: InputDecoration(
+                                hintText: 'Search products...',
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                filled: false,
+                              ),
+                              autofocus: true,
+                            )
+                          : Text(
+                              'Products',
+                              key: ValueKey('title'),
+                            ),
                       ),
-                      leading: IconButton(
+                    ),
+                    leading: Visibility(
+                      visible: appState.isConnectedToPantry && appState.productInfo.isNotEmpty,
+                      child: IconButton(
                         icon: Icon(
                           _isSearching
                             ? Icons.close
@@ -164,87 +132,96 @@ class _ProductsPageState extends State<ProductsPage> {
                           });
                         },
                       ),
-                      actions: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.person_rounded,
-                              size: 27,
+                    ),
+                    actions: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.person_rounded,
+                            size: 27,
+                          ),
+                          onPressed: () {
+                            if (!_isSearching) {
+                              context.pushNamed(ProfilePage.profileName);
+                            } else {
+                              setState(() {
+                                _isSearching = !_isSearching;
+                                _searchQuery = '';
+                              });
+                              Future.delayed(Duration(milliseconds: 600));
+                              context.pushNamed(ProfilePage.profileName);
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Expanded(
+                  child: filteredProducts.isNotEmpty 
+                  ? ListView.builder(
+                      padding: EdgeInsets.only(top: 0.0),
+                      itemCount: filteredProducts.length,
+                      itemBuilder: (context, index) {
+                        final productInfo = filteredProducts[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+                          child: Dismissible(
+                            key: Key(productInfo.docId),
+                            direction: DismissDirection.endToStart,
+                            background: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                              ),
+                              alignment: Alignment.centerRight,
+                              padding: const EdgeInsets.only(right: 20.0),
+                              child: Icon(Icons.delete_forever_rounded, color: Colors.red.shade900),
                             ),
-                            onPressed: () {
-                              if (!_isSearching) {
-                                context.pushNamed(ProfilePage.profileName);
-                              } else {
-                                setState(() {
-                                  _isSearching = !_isSearching;
-                                  _searchQuery = '';
-                                });
-                                Future.delayed(Duration(milliseconds: 600));
-                                context.pushNamed(ProfilePage.profileName);
+                            onDismissed: (_) async {
+                              final message = await Database.deleteProduct(docId: productInfo.docId);
+                              if (message.contains('Success')) {
+                                Fluttertoast.showToast(
+                                  msg: 'Product deleted successfully',
+                                  toastLength: Toast.LENGTH_SHORT,
+                                );
                               }
                             },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Expanded(
-                    child: filteredProducts.isNotEmpty 
-                    ? ListView.builder(
-                        padding: EdgeInsets.only(top: 0.0),
-                        itemCount: filteredProducts.length,
-                        itemBuilder: (context, index) {
-                          final productInfo = filteredProducts[index];
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-                            child: Dismissible(
-                              key: Key(productInfo.docId),
-                              direction: DismissDirection.endToStart,
-                              background: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                ),
-                                alignment: Alignment.centerRight,
-                                padding: const EdgeInsets.only(right: 20.0),
-                                child: Icon(Icons.delete_forever_rounded, color: Colors.red.shade900),
-                              ),
-                              onDismissed: (_) async {
-                                final message = await Database.deleteProduct(docId: productInfo.docId);
-                                if (message.contains('Success')) {
-                                  Fluttertoast.showToast(
-                                    msg: 'Product deleted successfully',
-                                    toastLength: Toast.LENGTH_SHORT,
-                                  );
-                                }
+                            child: GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => EditProductInfoDialog(productInfo: productInfo),
+                                );
                               },
-                              child: GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => EditProductInfoDialog(productInfo: productInfo),
-                                  );
-                                },
-                                child: ProductCard(productInfo: productInfo)
-                              ),
+                              child: ProductCard(productInfo: productInfo)
                             ),
-                          );
-                        }
-                      )
-                    : Center(
-                        child: Text(
-                          'No products match your search criteria',
+                          ),
+                        );
+                      }
+                    )
+                  : Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        child: Text(!appState.isConnectedToPantry 
+                          ? 'You are not connected to your pantry.\nGo to the profile page and connect in order to see your products'
+                          : _isSearching
+                            ? 'No products match your search criteria'
+                            : 'You have no products in your pantry',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w500,
                             color: Colors.blue.shade700,
-                          )
-                        )
+                          ),
+                          softWrap: true,
+                          textAlign: TextAlign.center,
+                        ),
                       )
-                  ),
-              ],
-            );
+                    )
+                ),
+            ],
+          );
         }
       ),
     );

@@ -305,4 +305,24 @@ class Database {
 
     return message;
   }
+
+  static Future<String> disconnectFromPantry() async {
+    String message;
+
+    try {
+      final auth = FirebaseAuth.instance;
+      await FirebaseFirestore.instance
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .update({
+          'connectedToPantry': false,
+        });
+      message = 'Success';
+    } catch (e) {
+      message = 'Disconnection attempt failed. Please try again';
+      debugPrint(e.toString());
+    }
+
+    return message;
+  }
 }

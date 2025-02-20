@@ -13,7 +13,7 @@ class QRCodeDialog extends StatelessWidget {
 
     return AlertDialog(
       backgroundColor: isDarkMode ? Colors.grey.shade900 : Colors.blue.shade100,
-      title: const Text('Scan to link your account', style: TextStyle(color: Colors.blue)),
+      title: const Text('Scan to connect to pantry', style: TextStyle(color: Colors.blue)),
       content: SizedBox(
         width: 200,
         height: 200,

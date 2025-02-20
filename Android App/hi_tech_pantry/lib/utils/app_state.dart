@@ -39,6 +39,14 @@ class ApplicationState extends ChangeNotifier {
   String _userPhotoUrl = '';
   String get userPhotoUrl => _userPhotoUrl;
 
+  StreamSubscription<DocumentSnapshot>? _pantryModeSubscription;
+
+  bool _isConnectedToPantry = false;
+  bool get isConnectedToPantry => _isConnectedToPantry;
+
+  String _pantryMode = '';
+  String get pantryMode => _pantryMode;
+
   Future<void> sendEmailVerification() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -112,9 +120,20 @@ class ApplicationState extends ChangeNotifier {
 
             notifyListeners();
           });
+        
+        _pantryModeSubscription = FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .snapshots()
+          .listen((snapshot) {
+            _isConnectedToPantry = snapshot.data()?['connectedToPantry'] as bool;
+            _pantryMode = snapshot.data()?['mode'] as String;
+            notifyListeners();
+          });
       } else {
         _isLoggedIn = false;
         _productInfo = [];
+        _pantryModeSubscription?.cancel();
         _productInfoSubscription?.cancel();
       }
 

@@ -52,6 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
     var theme = Theme.of(context);
     bool isDarkMode = theme.brightness == Brightness.dark;
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final userEmail = Provider.of<ApplicationState>(context, listen: false).userEmail;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -139,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Email: ${appState.userEmail}', style: TextStyle(fontSize: 17, color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68))),
+                            Text('Email: ${appState.userEmail}', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68))),
                             Row(
                               children: [
                                 Icon(appState.isUserEmailVerified ? Icons.check_circle_rounded : Icons.error_rounded, color: appState.isUserEmailVerified ? Colors.green.shade600 : Colors.red.shade600),
@@ -206,7 +207,112 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ),
+            Consumer<ApplicationState>(
+              builder: (context, appState, _) => Visibility(
+                visible: appState.isConnectedToPantry,
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 110,
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Pantry', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68))),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 20.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Text('Status:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68))),
+                                        Text('Mode:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: isDarkMode ? const Color.fromARGB(255, 110, 107, 107) : const Color.fromARGB(255, 68, 68, 68)))
+                                      ],
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Connected', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.green.shade600)),
+                                        Text(appState.pantryMode, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.blue.shade700)),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Center(
+                            child: SizedBox(
+                              width: 130,
+                              height: 50,
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  final message = await Database.disconnectFromPantry();
+                                  if (message.contains('Success')) {
+                                    Fluttertoast.showToast(
+                                      msg: 'You have disconnected from the pantry',
+                                      toastLength: Toast.LENGTH_SHORT,
+                                    );
+                                  } else {
+                                    Fluttertoast.showToast(
+                                      msg: message,
+                                      toastLength: Toast.LENGTH_SHORT,
+                                    );
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red.shade900,
+                                  foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: Text('Disconnect', style: TextStyle(fontSize: 18)),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             const Spacer(),
+            Consumer<ApplicationState>(
+              builder: (context, appState, _) => Visibility(
+                visible: !appState.isConnectedToPantry,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => QRCodeDialog(email: userEmail)
+                      );
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 20),
+                      child: Row(
+                        children: [
+                          Icon(Icons.qr_code_rounded, size: 25, color: isDarkMode ? Color.fromARGB(255, 110, 107, 107) : Colors.grey.shade800),
+                          SizedBox(width: 40),
+                          Text('Connect to your Pantry', style: TextStyle(fontSize: 20)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             ElevatedButton(
               onPressed: () => AppSettings.openAppSettings(type: AppSettingsType.notification),
               child: Padding(
@@ -217,27 +323,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     SizedBox(width: 40),
                     Text('Notifications', style: TextStyle(fontSize: 20)),
                   ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Consumer<ApplicationState>(
-              builder: (context, appState, _) => ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => QRCodeDialog(email: appState.userEmail)
-                  );
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Row(
-                    children: [
-                      Icon(Icons.qr_code_rounded, size: 25, color: isDarkMode ? Color.fromARGB(255, 110, 107, 107) : Colors.grey.shade800),
-                      SizedBox(width: 40),
-                      Text('Link to Raspberry Pi App', style: TextStyle(fontSize: 20)),
-                    ],
-                  ),
                 ),
               ),
             ),
