@@ -13,3 +13,5 @@ Cloud functions used by the project to send push notifications to the users.
 `productsExpiringSoonNotification` (runs once a day) - sends a notification to the user with all the products that are to expire in the next 3 days
 
 `productsRunningLowNotification` (runs once a day) - sends a notification to the user with all the products that have `quantity <= 3`
+
+`checkExpiredProducts` (runs once a day) - checks whether products have expired or not and updates the `isExpired` field accordingly
