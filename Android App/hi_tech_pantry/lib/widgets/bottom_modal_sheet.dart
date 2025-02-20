@@ -76,10 +76,6 @@ class BottomModalSheet extends StatelessWidget {
               context.pop();
               await getImageFromGallery();
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
-            ),
             child: const Text('Choose picture from gallery', style: TextStyle(fontSize: 20)),
           ),
           ElevatedButton(
@@ -87,10 +83,6 @@ class BottomModalSheet extends StatelessWidget {
               context.pop();
               await getImageFromCamera();
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
-            ),
             child: const Text('Take a picture', style: TextStyle(fontSize: 20)),
           ),
         ],
