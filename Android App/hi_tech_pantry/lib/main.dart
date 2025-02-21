@@ -15,7 +15,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       case 'newProduct':
         NotificationServices.showNotification(
           title: message.data['name'],
-          content: 'Click to add an expiration date and change product information if needed',
+          content: 'New product added',
           channelInfo: NotificationServices.newProductsChannel,
         );
         break;
