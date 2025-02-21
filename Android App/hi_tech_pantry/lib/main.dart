@@ -66,6 +66,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           channelInfo: NotificationServices.decreasedQuantityChannel,
         );
         break;
+      case 'productDeleted':
+        NotificationServices.showNotification(
+          title: message.data['name'],
+          content: 'This product ran out',
+          channelInfo: NotificationServices.productDeletedChannel,
+        );
+        break;
     }
 }
 

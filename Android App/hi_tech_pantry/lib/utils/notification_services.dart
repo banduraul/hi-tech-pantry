@@ -65,7 +65,17 @@ class NotificationServices {
     groupID: 5
   );
 
-  static int id = 6;
+  static const NotificationChannelInfo productDeletedChannel = NotificationChannelInfo(
+    id: 'productDeletedChannelID',
+    name: 'productDeletedChannel',
+    description: 'Channel for products that ran out',
+    groupKey: 'productDeletedNotificationGroup',
+    summaryText: 'Products that ran out',
+    subText: 'Product ran out',
+    groupID: 6
+  );
+
+  static int id = 7;
 
   static Future<void> init() async {
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
