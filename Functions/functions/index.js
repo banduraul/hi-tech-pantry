@@ -1,4 +1,4 @@
-const {onDocumentCreated, onDocumentUpdated} = require("firebase-functions/v2/firestore");
+const {onDocumentCreated, onDocumentUpdated, onDocumentDeletedWithAuthContext} = require("firebase-functions/v2/firestore");
 
 const {initializeApp} = require("firebase-admin/app");
 const {getFirestore} = require("firebase-admin/firestore");
@@ -209,5 +209,24 @@ exports.productQuantityUpdatedNotification = onDocumentUpdated({document: "users
             });
         }
 
+    }
+});
+
+exports.productDeletedNotification = onDocumentDeletedWithAuthContext({document: "users/{userId}/products/{docId}", region: "europe-west1"}, async (event) => {
+    if (event.authId.includes('adminsdk')) {
+        const document = await getFirestore()
+            .collection("fcmTokens")
+            .doc(event.params.userId)
+            .get();
+        
+        const pushTokens = document.data().pushTokens;
+
+        await admin.messaging().sendEachForMulticast({
+            tokens: pushTokens,
+            data: {
+                'type': 'productDeleted',
+                'name': event.data.data().name,
+            },
+        });
     }
 });

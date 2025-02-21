@@ -17,3 +17,5 @@ Cloud functions used by the project to send push notifications to the users.
 `checkExpiredProducts` (runs once a day) - checks whether products have expired or not and updates the `isExpired` field accordingly
 
 `productQuantityUpdatedNotification` - sends notifications to users whenever they deposit or withdraw products
+
+`productDeletedNotification` - sends notifications to users whenever they withdraw the last item of a given type
