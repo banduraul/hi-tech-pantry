@@ -199,6 +199,13 @@ class Database {
 
       await FirebaseFirestore.instance
         .collection('users')
+        .doc(auth.currentUser!.uid)
+        .update({
+          'connectedToPantry': false,
+        });
+
+      await FirebaseFirestore.instance
+        .collection('users')
         .doc(auth.currentUser!.uid).delete();
 
       await FirebaseFirestore.instance
