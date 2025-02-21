@@ -1,0 +1,14 @@
+# Ignore Python Virtual Environment
+my-venv/
+
+# Ignore Python generate files
+__pycache__/
+
+# Ignore Firebase Service Account
+service_account.json
+
+# Ignore EAN-Search API Token
+token_api.txt
+
+# Ignore Saved Account
+saved_account.txt
