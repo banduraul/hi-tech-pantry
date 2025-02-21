@@ -52,6 +52,20 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           channelInfo: NotificationServices.runningLowChannel,
         );
         break;
+      case 'increasedQuantity':
+        NotificationServices.showNotification(
+          title: message.data['name'],
+          content: message.data['message'],
+          channelInfo: NotificationServices.increasedQuantityChannel,
+        );
+        break;
+      case 'decreasedQuantity':
+        NotificationServices.showNotification(
+          title: message.data['name'],
+          content: message.data['message'],
+          channelInfo: NotificationServices.decreasedQuantityChannel,
+        );
+        break;
     }
 }
 

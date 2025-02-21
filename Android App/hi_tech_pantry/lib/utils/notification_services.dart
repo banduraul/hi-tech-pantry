@@ -45,7 +45,27 @@ class NotificationServices {
     groupID: 3
   );
 
-  static int id = 4;
+  static const NotificationChannelInfo increasedQuantityChannel = NotificationChannelInfo(
+    id: 'increasedQuantityChannelID',
+    name: 'increasedQuantityChannel',
+    description: 'Channel for product quantity increase',
+    groupKey: 'increasedQuantityNotificationGroup',
+    summaryText: 'Quantities increased',
+    subText: 'Quantity increased',
+    groupID: 4
+  );
+
+  static const NotificationChannelInfo decreasedQuantityChannel = NotificationChannelInfo(
+    id: 'decreasedQuantityChannelID',
+    name: 'decreasedQuantityChannel',
+    description: 'Channel for product quantity decrease',
+    groupKey: 'decreasedQuantityNotificationGroup',
+    summaryText: 'Quantities decreased',
+    subText: 'Quantity decreased',
+    groupID: 5
+  );
+
+  static int id = 6;
 
   static Future<void> init() async {
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
