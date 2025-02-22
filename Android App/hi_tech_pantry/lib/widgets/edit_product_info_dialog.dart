@@ -122,6 +122,7 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
                   ),
                   controller: _expiryDateController,
                   readOnly: true,
+                  validator: (value) => doesItHaveExpiryDate ? Validator.validateExpiryDate(expiryDate: value) : null,
                   onTap: () async {
                     DateTime? expiryDate = await showDatePicker(
                       context: context,
