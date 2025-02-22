@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../utils/database.dart';
-import '../utils/validator.dart';
 
 import '../screens/login_page.dart';
 
@@ -77,7 +76,6 @@ class _DeleteAccountDialog extends State<DeleteAccountDialog> {
                     )
                   ),
                   controller: _passwordController,
-                  validator: (value) => Validator.validatePassword(password: _passwordController.text),
                   focusNode: _focusPassword,
                 ),
                 const Spacer(),

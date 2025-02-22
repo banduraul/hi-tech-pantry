@@ -5,7 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../widgets/new_password_dialog.dart';
 
 import '../utils/database.dart';
-import '../utils/validator.dart';
 
 class ReauthenticateUserDialog extends StatefulWidget {
   const ReauthenticateUserDialog({super.key});
@@ -69,7 +68,6 @@ class _ReauthenticateUserDialogState extends State<ReauthenticateUserDialog> {
                     )
                   ),
                   controller: _passwordController,
-                  validator: (value) => Validator.validatePassword(password: _passwordController.text),
                   focusNode: _focusPassword,
                 ),
                 const Spacer(),

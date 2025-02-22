@@ -72,7 +72,6 @@ class _NewPasswordDialogState extends State<NewPasswordDialog> {
                     )
                   ),
                   controller: _newPasswordController,
-                  validator: (value) => Validator.validatePassword(password: _newPasswordController.text),
                   focusNode: _focusNewPassword,
                 ),
                 const SizedBox(height: 10),

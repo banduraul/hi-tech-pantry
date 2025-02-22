@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../widgets/password_validation_indicator.dart';
 import 'products_page.dart';
 
 import '../utils/database.dart';
@@ -32,6 +33,25 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _isProcessing = false;
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
+  bool _passwordRequirementsVisible = false;
+
+  // Password requirements
+  bool _hasDigit = false;
+  bool _hasUppercase = false;
+  bool _hasLowercase = false;
+  bool _hasMinLength = false;
+  bool _hasSpecialCharacter = false;
+  bool _allRequirementsMet = false;
+
+  @override
+  void initState() {
+    _focusPassword.addListener(() {
+      setState(() {
+        _passwordRequirementsVisible = _focusPassword.hasPrimaryFocus;        
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +119,27 @@ class _RegisterPageState extends State<RegisterPage> {
                           controller: _passwordTextController,
                           focusNode: _focusPassword,
                           obscureText: !_passwordVisible,
-                          validator: (value) => Validator.validatePassword(
-                            password: value,
-                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              _hasMinLength = value.length >= 8;
+                              _hasDigit = RegExp(r'\d').hasMatch(value);
+                              _hasUppercase = RegExp(r'[A-Z]').hasMatch(value);
+                              _hasLowercase = RegExp(r'[a-z]').hasMatch(value);
+                              _hasSpecialCharacter = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value);
+
+                              _allRequirementsMet = _hasMinLength && _hasDigit && _hasUppercase && _hasLowercase && _hasSpecialCharacter;
+                            });
+                          },
+                          onTap: () {
+                            setState(() {
+                              _passwordRequirementsVisible = true;
+                            });
+                          },
+                          onTapOutside: (event) {
+                            setState(() {
+                              _passwordRequirementsVisible = false;
+                            });
+                          },
                           decoration: InputDecoration(
                             labelText: 'Password',
                             hintText: 'Password',
@@ -126,34 +164,86 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 16.0),
-                        TextFormField(
-                          controller: _confirmPasswordTextController,
-                          focusNode: _focusConfirmPassword,
-                          obscureText: !_confirmPasswordVisible,
-                          validator: (value) => Validator.validateConfirmPassword(
-                            password: _passwordTextController.text,
-                            confirmPassword: value,
+                        const SizedBox(height: 5.0),
+                        Visibility(
+                          visible: _passwordRequirementsVisible && !_allRequirementsMet,
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Password Requirements',
+                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: isDarkMode ? Colors.yellow : Colors.orange),
+                                  ),
+                                  const SizedBox(height: 10.0),
+                                  PasswordValidationIndicator(
+                                    text: 'Minimum 8 characters',
+                                    isValid: _hasMinLength,
+                                  ),
+                                  PasswordValidationIndicator(
+                                    text: 'At least 1 uppercase letter',
+                                    isValid: _hasUppercase,
+                                  ),
+                                  PasswordValidationIndicator(
+                                    text: 'At least 1 lowercase letter',
+                                    isValid: _hasLowercase,
+                                  ),
+                                  PasswordValidationIndicator(
+                                    text: 'At least 1 digit',
+                                    isValid: _hasDigit,
+                                  ),
+                                  PasswordValidationIndicator(
+                                    text: 'At least 1 of the symbols: [!@#\$%^&*(),.?":{}|<>]',
+                                    isValid: _hasSpecialCharacter,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          decoration: InputDecoration(
-                            labelText: 'Confirm Password',
-                            hintText: 'Confirm Password',
-                            prefixIcon: const Icon(Icons.lock_rounded, size: 24),
-                            suffixIcon: Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _confirmPasswordVisible = !_confirmPasswordVisible;
-                                    if (_focusConfirmPassword.hasPrimaryFocus) return;
-                                    _focusConfirmPassword.canRequestFocus = false;
-                                  });
-                                },
-                                child: Icon(
-                                  _confirmPasswordVisible
-                                  ? Icons.visibility_rounded
-                                  : Icons.visibility_off_rounded,
-                                  size: 24,
+                        ),
+                        Visibility(
+                          visible: _allRequirementsMet,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: PasswordValidationIndicator(
+                              text: 'All requirements met',
+                              isValid: _allRequirementsMet,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10.0),
+                        Visibility(
+                          visible: _allRequirementsMet,
+                          child: TextFormField(
+                            controller: _confirmPasswordTextController,
+                            focusNode: _focusConfirmPassword,
+                            obscureText: !_confirmPasswordVisible,
+                            validator: (value) => Validator.validateConfirmPassword(
+                              password: _passwordTextController.text,
+                              confirmPassword: value,
+                            ),
+                            decoration: InputDecoration(
+                              labelText: 'Confirm Password',
+                              hintText: 'Confirm Password',
+                              prefixIcon: const Icon(Icons.lock_rounded, size: 24),
+                              suffixIcon: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _confirmPasswordVisible = !_confirmPasswordVisible;
+                                      if (_focusConfirmPassword.hasPrimaryFocus) return;
+                                      _focusConfirmPassword.canRequestFocus = false;
+                                    });
+                                  },
+                                  child: Icon(
+                                    _confirmPasswordVisible
+                                    ? Icons.visibility_rounded
+                                    : Icons.visibility_off_rounded,
+                                    size: 24,
+                                  ),
                                 ),
                               ),
                             ),
