@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../widgets/password_validation_indicator.dart';
 import 'products_page.dart';
+
+import '../widgets/password_requirements_card.dart';
+import '../widgets/password_validation_indicator.dart';
 
 import '../utils/database.dart';
 import '../utils/validator.dart';
@@ -33,7 +35,6 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _isProcessing = false;
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
-  bool _passwordRequirementsVisible = false;
 
   // Password requirements
   bool _hasDigit = false;
@@ -42,16 +43,6 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _hasMinLength = false;
   bool _hasSpecialCharacter = false;
   bool _allRequirementsMet = false;
-
-  @override
-  void initState() {
-    _focusPassword.addListener(() {
-      setState(() {
-        _passwordRequirementsVisible = _focusPassword.hasPrimaryFocus;        
-      });
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,16 +121,6 @@ class _RegisterPageState extends State<RegisterPage> {
                               _allRequirementsMet = _hasMinLength && _hasDigit && _hasUppercase && _hasLowercase && _hasSpecialCharacter;
                             });
                           },
-                          onTap: () {
-                            setState(() {
-                              _passwordRequirementsVisible = true;
-                            });
-                          },
-                          onTapOutside: (event) {
-                            setState(() {
-                              _passwordRequirementsVisible = false;
-                            });
-                          },
                           decoration: InputDecoration(
                             labelText: 'Password',
                             hintText: 'Password',
@@ -164,56 +145,25 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 5.0),
-                        Visibility(
-                          visible: _passwordRequirementsVisible && !_allRequirementsMet,
-                          child: Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Password Requirements',
-                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: isDarkMode ? Colors.yellow : Colors.orange),
-                                  ),
-                                  const SizedBox(height: 10.0),
-                                  PasswordValidationIndicator(
-                                    text: 'Minimum 8 characters',
-                                    isValid: _hasMinLength,
-                                  ),
-                                  PasswordValidationIndicator(
-                                    text: 'At least 1 uppercase letter',
-                                    isValid: _hasUppercase,
-                                  ),
-                                  PasswordValidationIndicator(
-                                    text: 'At least 1 lowercase letter',
-                                    isValid: _hasLowercase,
-                                  ),
-                                  PasswordValidationIndicator(
-                                    text: 'At least 1 digit',
-                                    isValid: _hasDigit,
-                                  ),
-                                  PasswordValidationIndicator(
-                                    text: 'At least 1 of the symbols: [!@#\$%^&*(),.?":{}|<>]',
-                                    isValid: _hasSpecialCharacter,
-                                  ),
-                                ],
+                        AnimatedSwitcher(
+                          duration: const Duration(seconds: 1),
+                          child: !_allRequirementsMet 
+                            ? PasswordRequirementsCard(
+                              hasDigit: _hasDigit,
+                              isDarkMode: isDarkMode,
+                              hasMinLength: _hasMinLength,
+                              hasUppercase: _hasUppercase,
+                              hasLowercase: _hasLowercase,
+                              hasSpecialCharacter: _hasSpecialCharacter
+                            )
+                            : Padding(
+                              padding: const EdgeInsets.only(left: 8.0, bottom: 10.0),
+                              child: PasswordValidationIndicator(
+                                text: 'All requirements met',
+                                isValid: _allRequirementsMet,
                               ),
                             ),
-                          ),
                         ),
-                        Visibility(
-                          visible: _allRequirementsMet,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: PasswordValidationIndicator(
-                              text: 'All requirements met',
-                              isValid: _allRequirementsMet,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 10.0),
                         Visibility(
                           visible: _allRequirementsMet,
                           child: TextFormField(
@@ -268,8 +218,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         foregroundColor: Colors.blue.shade700,
                                       ),
                                       onPressed: () async {
-                                        if (_registerFormKey.currentState!
-                                            .validate()) {
+                                        if (_registerFormKey.currentState!.validate() && _allRequirementsMet) {
                                           setState(() {
                                             _isProcessing = true;
                                           });
