@@ -145,7 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               children: [
                                 Icon(appState.isUserEmailVerified ? Icons.check_circle_rounded : Icons.error_rounded, color: appState.isUserEmailVerified ? Colors.green.shade600 : Colors.red.shade600),
                                 SizedBox(width: 10),
-                                Text(appState.isUserEmailVerified ? 'Email verified' : 'Email not verified', style: TextStyle(fontSize: 15, color: appState.isUserEmailVerified ? Colors.green.shade600 : Colors.red.shade600)),
+                                Text(appState.isUserEmailVerified ? 'Email verified' : 'Email not verified', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: appState.isUserEmailVerified ? Colors.green.shade600 : Colors.red.shade600)),
                               ],
                             )
                           ],
@@ -197,7 +197,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: Text(
                                 themeProvider.currentThemeMode == ThemeMode.system ? 'System Default'
                                   : isDarkMode ? 'Dark' : 'Light',
-                                style: TextStyle(fontSize: 18, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800)),
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800)),
                             ),
                           ],
                         ),
