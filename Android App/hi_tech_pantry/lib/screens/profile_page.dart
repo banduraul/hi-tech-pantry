@@ -1,14 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'login_page.dart';
 
 import '../utils/database.dart';
 import '../utils/app_state.dart';
 import '../utils/theme_provider.dart';
+import '../utils/notification_services.dart';
 
 import '../widgets/qr_code_dialog.dart';
 import '../widgets/bottom_modal_sheet.dart';
@@ -29,6 +33,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
 
   late final AppLifecycleListener _appLifecycleListener;
+  late final StreamSubscription<RemoteMessage>? _messageSubscription;
 
   @override
   void initState() {
@@ -39,11 +44,78 @@ class _ProfilePageState extends State<ProfilePage> {
         ApplicationState.refreshUser();
       },
     );
+    _messageSubscription = FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      debugPrint('message: $message');
+      switch (message.data['type']) {
+        case 'newProduct':
+          NotificationServices.showNotification(
+            title: message.data['name'],
+            content: 'New product added',
+            channelInfo: NotificationServices.newProductsChannel,
+          );
+          break;
+        case 'expiredProduct':
+          NotificationServices.showNotification(
+            title: message.data['name'],
+            content: 'Expired on ${message.data['expiryDate']}',
+            channelInfo: NotificationServices.expiredProductsChannel,
+          );
+          break;
+        case 'expireSoon':
+          String days = '';
+          switch(message.data['days']) {
+              case '0':
+                days = 'Expires today';
+                break;
+              case '1':
+                days = 'Expires tomorrow';
+                break;
+              default:
+                days = 'Expires in ${message.data['days']} days';
+                break;
+          }
+          NotificationServices.showNotification(
+            title: message.data['name'],
+            content: days,
+            channelInfo: NotificationServices.expireSoonChannel,
+          );
+          break;
+        case 'runningLow':
+          NotificationServices.showNotification(
+            title: message.data['name'],
+            content: 'You only have ${message.data['quantity']} left',
+            channelInfo: NotificationServices.runningLowChannel,
+          );
+          break;
+        case 'increasedQuantity':
+          NotificationServices.showNotification(
+            title: message.data['name'],
+            content: message.data['message'],
+            channelInfo: NotificationServices.increasedQuantityChannel,
+          );
+          break;
+        case 'decreasedQuantity':
+          NotificationServices.showNotification(
+            title: message.data['name'],
+            content: message.data['message'],
+            channelInfo: NotificationServices.decreasedQuantityChannel,
+          );
+          break;
+        case 'productDeleted':
+          NotificationServices.showNotification(
+            title: message.data['name'],
+            content: 'This product ran out',
+            channelInfo: NotificationServices.productDeletedChannel,
+          );
+          break;
+      }
+    });
   }
 
   @override
   void dispose() {
     _appLifecycleListener.dispose();
+    _messageSubscription?.cancel();
     super.dispose();
   }
 
