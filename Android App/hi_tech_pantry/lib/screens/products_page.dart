@@ -11,7 +11,7 @@ import '../utils/notification_services.dart';
 
 import '../widgets/product_card.dart';
 import '../widgets/edit_product_info_dialog.dart';
-import '../widgets/confirm_product_deletion_dialog.dart';
+import '../widgets/confirmation_dialog.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -184,7 +184,7 @@ class _ProductsPageState extends State<ProductsPage> {
                               return await showDialog(
                                 barrierDismissible: false,
                                 context: context,
-                                builder: (context) => ConfirmProductDeletionDialog(productName: productInfo.name),
+                                builder: (context) => ConfirmationDialog(text: 'Are you sure you want to delete ${productInfo.name}?'),
                               );
                             },
                             onDismissed: (_) async {

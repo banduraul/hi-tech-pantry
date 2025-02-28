@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import '../widgets/confirmation_dialog.dart';
 import 'login_page.dart';
 
 import '../utils/database.dart';
@@ -329,17 +330,24 @@ class _ProfilePageState extends State<ProfilePage> {
                               height: 50,
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  final message = await Database.disconnectFromPantry();
-                                  if (message.contains('Success')) {
-                                    Fluttertoast.showToast(
-                                      msg: 'You have disconnected from the pantry',
-                                      toastLength: Toast.LENGTH_SHORT,
-                                    );
-                                  } else {
-                                    Fluttertoast.showToast(
-                                      msg: message,
-                                      toastLength: Toast.LENGTH_SHORT,
-                                    );
+                                  final confirmation = await showDialog(
+                                    context: context,
+                                    builder: (context) => const ConfirmationDialog(text: 'Are you sure you want to disconnect from your pantry?')
+                                  );
+
+                                  if (confirmation) {
+                                    final message = await Database.disconnectFromPantry();
+                                    if (message.contains('Success')) {
+                                      Fluttertoast.showToast(
+                                        msg: 'You have disconnected from the pantry',
+                                        toastLength: Toast.LENGTH_SHORT,
+                                      );
+                                    } else {
+                                      Fluttertoast.showToast(
+                                        msg: message,
+                                        toastLength: Toast.LENGTH_SHORT,
+                                      );
+                                    }
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
