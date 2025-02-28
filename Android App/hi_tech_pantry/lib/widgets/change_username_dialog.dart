@@ -56,37 +56,49 @@ class _ChangeUsernameDialogState extends State<ChangeUsernameDialog> {
                 const Spacer(),
                 _isProcessing
                   ? CircularProgressIndicator(color: Colors.blue.shade700)
-                  : ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue.shade700,
-                      foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
-                    ),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                          setState(() {
-                            _isProcessing = true;
-                          });
-                          final message = await Database.updateUsername(username: _usernameController.text);
-                          setState(() {
-                            _isProcessing = false;
-                          });
-                          if (message.contains('Success')) {
-                            if (context.mounted) {
-                              context.pop();
-                              Fluttertoast.showToast(
-                                msg: 'Username changed successfully',
-                                toastLength: Toast.LENGTH_SHORT,
-                              );
+                  : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          context.pop();
+                        },
+                        child: Text('Cancel', style: TextStyle(fontSize: 18, color: Colors.blue.shade700)),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue.shade700,
+                          foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+                          minimumSize: const Size(50, 50),
+                        ),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                              setState(() {
+                                _isProcessing = true;
+                              });
+                              final message = await Database.updateUsername(username: _usernameController.text);
+                              setState(() {
+                                _isProcessing = false;
+                              });
+                              if (message.contains('Success')) {
+                                if (context.mounted) {
+                                  context.pop();
+                                  Fluttertoast.showToast(
+                                    msg: 'Username changed successfully',
+                                    toastLength: Toast.LENGTH_SHORT,
+                                  );
+                                }
+                              } else if (message.contains('username')) {
+                                Fluttertoast.showToast(
+                                  msg: message,
+                                  toastLength: Toast.LENGTH_SHORT,
+                                );
+                              }
                             }
-                          } else if (message.contains('username')) {
-                            Fluttertoast.showToast(
-                              msg: message,
-                              toastLength: Toast.LENGTH_SHORT,
-                            );
-                          }
-                        }
-                    },
-                    child: const Text('Change Username'),
+                        },
+                        child: const Text('Change Username', style: TextStyle(fontSize: 18)),
+                      ),
+                    ],
                   ),
               ],
             ),

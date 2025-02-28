@@ -73,39 +73,52 @@ class _ReauthenticateUserDialogState extends State<ReauthenticateUserDialog> {
                 const Spacer(),
                 _isProcessing
                   ? CircularProgressIndicator(color: Colors.blue.shade700)
-                  : ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue.shade700,
-                        foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+                  : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          context.pop();
+                        },
+                        child: Text('Cancel', style: TextStyle(fontSize: 24, color: Colors.blue.shade700)),
                       ),
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          setState(() {
-                            _isProcessing = true;
-                          });
-                          final message = await Database.reauthenticateUser(password: _passwordController.text);
-                          setState(() {
-                            _isProcessing = false;
-                          });
-                          if (message.contains('Success')) {
-                            if (context.mounted) {
-                              context.pop();
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return const NewPasswordDialog();
-                                },
-                              );
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue.shade700,
+                            foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+                            minimumSize: const Size(150, 50),
+                          ),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              setState(() {
+                                _isProcessing = true;
+                              });
+                              final message = await Database.reauthenticateUser(password: _passwordController.text);
+                              setState(() {
+                                _isProcessing = false;
+                              });
+                              if (message.contains('Success')) {
+                                if (context.mounted) {
+                                  context.pop();
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (context) {
+                                      return const NewPasswordDialog();
+                                    },
+                                  );
+                                }
+                              } else if (message.contains('password')) {
+                                Fluttertoast.showToast(
+                                  msg: message,
+                                  toastLength: Toast.LENGTH_SHORT,
+                                );
+                              }
                             }
-                          } else if (message.contains('password')) {
-                            Fluttertoast.showToast(
-                              msg: message,
-                              toastLength: Toast.LENGTH_SHORT,
-                            );
-                          }
-                        }
-                      },
-                      child: const Text('Continue'),
+                          },
+                          child: const Text('Continue'),
+                      ),
+                    ],
                   )
               ],
             ),

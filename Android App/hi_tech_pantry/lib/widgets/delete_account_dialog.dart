@@ -81,47 +81,59 @@ class _DeleteAccountDialog extends State<DeleteAccountDialog> {
                 const Spacer(),
                 _isProcessing
                   ? CircularProgressIndicator(color: Colors.red.shade700)
-                  : ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          setState(() {
-                            _isProcessing = true;
-                          });
-                          final message = await Database.reauthenticateUser(password: _passwordController.text);
-                          setState(() {
-                            _isProcessing = false;
-                          });
-                          if (message.contains('Success')) {
-                            setState(() {
-                              _isProcessing = true;
-                            });
-                            final message = await Database.deleteAccount();
-                            setState(() {
-                              _isProcessing = false;
-                            });
-                            if (message.contains('Success')) {
-                              Fluttertoast.showToast(
-                                msg: 'Account deleted successfully',
-                                toastLength: Toast.LENGTH_SHORT,
-                              );
-                              if (context.mounted) {
-                                context.goNamed(LoginPage.loginName);
+                  : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                            context.pop();
+                        },
+                        child: Text('Cancel', style: TextStyle(fontSize: 24, color: isDarkMode ? Colors.red.shade900 : Colors.red.shade700)),
+                      ),
+                      ElevatedButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              setState(() {
+                                _isProcessing = true;
+                              });
+                              final message = await Database.reauthenticateUser(password: _passwordController.text);
+                              setState(() {
+                                _isProcessing = false;
+                              });
+                              if (message.contains('Success')) {
+                                setState(() {
+                                  _isProcessing = true;
+                                });
+                                final message = await Database.deleteAccount();
+                                setState(() {
+                                  _isProcessing = false;
+                                });
+                                if (message.contains('Success')) {
+                                  Fluttertoast.showToast(
+                                    msg: 'Account deleted successfully',
+                                    toastLength: Toast.LENGTH_SHORT,
+                                  );
+                                  if (context.mounted) {
+                                    context.goNamed(LoginPage.loginName);
+                                  }
+                                }
+                              } else if (message.contains('password')) {
+                                Fluttertoast.showToast(
+                                  msg: message,
+                                  toastLength: Toast.LENGTH_SHORT,
+                                );
                               }
                             }
-                          } else if (message.contains('password')) {
-                            Fluttertoast.showToast(
-                              msg: message,
-                              toastLength: Toast.LENGTH_SHORT,
-                            );
-                          }
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isDarkMode ? Colors.red.shade900 : Colors.red.shade700,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text('Delete'),
-                    )
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: isDarkMode ? Colors.red.shade900 : Colors.red.shade700,
+                            foregroundColor: Colors.white,
+                            minimumSize: const Size(150, 50),
+                          ),
+                          child: const Text('Delete'),
+                        ),
+                    ],
+                  )
               ],
             ),
           ),

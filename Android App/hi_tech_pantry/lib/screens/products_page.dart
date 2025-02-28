@@ -182,6 +182,7 @@ class _ProductsPageState extends State<ProductsPage> {
                             ),
                             confirmDismiss: (_) async {
                               return await showDialog(
+                                barrierDismissible: false,
                                 context: context,
                                 builder: (context) => ConfirmProductDeletionDialog(productName: productInfo.name),
                               );
@@ -198,6 +199,7 @@ class _ProductsPageState extends State<ProductsPage> {
                             child: GestureDetector(
                               onTap: () {
                                 showDialog(
+                                  barrierDismissible: false,
                                   context: context,
                                   builder: (context) => EditProductInfoDialog(productInfo: productInfo),
                                 );

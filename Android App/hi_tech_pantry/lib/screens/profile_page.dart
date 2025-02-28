@@ -185,6 +185,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 onPressed: () {
                                   showDialog(
                                     context: context,
+                                    barrierDismissible: false,
                                     builder: (context) => const ChangeUsernameDialog()
                                   );
                                 },
@@ -250,6 +251,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 onTap: () {
                   showDialog(
                     context: context,
+                    barrierDismissible: false,
                     builder: (context) => const ChangeThemeDialog()
                   );
                 },
@@ -403,6 +405,7 @@ class _ProfilePageState extends State<ProfilePage> {
               onPressed: () {
                 showDialog(
                   context: context,
+                  barrierDismissible: false,
                   builder: (context) => const ReauthenticateUserDialog()
                 );
               },
@@ -451,6 +454,7 @@ class _ProfilePageState extends State<ProfilePage> {
               onPressed: () {
                 showDialog(
                   context: context,
+                  barrierDismissible: false,
                   builder: (context) => const DeleteAccountDialog()
                 );
               },

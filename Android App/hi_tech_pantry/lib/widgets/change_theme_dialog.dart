@@ -85,16 +85,28 @@ class _ChangeThemeDialogState extends State<ChangeThemeDialog> {
             selected: selectedTheme == 'dark',
             title: const Text('Dark'),
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue.shade700,
-              foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
-            ),
-            onPressed: () {
-              themeProvider.changeTheme(selectedTheme);
-              context.pop();
-            },
-            child: const Text('Change'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TextButton(
+                onPressed: () {
+                  context.pop();
+                },
+                child: Text('Cancel', style: TextStyle(fontSize: 24, color: Colors.blue.shade700)),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue.shade700,
+                  foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+                  minimumSize: Size(80, 40),
+                ),
+                onPressed: () {
+                  themeProvider.changeTheme(selectedTheme);
+                  context.pop();
+                },
+                child: const Text('Change'),
+              ),
+            ],
           )
         ],
       ),
