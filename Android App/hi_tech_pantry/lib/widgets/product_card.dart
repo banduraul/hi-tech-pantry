@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../data_classes/product_info.dart';
 
+import '../widgets/quantity_update_widget.dart';
+
 import 'edit_product_info_dialog.dart';
 import 'product_expiry_date_status.dart';
 
@@ -31,12 +33,7 @@ class ProductCard extends StatelessWidget {
                 expiryDate: 'Expired On: $expiryDate',
                 color: Colors.red.shade800
               ),
-              trailing: Text(
-                productInfo.quantity.toString(),
-                style: TextStyle(
-                  color: productInfo.quantity <= 3 ? Colors.red.shade900 : null
-                )
-              ),
+              trailing: QuantityUpdateWidget(quantity: productInfo.quantity, docId: productInfo.docId),
             ),
           );
         }
@@ -57,12 +54,7 @@ class ProductCard extends StatelessWidget {
               color: isAfter ? Colors.green.shade600
                              : Colors.orange.shade600
             ),
-            trailing: Text(
-              productInfo.quantity.toString(),
-              style: TextStyle(
-                color: productInfo.quantity <= 3 ? Colors.red.shade800 : null
-              )
-            ),
+            trailing: QuantityUpdateWidget(quantity: productInfo.quantity, docId: productInfo.docId),
           ),
         );
       }
@@ -72,14 +64,9 @@ class ProductCard extends StatelessWidget {
           title: Text(productInfo.name, style: TextStyle(color: isDarkMode ? Colors.white : null)),
           subtitle: Text(
             'No expiry date set for this product',
-            style: TextStyle(color: Colors.blue.shade700)
+            style: TextStyle(color: Colors.blue.shade700, fontWeight: FontWeight.w900)
           ),
-          trailing: Text(
-            productInfo.quantity.toString(),
-            style: TextStyle(
-              color: productInfo.quantity <= 3 ? Colors.red.shade900 : null
-            )
-          ),
+          trailing: QuantityUpdateWidget(quantity: productInfo.quantity, docId: productInfo.docId),
         ),
       );
     }
