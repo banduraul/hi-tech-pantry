@@ -63,7 +63,7 @@ class ProductCard extends StatelessWidget {
         child: ListTile(
           title: Text(productInfo.name, style: TextStyle(color: isDarkMode ? Colors.white : null)),
           subtitle: Text(
-            'No expiry date set for this product',
+            'No expiry date',
             style: TextStyle(color: Colors.blue.shade700, fontWeight: FontWeight.w900)
           ),
           trailing: QuantityUpdateWidget(quantity: productInfo.quantity, docId: productInfo.docId),
