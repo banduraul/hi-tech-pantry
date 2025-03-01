@@ -54,20 +54,6 @@ class Validator {
     return null;
   }
 
-  static String? validatePassword({required String? password}) {
-    if (password == null) {
-      return null;
-    }
-
-    if (password.isEmpty) {
-      return 'Password cannot be empty';
-    } else if (password.length < 6) {
-      return 'Minimum password length is 6 characters';
-    }
-
-    return null;
-  }
-
   static String? validateConfirmPassword({required String password, required String? confirmPassword}) {
     if (confirmPassword == null) {
       return null;

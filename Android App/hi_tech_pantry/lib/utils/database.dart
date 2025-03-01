@@ -199,6 +199,13 @@ class Database {
 
       await FirebaseFirestore.instance
         .collection('users')
+        .doc(auth.currentUser!.uid)
+        .update({
+          'connectedToPantry': false,
+        });
+
+      await FirebaseFirestore.instance
+        .collection('users')
         .doc(auth.currentUser!.uid).delete();
 
       await FirebaseFirestore.instance
@@ -320,6 +327,54 @@ class Database {
       message = 'Success';
     } catch (e) {
       message = 'Disconnection attempt failed. Please try again';
+      debugPrint(e.toString());
+    }
+
+    return message;
+  }
+
+  static Future<String> decrementQuantity({required String docId}) async {
+    String message;
+
+    try {
+      final auth = FirebaseAuth.instance;
+
+      await FirebaseFirestore.instance
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('products')
+        .doc(docId)
+        .update({
+          'quantity': FieldValue.increment(-1),
+        });
+
+      message = 'Success';
+    } catch (e) {
+      message = e.toString();
+      debugPrint(e.toString());
+    }
+
+    return message;
+  }
+
+  static Future<String> incrementQuantity({required String docId}) async {
+    String message;
+
+    try {
+      final auth = FirebaseAuth.instance;
+
+      await FirebaseFirestore.instance
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('products')
+        .doc(docId)
+        .update({
+          'quantity': FieldValue.increment(1),
+        });
+
+      message = 'Success';
+    } catch (e) {
+      message = e.toString();
       debugPrint(e.toString());
     }
 

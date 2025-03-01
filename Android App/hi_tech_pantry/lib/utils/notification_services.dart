@@ -7,7 +7,7 @@ class NotificationServices {
 
   static const NotificationChannelInfo newProductsChannel = NotificationChannelInfo(
     id: 'newProductsChannelID',
-    name: 'newProductsChannel',
+    name: 'New Products',
     description: 'Channel for new products',
     groupKey: 'newProductsNotificationGroup',
     summaryText: 'New Products',
@@ -17,7 +17,7 @@ class NotificationServices {
 
   static const NotificationChannelInfo expiredProductsChannel = NotificationChannelInfo(
     id: 'expiredProductsChannelID',
-    name: 'expiredProductsChannel',
+    name: 'Expired Products',
     description: 'Channel for expired products',
     groupKey: 'expiredProductsNotificationGroup',
     summaryText: 'Expired Products',
@@ -27,7 +27,7 @@ class NotificationServices {
 
   static const NotificationChannelInfo expireSoonChannel = NotificationChannelInfo(
     id: 'expireSoonChannelID',
-    name: 'expireSoonChannel',
+    name: 'Products expiring soon',
     description: 'Channel for products that expire in the next 3 days',
     groupKey: 'expireSoonNotificationGroup',
     summaryText: 'Products expiring soon',
@@ -37,7 +37,7 @@ class NotificationServices {
 
   static const NotificationChannelInfo runningLowChannel = NotificationChannelInfo(
     id: 'runningLowChannelID',
-    name: 'runningLowChannel',
+    name: 'Products running low',
     description: 'Channel for products running low',
     groupKey: 'runningLowNotificationGroup',
     summaryText: 'Products running low',
@@ -45,7 +45,37 @@ class NotificationServices {
     groupID: 3
   );
 
-  static int id = 4;
+  static const NotificationChannelInfo increasedQuantityChannel = NotificationChannelInfo(
+    id: 'increasedQuantityChannelID',
+    name: 'Product quantity increased',
+    description: 'Channel for product quantity increase',
+    groupKey: 'increasedQuantityNotificationGroup',
+    summaryText: 'Quantities increased',
+    subText: 'Quantity increased',
+    groupID: 4
+  );
+
+  static const NotificationChannelInfo decreasedQuantityChannel = NotificationChannelInfo(
+    id: 'decreasedQuantityChannelID',
+    name: 'Product quantity decreased',
+    description: 'Channel for product quantity decrease',
+    groupKey: 'decreasedQuantityNotificationGroup',
+    summaryText: 'Quantities decreased',
+    subText: 'Quantity decreased',
+    groupID: 5
+  );
+
+  static const NotificationChannelInfo productDeletedChannel = NotificationChannelInfo(
+    id: 'productDeletedChannelID',
+    name: 'Products that ran out',
+    description: 'Channel for products that ran out',
+    groupKey: 'productDeletedNotificationGroup',
+    summaryText: 'Products that ran out',
+    subText: 'Product ran out',
+    groupID: 6
+  );
+
+  static int id = 7;
 
   static Future<void> init() async {
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');

@@ -72,7 +72,7 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
           child: Form(
             key: _formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextFormField(
                   decoration: InputDecoration(
@@ -122,8 +122,11 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
                   ),
                   controller: _expiryDateController,
                   readOnly: true,
+                  validator: (value) => doesItHaveExpiryDate ? Validator.validateExpiryDate(expiryDate: value) : null,
                   onTap: () async {
                     DateTime? expiryDate = await showDatePicker(
+                      barrierDismissible: false,
+                      initialEntryMode: DatePickerEntryMode.calendarOnly,
                       context: context,
                       initialDate: widget.productInfo.expiryDate != null ? DateTime.now() : null,
                       firstDate: DateTime.now(),
@@ -137,52 +140,64 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
                     }
                   },
                 ),
-                const Spacer(),
+                const SizedBox(height: 25),
                 _isProcessing
                   ? CircularProgressIndicator(color: Colors.blue.shade700)
-                  : ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue.shade700,
-                        foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+                  : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                            context.pop();
+                        },
+                        child: Text('Cancel', style: TextStyle(fontSize: 24, color: Colors.blue.shade700)),
                       ),
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          setState(() {
-                            _isProcessing = true;
-                          });
-
-                          final message = await Database.updateProductInfo(
-                            productInfo: ProductInfo(
-                              docId: widget.productInfo.docId,
-                              eancode: widget.productInfo.eancode,
-                              name: _nameController.text,
-                              finishedEditing: true,
-                              isExpired: widget.productInfo.expiryDate != null ? _expiryDateController.text == DateFormat('dd/MM/yyyy').format(widget.productInfo.expiryDate!) ? widget.productInfo.isExpired : false : false,
-                              quantity: int.parse(_quantityController.text),
-                              expiryDate: _expiryDateController.text.isNotEmpty ? DateFormat('dd/MM/yyyy').parse(_expiryDateController.text) : null,
-                            )
-                          );
-                          setState(() {
-                            _isProcessing = false;
-                          });
-                          if (message.contains('Success')) {
-                            Fluttertoast.showToast(
-                              msg: 'Product info updated successfully',
-                              toastLength: Toast.LENGTH_SHORT,
-                            );
-                            if (context.mounted) {
-                              context.pop();
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue.shade700,
+                            foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+                            minimumSize: const Size(150, 50),
+                          ),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              setState(() {
+                                _isProcessing = true;
+                              });
+                      
+                              final message = await Database.updateProductInfo(
+                                productInfo: ProductInfo(
+                                  docId: widget.productInfo.docId,
+                                  eancode: widget.productInfo.eancode,
+                                  name: _nameController.text,
+                                  finishedEditing: true,
+                                  isExpired: widget.productInfo.expiryDate != null ? _expiryDateController.text == DateFormat('dd/MM/yyyy').format(widget.productInfo.expiryDate!) ? widget.productInfo.isExpired : false : false,
+                                  quantity: int.parse(_quantityController.text),
+                                  expiryDate: _expiryDateController.text.isNotEmpty ? DateFormat('dd/MM/yyyy').parse(_expiryDateController.text) : null,
+                                )
+                              );
+                              setState(() {
+                                _isProcessing = false;
+                              });
+                              if (message.contains('Success')) {
+                                Fluttertoast.showToast(
+                                  msg: 'Product info updated successfully',
+                                  toastLength: Toast.LENGTH_SHORT,
+                                );
+                                if (context.mounted) {
+                                  context.pop();
+                                }
+                              } else {
+                                Fluttertoast.showToast(
+                                  msg: 'Failed to update product info. Please try again',
+                                  toastLength: Toast.LENGTH_SHORT,
+                                );
+                              }
                             }
-                          } else {
-                            Fluttertoast.showToast(
-                              msg: 'Failed to update product info. Please try again',
-                              toastLength: Toast.LENGTH_SHORT,
-                            );
-                          }
-                        }
-                      },
-                      child: const Text('Update'),
-                    ),
+                          },
+                          child: const Text('Update'),
+                        ),
+                    ],
+                  ),
               ],
             ),
           ),
