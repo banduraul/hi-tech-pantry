@@ -64,142 +64,143 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
             ),
         ],
       ),
-      content: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SizedBox(
-          width: 300,
-          height: 310,
-          child: Form(
-            key: _formKey,
-            child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Name',
-                    hintText: 'Name',
-                    prefixIcon: const Icon(Icons.abc_rounded, size: 24),  
-                  ),
-                  controller: _nameController,
-                  validator: (value) => Validator.validateName(name: value),
-                  focusNode: _focusName,
+      content: IntrinsicHeight(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                  hintText: 'Name',
+                  prefixIcon: const Icon(Icons.abc_rounded, size: 24),  
                 ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Quantity',
-                    hintText: 'Quantity',
-                    prefixIcon: const Icon(Icons.numbers_rounded, size: 24),
-                  ),
-                  controller: _quantityController,
-                  validator: (value) => Validator.validateQuantity(quantity: value),
-                  focusNode: _focusQuantity,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                controller: _nameController,
+                validator: (value) => Validator.validateName(name: value),
+                focusNode: _focusName,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                onChanged: (value) {
+                  setState(() {
+                    _quantityController.value = TextEditingValue(text: _quantityController.text.replaceFirst(RegExp(r'^0+'), ''));
+                  });
+                },
+                maxLength: 3,
+                decoration: InputDecoration(
+                  counterText: '',
+                  labelText: 'Quantity',
+                  hintText: 'Quantity (1-999)',
+                  prefixIcon: const Icon(Icons.numbers_rounded, size: 24),
                 ),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: doesItHaveExpiryDate,
-                      onChanged: (value) {
-                        setState(() {
-                          doesItHaveExpiryDate = value!;
-                          if (!doesItHaveExpiryDate) {
-                            _expiryDateController.clear();
-                          }
-                        });
-                      }
-                    ),
-                    Text('Expiry Date', style: TextStyle(fontSize: 18, color: Colors.blue.shade700, fontWeight: doesItHaveExpiryDate ? FontWeight.bold : FontWeight.normal)),
-                  ],
-                ),
-                TextFormField(
-                  enabled: doesItHaveExpiryDate,
-                  decoration: InputDecoration(
-                    labelText: 'Expiry Date',
-                    hintText: 'Expiry Date',
-                    prefixIcon: const Icon(Icons.calendar_today_rounded, size: 24),
-                  ),
-                  controller: _expiryDateController,
-                  readOnly: true,
-                  validator: (value) => doesItHaveExpiryDate ? Validator.validateExpiryDate(expiryDate: value) : null,
-                  onTap: () async {
-                    DateTime? expiryDate = await showDatePicker(
-                      barrierDismissible: false,
-                      initialEntryMode: DatePickerEntryMode.calendarOnly,
-                      context: context,
-                      initialDate: widget.productInfo.expiryDate != null ? DateTime.now() : null,
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime(2040),
-                    );
-
-                    if (expiryDate != null) {
+                controller: _quantityController,
+                validator: (value) => Validator.validateQuantity(quantity: value),
+                focusNode: _focusQuantity,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              ),
+              Row(
+                children: [
+                  Checkbox(
+                    value: doesItHaveExpiryDate,
+                    onChanged: (value) {
                       setState(() {
-                        _expiryDateController.text = DateFormat('dd/MM/yyyy').format(expiryDate);
+                        doesItHaveExpiryDate = value!;
+                        if (!doesItHaveExpiryDate) {
+                          _expiryDateController.clear();
+                        }
                       });
                     }
-                  },
-                ),
-                const SizedBox(height: 25),
-                _isProcessing
-                  ? CircularProgressIndicator(color: Colors.blue.shade700)
-                  : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                            context.pop();
-                        },
-                        child: Text('Cancel', style: TextStyle(fontSize: 24, color: Colors.blue.shade700)),
-                      ),
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue.shade700,
-                            foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
-                            minimumSize: const Size(150, 50),
-                          ),
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              setState(() {
-                                _isProcessing = true;
-                              });
-                      
-                              final message = await Database.updateProductInfo(
-                                productInfo: ProductInfo(
-                                  docId: widget.productInfo.docId,
-                                  eancode: widget.productInfo.eancode,
-                                  name: _nameController.text,
-                                  finishedEditing: true,
-                                  isExpired: widget.productInfo.expiryDate != null ? _expiryDateController.text == DateFormat('dd/MM/yyyy').format(widget.productInfo.expiryDate!) ? widget.productInfo.isExpired : false : false,
-                                  quantity: int.parse(_quantityController.text),
-                                  expiryDate: _expiryDateController.text.isNotEmpty ? DateFormat('dd/MM/yyyy').parse(_expiryDateController.text) : null,
-                                )
-                              );
-                              setState(() {
-                                _isProcessing = false;
-                              });
-                              if (message.contains('Success')) {
-                                Fluttertoast.showToast(
-                                  msg: 'Product info updated successfully',
-                                  toastLength: Toast.LENGTH_SHORT,
-                                );
-                                if (context.mounted) {
-                                  context.pop();
-                                }
-                              } else {
-                                Fluttertoast.showToast(
-                                  msg: 'Failed to update product info. Please try again',
-                                  toastLength: Toast.LENGTH_SHORT,
-                                );
-                              }
-                            }
-                          },
-                          child: const Text('Update'),
-                        ),
-                    ],
                   ),
-              ],
-            ),
+                  Text('Expiry Date', style: TextStyle(fontSize: 18, color: Colors.blue.shade700, fontWeight: doesItHaveExpiryDate ? FontWeight.bold : FontWeight.normal)),
+                ],
+              ),
+              TextFormField(
+                enabled: doesItHaveExpiryDate,
+                decoration: InputDecoration(
+                  labelText: 'Expiry Date',
+                  hintText: 'Expiry Date',
+                  prefixIcon: const Icon(Icons.calendar_today_rounded, size: 24),
+                ),
+                controller: _expiryDateController,
+                readOnly: true,
+                validator: (value) => doesItHaveExpiryDate ? Validator.validateExpiryDate(expiryDate: value) : null,
+                onTap: () async {
+                  DateTime? expiryDate = await showDatePicker(
+                    barrierDismissible: false,
+                    initialEntryMode: DatePickerEntryMode.calendarOnly,
+                    context: context,
+                    initialDate: widget.productInfo.expiryDate != null ? DateTime.now() : null,
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2040),
+                  );
+        
+                  if (expiryDate != null) {
+                    setState(() {
+                      _expiryDateController.text = DateFormat('dd/MM/yyyy').format(expiryDate);
+                    });
+                  }
+                },
+              ),
+              const SizedBox(height: 25),
+              _isProcessing
+                ? CircularProgressIndicator(color: Colors.blue.shade700)
+                : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                          context.pop();
+                      },
+                      child: Text('Cancel', style: TextStyle(fontSize: 24, color: Colors.blue.shade700)),
+                    ),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue.shade700,
+                          foregroundColor: isDarkMode ? Colors.grey.shade900 : Colors.white,
+                          minimumSize: const Size(150, 50),
+                        ),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() {
+                              _isProcessing = true;
+                            });
+                    
+                            final message = await Database.updateProductInfo(
+                              productInfo: ProductInfo(
+                                docId: widget.productInfo.docId,
+                                eancode: widget.productInfo.eancode,
+                                name: _nameController.text,
+                                finishedEditing: true,
+                                isExpired: widget.productInfo.expiryDate != null ? _expiryDateController.text == DateFormat('dd/MM/yyyy').format(widget.productInfo.expiryDate!) ? widget.productInfo.isExpired : false : false,
+                                quantity: int.parse(_quantityController.text),
+                                expiryDate: _expiryDateController.text.isNotEmpty ? DateFormat('dd/MM/yyyy').parse(_expiryDateController.text) : null,
+                              )
+                            );
+                            setState(() {
+                              _isProcessing = false;
+                            });
+                            if (message.contains('Success')) {
+                              Fluttertoast.showToast(
+                                msg: 'Product info updated successfully',
+                                toastLength: Toast.LENGTH_SHORT,
+                              );
+                              if (context.mounted) {
+                                context.pop();
+                              }
+                            } else {
+                              Fluttertoast.showToast(
+                                msg: 'Failed to update product info. Please try again',
+                                toastLength: Toast.LENGTH_SHORT,
+                              );
+                            }
+                          }
+                        },
+                        child: const Text('Update'),
+                      ),
+                  ],
+                ),
+            ],
           ),
         ),
       ),
