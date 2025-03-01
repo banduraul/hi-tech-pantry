@@ -298,27 +298,15 @@ class _ProfilePageState extends State<ProfilePage> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Pantry', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800)),
+                              Text('Pantry', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800)),
                               Padding(
                                 padding: const EdgeInsets.only(left: 20.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      children: [
-                                        Text('Status:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800)),
-                                        Text('Mode:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800))
-                                      ],
-                                    ),
+                                    Text('Status:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: isDarkMode ? Colors.blue.shade700 : Colors.grey.shade800)),
                                     const SizedBox(width: 10),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Connected', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.green.shade600)),
-                                        Text(appState.pantryMode, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: isDarkMode ? Colors.yellow : Colors.orange)),
-                                      ],
-                                    ),
+                                    Text('Connected', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.green.shade600)),
                                   ],
                                 ),
                               ),
