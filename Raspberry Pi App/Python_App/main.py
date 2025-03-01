@@ -58,21 +58,6 @@ def addProduct(eancode):
             db.collection('users').document(uid).collection('products').add(ProductInfo(eancode = eancode, name = '').toFirestore())
             print(colored('The product info has not been found using the API. The product has been added to the pantry as an Unknown Product. Please add a name to the product using the Mobile Application.', color = 'yellow'))
 
-def removeProduct(eancode):
-    global db
-    products_ref = db.collection('users').document(uid).collection('products')
-    query = products_ref.where(filter = FieldFilter('eancode', '==', eancode)).stream()
-    results = [doc for doc in query]
-    if results:
-        doc_ref = results[0].reference
-        if results[0]._data['quantity'] == 1:
-            doc_ref.delete()
-        else:
-            doc_ref.update({ 'quantity': firestore.Increment(-1) })
-        print(colored('You have successfully withdrawn {}'.format(results[0]._data['name']), color = 'green'))
-    else:
-        print(colored('The scanned product wasn\'t deposited first', color = 'red'))
-
 email = ''
 uid = ''
 mode = 'Deposit'
@@ -97,7 +82,7 @@ while True:
             with open('/home/hi-tech-pantry/Desktop/Project/hi-tech-pantry/Raspberry Pi App/Python_App/saved_account.txt', 'r') as file:
                 email = file.read()
         except FileNotFoundError:
-            pass
+            email = ''
         if email == '':
             email = input('Scan QR Code to connect to pantry: ')
             with open('/home/hi-tech-pantry/Desktop/Project/hi-tech-pantry/Raspberry Pi App/Python_App/saved_account.txt', 'w') as file:
@@ -108,7 +93,7 @@ while True:
 
             doc_ref = db.collection('users').document(uid)
 
-            doc_ref.update({ 'connectedToPantry': True, 'mode': mode })
+            doc_ref.update({ 'connectedToPantry': True })
 
             ascii_art = pyfiglet.figlet_format('CONNECTED TO PANTRY')
             print(colored(ascii_art, color = 'green'))
@@ -122,22 +107,9 @@ while True:
                 ascii_art = pyfiglet.figlet_format(mode.upper())
                 print(colored(ascii_art, color = 'blue'))
                 eancode = input('Scan product barcode: ')
-                if eancode == 'Deposit/Withdraw':
-                    match mode:
-                        case 'Deposit':
-                            mode = 'Withdraw'
-                            doc_ref.update({ 'mode': mode })
-                        case 'Withdraw':
-                            mode = 'Deposit'
-                            doc_ref.update({ 'mode': mode })
-                elif eancode.isdigit():
-                    # Add or Remove the scanned product based on the mode variable
+                if eancode.isdigit():
                     os.system('echo heartbeat | sudo tee /sys/class/leds/ACT/trigger > /dev/null') # Turn on blinking green LED in heartbeat mode to mark processing the barcode
-                    match mode:
-                        case 'Deposit':
-                            addProduct(eancode)
-                        case 'Withdraw':
-                            removeProduct(eancode)
+                    addProduct(eancode) # Add the scanned product to the pantry
                     os.system('echo none | sudo tee /sys/class/leds/ACT/trigger > /dev/null')
                     os.system('echo 1 | sudo tee /sys/class/leds/ACT/brightness > /dev/null') # Let the green LED on to mark processing finished
                 else:
