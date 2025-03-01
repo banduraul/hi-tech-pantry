@@ -152,6 +152,25 @@ class ThemeProvider extends ChangeNotifier {
       }),
       checkColor: WidgetStateProperty.all(Colors.blue.shade50),
     ),
+    tooltipTheme: TooltipThemeData(
+      textStyle: TextStyle(
+        fontSize: 15,
+        color: Colors.blue.shade700,
+        fontWeight: FontWeight.w500,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.blue.shade50,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      waitDuration: const Duration(milliseconds: 200),
+      showDuration: const Duration(seconds: 1),
+    ),
+    menuTheme: MenuThemeData(
+      style: MenuStyle(
+        backgroundColor: WidgetStatePropertyAll(Colors.blue.shade50),
+        shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+      ),
+    ),
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -262,6 +281,25 @@ class ThemeProvider extends ChangeNotifier {
         return Colors.transparent;
       }),
       checkColor: WidgetStateProperty.all(Colors.grey[850]),
+    ),
+    tooltipTheme: TooltipThemeData(
+      textStyle: TextStyle(
+        fontSize: 15,
+        color: Colors.blue.shade700,
+        fontWeight: FontWeight.w500,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.grey[850],
+        borderRadius: BorderRadius.circular(20),
+      ),
+      waitDuration: const Duration(milliseconds: 200),
+      showDuration: const Duration(seconds: 1),
+    ),
+    menuTheme: MenuThemeData(
+      style: MenuStyle(
+        backgroundColor: WidgetStatePropertyAll(Colors.grey[850]),
+        shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+      ),
     ),
   );
 }

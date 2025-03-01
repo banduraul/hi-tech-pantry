@@ -103,18 +103,6 @@ class ApplicationState extends ChangeNotifier {
             
             _hasExpiredProducts = _productInfo.any((product) => product.isExpired);
 
-            _productInfo.sort((a, b) {
-              if (a.expiryDate == null && b.expiryDate == null) {
-                return 0;
-              } else if (a.expiryDate == null) {
-                return -1;
-              } else if (b.expiryDate == null) {
-                return 1;
-              } else {
-                return a.expiryDate!.isBefore(b.expiryDate!) ? -1 : 1;
-              }
-            });
-
             notifyListeners();
           });
         

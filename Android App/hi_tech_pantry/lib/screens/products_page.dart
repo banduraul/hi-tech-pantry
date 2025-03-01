@@ -10,8 +10,8 @@ import '../utils/app_state.dart';
 import '../utils/notification_services.dart';
 
 import '../widgets/product_card.dart';
-import '../widgets/edit_product_info_dialog.dart';
 import '../widgets/confirmation_dialog.dart';
+import '../widgets/edit_product_info_dialog.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -22,11 +22,15 @@ class ProductsPage extends StatefulWidget {
   State<ProductsPage> createState() => _ProductsPageState();
 }
 
-class _ProductsPageState extends State<ProductsPage> {
+class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderStateMixin {
   bool _isSearching = false;
   String _searchQuery = '';
 
   late final AppLifecycleListener _appLifecycleListener;
+
+  final MenuController _menuController = MenuController();
+
+  int selectedSortOption = 0;
 
   @override
   void initState() {
@@ -45,13 +49,91 @@ class _ProductsPageState extends State<ProductsPage> {
     super.dispose();
   }
 
+  Widget _buildCustomMenuItem(IconData icon, String text, int value, bool isDarkMode) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          selectedSortOption = value;
+          _menuController.close();
+        });
+      },
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: selectedSortOption == value ? Border.all(color: Colors.blue.shade700, width: 1.5) : null,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          child: Row(
+            children: [
+              Icon(icon, color: selectedSortOption == value ? Colors.blue.shade700 : isDarkMode ? Colors.white : Colors.black, size: 24),
+              const SizedBox(width: 10),
+              Text(
+                text,
+                style: TextStyle(
+                  color: selectedSortOption == value ? Colors.blue.shade700 : isDarkMode ? Colors.white : Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    bool isDarkMode = theme.brightness == Brightness.dark;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Consumer<ApplicationState>(
         builder: (context, appState, _) {
           final filteredProducts = appState.isConnectedToPantry ? appState.productInfo.where((product) => product.name.toLowerCase().contains(_searchQuery)).toList() : [];
+          switch (selectedSortOption) {
+            case 0:
+              filteredProducts.sort((a, b) {
+                if (a.expiryDate == null && b.expiryDate == null) {
+                  return 0;
+                } else if (a.expiryDate == null) {
+                  return -1;
+                } else if (b.expiryDate == null) {
+                  return 1;
+                } else {
+                  return a.expiryDate!.isBefore(b.expiryDate!) ? -1 : 1;
+                }
+              });
+              break;
+            case 1:
+              filteredProducts.sort((a, b) {
+                if (a.expiryDate == null && b.expiryDate == null) {
+                  return 0;
+                } else if (a.expiryDate == null) {
+                  return 1;
+                } else if (b.expiryDate == null) {
+                  return -1;
+                } else {
+                  return a.expiryDate!.isBefore(b.expiryDate!) ? 1 : -1;
+                }
+              });
+              break;
+            case 2:
+              filteredProducts.sort((a, b) => a.name.compareTo(b.name));
+              break;
+            case 3:
+              filteredProducts.sort((a, b) => b.name.compareTo(a.name));
+              break;
+            case 4:
+              filteredProducts.sort((a, b) => a.quantity.compareTo(b.quantity));
+              break;
+            case 5:
+              filteredProducts.sort((a, b) => b.quantity.compareTo(a.quantity));
+              break;
+          }
           return Column(
             children: [
               Stack(
@@ -118,6 +200,7 @@ class _ProductsPageState extends State<ProductsPage> {
                     leading: Visibility(
                       visible: appState.isConnectedToPantry && appState.productInfo.isNotEmpty,
                       child: IconButton(
+                        tooltip: _isSearching ? 'Cancel' : 'Search products',
                         icon: Icon(
                           _isSearching
                             ? Icons.close
@@ -135,9 +218,45 @@ class _ProductsPageState extends State<ProductsPage> {
                       ),
                     ),
                     actions: [
+                      Visibility(
+                        visible: appState.isConnectedToPantry && appState.productInfo.isNotEmpty,
+                        child: MenuAnchor(
+                          controller: _menuController,
+                          alignmentOffset: const Offset(-50, 0),
+                          builder: (context, controller, child) {
+                            return IconButton(
+                              tooltip: 'Sort Products',
+                              icon: Icon(
+                                Icons.swap_vert_rounded,
+                                size: 27,
+                              ),
+                              onPressed: () {
+                                _menuController.isOpen ? _menuController.close() : _menuController.open();
+                              },
+                            );
+                          },
+                          menuChildren: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _buildCustomMenuItem(Icons.arrow_upward_rounded, 'Expiry Date', 0, isDarkMode),
+                                _buildCustomMenuItem(Icons.arrow_downward_rounded, 'Expiry Date', 1, isDarkMode),
+                                PopupMenuDivider(height: 5),
+                                _buildCustomMenuItem(Icons.arrow_upward_rounded, 'Name', 2, isDarkMode),
+                                _buildCustomMenuItem(Icons.arrow_downward_rounded, 'Name', 3, isDarkMode),
+                                PopupMenuDivider(height: 5),
+                                _buildCustomMenuItem(Icons.arrow_upward_rounded, 'Quantity', 4, isDarkMode),
+                                _buildCustomMenuItem(Icons.arrow_downward_rounded, 'Quantity', 5, isDarkMode),
+                              ],
+                            ),
+                          ]
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(right: 10),
                         child: IconButton(
+                          tooltip: 'Profile',
                           icon: Icon(
                             Icons.person_rounded,
                             size: 27,
