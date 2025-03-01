@@ -7,7 +7,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import '../widgets/confirmation_dialog.dart';
 import 'login_page.dart';
 
 import '../utils/database.dart';
@@ -18,6 +17,7 @@ import '../utils/notification_services.dart';
 import '../widgets/qr_code_dialog.dart';
 import '../widgets/bottom_modal_sheet.dart';
 import '../widgets/change_theme_dialog.dart';
+import '../widgets/confirmation_dialog.dart';
 import '../widgets/delete_account_dialog.dart';
 import '../widgets/change_username_dialog.dart';
 import '../widgets/reauthenticate_user_dialog.dart';
@@ -378,6 +378,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     onPressed: () {
                       showDialog(
                         context: context,
+                        barrierDismissible: false,
                         builder: (context) => QRCodeDialog(email: userEmail)
                       );
                     },
