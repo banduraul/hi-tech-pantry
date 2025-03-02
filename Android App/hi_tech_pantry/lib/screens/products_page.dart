@@ -32,6 +32,9 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
 
   int selectedSortOption = 0;
 
+  bool _isSelecting = false;
+  final Set<String> _selectedItems = {};
+
   @override
   void initState() {
     super.initState();
@@ -161,7 +164,7 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
                   AppBar(
                     title: Padding(
                       padding: const EdgeInsets.only(left: 20),
-                      child: AnimatedSwitcher(
+                      child: _isSelecting ? Text('${_selectedItems.length} products selected') : AnimatedSwitcher(
                         duration: const Duration(milliseconds: 400),
                         transitionBuilder: (child, animation) {
                           return SizeTransition(
@@ -200,14 +203,21 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
                     leading: Visibility(
                       visible: appState.isConnectedToPantry && appState.productInfo.isNotEmpty,
                       child: IconButton(
-                        tooltip: _isSearching ? 'Cancel' : 'Search products',
+                        tooltip: _isSelecting ? 'Cancel selection' : _isSearching ? 'Cancel' : 'Search products',
                         icon: Icon(
-                          _isSearching
-                            ? Icons.close
-                            : Icons.search,
+                          _isSelecting 
+                            ? Icons.close_rounded
+                            : _isSearching
+                              ? Icons.close_rounded
+                              : Icons.search_rounded,
                           size: 27,
                         ),
-                        onPressed: () {
+                        onPressed: _isSelecting ? () {
+                          setState(() {
+                            _selectedItems.clear();
+                            _isSelecting = false;
+                          });
+                        } : () {
                           setState(() {
                             _isSearching = !_isSearching;
                             if (!_isSearching) {
@@ -219,7 +229,7 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
                     ),
                     actions: [
                       Visibility(
-                        visible: appState.isConnectedToPantry && appState.productInfo.isNotEmpty,
+                        visible: appState.isConnectedToPantry && appState.productInfo.isNotEmpty && !_isSelecting,
                         child: MenuAnchor(
                           controller: _menuController,
                           alignmentOffset: const Offset(-50, 0),
@@ -258,10 +268,36 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
                         child: IconButton(
                           tooltip: 'Profile',
                           icon: Icon(
-                            Icons.person_rounded,
+                            _isSelecting
+                              ? Icons.delete_outline_rounded
+                              : Icons.person_rounded,
                             size: 27,
+                            color: _isSelecting ? Colors.red.shade800 : null,
                           ),
-                          onPressed: () {
+                          onPressed: _isSelecting ? () async {
+                            final confirmation = await showDialog(
+                              context: context,
+                              builder: (context) => ConfirmationDialog(text: 'Are you sure you want to delete these ${_selectedItems.length} products?')
+                            );
+
+                            if (confirmation) {
+                              var messages = [];
+                              for (var docId in _selectedItems) {
+                                final message = await Database.deleteProduct(docId: docId);
+                                messages.add(message);
+                              }
+                              if (messages.every((message) => message.contains('Success'))) {
+                                Fluttertoast.showToast(
+                                  msg: 'Selected products deleted successfully',
+                                  toastLength: Toast.LENGTH_SHORT,
+                                );
+                              }
+                              setState(() {
+                                _selectedItems.clear();
+                                _isSelecting = false;
+                              });
+                            }
+                          } : () {
                             if (!_isSearching) {
                               context.pushNamed(ProfilePage.profileName);
                             } else {
@@ -286,6 +322,8 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
                       itemCount: filteredProducts.length,
                       itemBuilder: (context, index) {
                         final productInfo = filteredProducts[index];
+                        final isSelected = _selectedItems.contains(productInfo.docId);
+
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
                           child: Dismissible(
@@ -316,14 +354,31 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
                               }
                             },
                             child: GestureDetector(
-                              onTap: () {
+                              onLongPress: _isSelecting ? null : () {
+                                setState(() {
+                                  _isSelecting = true;
+                                  _selectedItems.add(productInfo.docId);
+                                });
+                              },
+                              onTap: _isSelecting ? () {
+                                setState(() {
+                                  if (_selectedItems.contains(productInfo.docId)) {
+                                    _selectedItems.remove(productInfo.docId);
+                                    if (_selectedItems.isEmpty) {
+                                      _isSelecting = false;
+                                    }
+                                  } else {
+                                    _selectedItems.add(productInfo.docId);
+                                  }
+                                });
+                              } : () {
                                 showDialog(
                                   barrierDismissible: false,
                                   context: context,
                                   builder: (context) => EditProductInfoDialog(productInfo: productInfo),
                                 );
                               },
-                              child: ProductCard(productInfo: productInfo)
+                              child: ProductCard(productInfo: productInfo, isSelected: isSelected)
                             ),
                           ),
                         );

@@ -12,9 +12,11 @@ class ProductCard extends StatelessWidget {
   const ProductCard({
     super.key,
     required this.productInfo,
+    required this.isSelected,
   });
 
   final ProductInfo productInfo;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,10 @@ class ProductCard extends StatelessWidget {
         final expiryDate = DateFormat('dd/MM/yyyy').format(productInfo.expiryDate!);
         if (productInfo.isExpired) {
           return Card(
+            shape: isSelected ? RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+              side: BorderSide(color: Colors.blue.shade700, width: 2)
+            ) : null,
             child: ListTile(
               title: Text(productInfo.name, style: TextStyle(color: isDarkMode ? Colors.white : null)),
               subtitle: ProductExpiryDateStatus(
@@ -45,6 +51,10 @@ class ProductCard extends StatelessWidget {
         );
 
         return Card(
+          shape: isSelected ? RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+            side: BorderSide(color: Colors.blue.shade700, width: 2)
+          ) : null,
           child: ListTile(
             title: Text(productInfo.name, style: TextStyle(color: isDarkMode ? Colors.white : null)),
             subtitle: ProductExpiryDateStatus(
@@ -60,6 +70,10 @@ class ProductCard extends StatelessWidget {
       }
 
       return Card(
+        shape: isSelected ? RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25),
+          side: BorderSide(color: Colors.blue.shade700, width: 2)
+        ) : null,
         child: ListTile(
           title: Text(productInfo.name, style: TextStyle(color: isDarkMode ? Colors.white : null)),
           subtitle: Text(
@@ -72,6 +86,10 @@ class ProductCard extends StatelessWidget {
     }
     
     return Card(
+      shape: isSelected ? RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(25),
+        side: BorderSide(color: Colors.blue.shade700, width: 2)
+      ) : null,
       child: ListTile(
         title: Text(productInfo.name.isEmpty ? 'Unknown Product' : productInfo.name, style: TextStyle(color: isDarkMode ? Colors.white : null)),
         subtitle: Text(
