@@ -8,6 +8,7 @@ class ProductInfo:
     name: str
     finishedEditing: bool = False
     isExpired: bool = False
+    imageURL: str = ''
     quantity: int = 1
     expiryDate: Optional[datetime] = None
 
@@ -17,6 +18,7 @@ class ProductInfo:
             'name': self.name,
             'finishedEditing': self.finishedEditing,
             'isExpired': self.isExpired,
+            'imageURL': self.imageURL,
             'quantity': self.quantity,
             'expiryDate': self.expiryDate
         }
