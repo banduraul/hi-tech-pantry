@@ -191,9 +191,13 @@ class Database {
         .doc(auth.currentUser!.uid)
         .collection('products')
         .get()
-        .then((snapshot) {
+        .then((snapshot) async {
           for (DocumentSnapshot doc in snapshot.docs) {
-            doc.reference.delete();
+            if (doc['imageURL'] != '') {
+              final storageRef = FirebaseStorage.instance.ref('${auth.currentUser!.uid}/products');
+              await storageRef.child('${doc.id}.jpg').delete();
+            }
+            await doc.reference.delete();
           }
         });
 
@@ -226,11 +230,31 @@ class Database {
     return message;
   }
 
-  static Future<String> updateProductInfo({required ProductInfo productInfo}) async {
+  static Future<String> updateProductInfo({required ProductInfo productInfo, required File? image}) async {
     String message;
 
     try {
       final auth = FirebaseAuth.instance;
+
+      if (image != null) {
+        final storageRef = FirebaseStorage.instance.ref('${auth.currentUser!.uid}/products');
+        await storageRef.child('${productInfo.docId}.jpg').putFile(image);
+        final downloadURL = await storageRef.child('${productInfo.docId}.jpg').getDownloadURL();
+        productInfo.imageURL = downloadURL;
+      } else {
+        final product = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(auth.currentUser!.uid)
+          .collection('products')
+          .doc(productInfo.docId)
+          .get();
+
+        if (product['imageURL'] != '') {
+          final storageRef = FirebaseStorage.instance.ref('${auth.currentUser!.uid}/products');
+          await storageRef.child('${productInfo.docId}.jpg').delete();
+        }
+      }
+
       await FirebaseFirestore.instance
         .collection('users')
         .doc(auth.currentUser!.uid)
@@ -251,12 +275,19 @@ class Database {
 
     try {
       final auth = FirebaseAuth.instance;
-      await FirebaseFirestore.instance
+      final product = await FirebaseFirestore.instance
         .collection('users')
         .doc(auth.currentUser!.uid)
         .collection('products')
         .doc(docId)
-        .delete();
+        .get();
+
+      if (product['imageURL'] != '') {
+        final storageRef = FirebaseStorage.instance.ref('${auth.currentUser!.uid}/products');
+        await storageRef.child('$docId.jpg').delete();
+      }
+
+      await product.reference.delete();
       message = 'Success';
     } catch (e) {
       message = e.toString();

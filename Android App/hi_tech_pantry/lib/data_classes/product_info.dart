@@ -5,6 +5,7 @@ class ProductInfo {
     required this.finishedEditing,
     required this.quantity,
     required this.expiryDate,
+    required this.imageURL,
     this.docId = "",
     required this.isExpired
   });
@@ -12,6 +13,7 @@ class ProductInfo {
   final String eancode;
   final String name;
   final bool finishedEditing;
+  String imageURL;
   final int quantity;
   final DateTime? expiryDate;
   String docId = "";
@@ -24,6 +26,7 @@ class ProductInfo {
       'finishedEditing': finishedEditing,
       'quantity': quantity,
       'expiryDate': expiryDate,
+      'imageURL': imageURL,
       'isExpired': isExpired
     };
   }

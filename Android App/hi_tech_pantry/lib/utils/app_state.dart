@@ -96,6 +96,7 @@ class ApplicationState extends ChangeNotifier {
                   quantity: document.data()['quantity'] as int,
                   expiryDate: document.data()['expiryDate']?.toDate() as DateTime?,
                   docId: document.id,
+                  imageURL: document.data()['imageURL'] as String,
                   isExpired: document.data()['isExpired'] as bool
                 ),
               );
