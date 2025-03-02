@@ -25,6 +25,7 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderStateMixin {
   bool _isSearching = false;
   String _searchQuery = '';
+  final TextEditingController _searchController = TextEditingController();
 
   late final AppLifecycleListener _appLifecycleListener;
 
@@ -176,6 +177,7 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
                         child: _isSearching
                           ? TextField(
                               key: ValueKey('searchField'),
+                              controller: _searchController,
                               onChanged: (value) {
                                 setState(() {
                                   _searchQuery = value;
