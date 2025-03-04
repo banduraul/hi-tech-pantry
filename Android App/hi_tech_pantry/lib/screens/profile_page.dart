@@ -95,20 +95,6 @@ class _ProfilePageState extends State<ProfilePage> {
             channelInfo: NotificationServices.increasedQuantityChannel,
           );
           break;
-        case 'decreasedQuantity':
-          NotificationServices.showNotification(
-            title: message.data['name'],
-            content: message.data['message'],
-            channelInfo: NotificationServices.decreasedQuantityChannel,
-          );
-          break;
-        case 'productDeleted':
-          NotificationServices.showNotification(
-            title: message.data['name'],
-            content: 'This product ran out',
-            channelInfo: NotificationServices.productDeletedChannel,
-          );
-          break;
       }
     });
   }
