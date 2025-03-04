@@ -169,7 +169,7 @@ exports.checkExpiredProducts = onSchedule({schedule: "every day 00:00", region: 
         });
 });
 
-exports.productQuantityUpdatedNotification = onDocumentUpdated({document: "users/{userId}/products/{docId}", region: "europe-west1"}, async (event) => {
+exports.productQuantityIncreasedNotification = onDocumentUpdated({document: "users/{userId}/products/{docId}", region: "europe-west1"}, async (event) => {
     if (event.data.after.data().quantity !== event.data.before.data().quantity) {
         const document = await getFirestore()
             .collection("fcmTokens")
@@ -187,46 +187,6 @@ exports.productQuantityUpdatedNotification = onDocumentUpdated({document: "users
                     'message': 'Quantity has been increased to ' + event.data.after.data().quantity.toString(),
                 },
             });
-        } else {
-            if (event.data.after.data().quantity === 3) {
-                await admin.messaging().sendEachForMulticast({
-                    tokens: pushTokens,
-                    data: {
-                        'type': 'runningLow',
-                        'name': event.data.after.data().name,
-                        'quantity': '3',
-                    },
-                });
-            }
-            
-            await admin.messaging().sendEachForMulticast({
-                tokens: pushTokens,
-                data: {
-                    'type': 'decreasedQuantity',
-                    'name': event.data.after.data().name,
-                    'message': 'Quantity has been decreased to ' + event.data.after.data().quantity.toString(),
-                },
-            });
         }
-
-    }
-});
-
-exports.productDeletedNotification = onDocumentDeletedWithAuthContext({document: "users/{userId}/products/{docId}", region: "europe-west1"}, async (event) => {
-    if (event.authId.includes('adminsdk')) {
-        const document = await getFirestore()
-            .collection("fcmTokens")
-            .doc(event.params.userId)
-            .get();
-        
-        const pushTokens = document.data().pushTokens;
-
-        await admin.messaging().sendEachForMulticast({
-            tokens: pushTokens,
-            data: {
-                'type': 'productDeleted',
-                'name': event.data.data().name,
-            },
-        });
     }
 });
