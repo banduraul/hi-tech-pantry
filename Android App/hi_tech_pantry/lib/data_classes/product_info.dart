@@ -2,6 +2,7 @@ class ProductInfo {
   ProductInfo({
     required this.eancode,
     required this.name,
+    required this.categories,
     required this.finishedEditing,
     required this.quantity,
     required this.expiryDate,
@@ -12,6 +13,7 @@ class ProductInfo {
 
   final String eancode;
   final String name;
+  final List<String> categories;
   final bool finishedEditing;
   String imageURL;
   final int quantity;
@@ -23,6 +25,7 @@ class ProductInfo {
     return {
       'eancode': eancode,
       'name': name,
+      'categories': categories,
       'finishedEditing': finishedEditing,
       'quantity': quantity,
       'expiryDate': expiryDate,

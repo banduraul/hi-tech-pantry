@@ -44,6 +44,9 @@ class ApplicationState extends ChangeNotifier {
   bool _isConnectedToPantry = false;
   bool get isConnectedToPantry => _isConnectedToPantry;
 
+  List<String> _productCategories = [];
+  List<String> get productCategories => _productCategories;
+
   Future<void> sendEmailVerification() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -92,6 +95,7 @@ class ApplicationState extends ChangeNotifier {
                 ProductInfo(
                   eancode: document.data()['eancode'] as String,
                   name: document.data()['name'] as String,
+                  categories: List<String>.from(document.data()['categories']),
                   finishedEditing: document.data()['finishedEditing'] as bool,
                   quantity: document.data()['quantity'] as int,
                   expiryDate: document.data()['expiryDate']?.toDate() as DateTime?,
@@ -101,7 +105,18 @@ class ApplicationState extends ChangeNotifier {
                 ),
               );
             }
-            
+
+            _productCategories = _productInfo.fold<List<String>>([], (previousValue, element) {
+              for (final category in element.categories) {
+                if (!previousValue.contains(category)) {
+                  previousValue.add(category);
+                }
+              }
+              return previousValue;
+            });
+
+            _productCategories.sort();
+
             _hasExpiredProducts = _productInfo.any((product) => product.isExpired);
 
             notifyListeners();

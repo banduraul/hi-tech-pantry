@@ -3,13 +3,18 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../utils/database.dart';
+import '../utils/app_state.dart';
 import '../utils/validator.dart';
-import '../widgets/image_dialog.dart';
+
+import 'image_dialog.dart';
+import 'add_category_dialog.dart';
+import 'categories_container.dart';
 
 import '../data_classes/product_info.dart';
 
@@ -39,12 +44,15 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
 
   int _quantity = 0;
 
+  late Set<String> selected;
+
   @override
   void initState() {
     super.initState();
     _quantity = widget.productInfo.quantity;
     _nameController.text = widget.productInfo.name;
     _quantityController.text = _quantity.toString();
+    selected = Set.from(widget.productInfo.categories);
     if (widget.productInfo.expiryDate != null) {
       doesItHaveExpiryDate = true;
       _expiryDateController.text = DateFormat('dd/MM/yyyy').format(widget.productInfo.expiryDate!);
@@ -74,7 +82,7 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
       content: SingleChildScrollView(
         child: SizedBox(
           width: 280,
-          height: 350,
+          height: 500,
           child: Form(
             key: _formKey,
             child: Column(
@@ -109,6 +117,47 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
                   focusNode: _focusQuantity,
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.category_rounded, size: 24, color: Colors.blue.shade700),
+                    Text('Category:', style: TextStyle(fontSize: 18, color: Colors.blue.shade700)),
+                    const Spacer(),
+                    IconButton(
+                      icon: Icon(Icons.add_rounded, color: Colors.blue.shade700, size: 24),
+                      onPressed: () async {
+                        final result = await showDialog(
+                          context: context,
+                          builder:(context) => AddCategoryDialog(),
+                        );
+
+                        if (result[0] == true) {
+                          setState(() {
+                            selected.add(result[1]);
+                          });
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                Consumer<ApplicationState>(
+                  builder: (context, appState, _) => Visibility(
+                    visible: appState.productCategories.isNotEmpty,
+                    child: CategoriesContainer(
+                      categories: {...appState.productCategories, ...selected}.toList(),
+                      selected: selected,
+                      isDarkMode: isDarkMode,
+                      onSelected: (category) {
+                        setState(() {
+                          if (selected.contains(category)) {
+                            selected.remove(category);
+                          } else {
+                            selected.add(category);
+                          }
+                        });
+                      },
+                    ),
+                  ),
                 ),
                 Row(
                   children: [
@@ -243,6 +292,7 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
                                 productInfo: ProductInfo(
                                   docId: widget.productInfo.docId,
                                   eancode: widget.productInfo.eancode,
+                                  categories: selected.toList(),
                                   imageURL: widget.productInfo.imageURL,
                                   name: _nameController.text,
                                   finishedEditing: true,
