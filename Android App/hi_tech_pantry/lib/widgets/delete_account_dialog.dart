@@ -51,6 +51,7 @@ class _DeleteAccountDialog extends State<DeleteAccountDialog> {
             child: Column(
               children: [
                 TextFormField(
+                  textCapitalization: TextCapitalization.words,
                   obscureText: !_passwordVisible,
                   decoration: InputDecoration(
                     labelText: 'Password',

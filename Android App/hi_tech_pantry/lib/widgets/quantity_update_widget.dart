@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hi_tech_pantry/utils/database.dart';
+
+import '../utils/database.dart';
 
 class QuantityUpdateWidget extends StatelessWidget {
   const QuantityUpdateWidget({super.key, required this.quantity, required this.docId});

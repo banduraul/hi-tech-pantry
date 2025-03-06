@@ -54,6 +54,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   child: Column(
                     children: [
                       TextFormField(
+                        textCapitalization: TextCapitalization.words,
                         controller: _emailTextController,
                         focusNode: _focusEmail,
                         validator: (value) => Validator.validateEmail(email: _emailTextController.text),

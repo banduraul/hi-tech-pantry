@@ -29,6 +29,7 @@ class AddCategoryDialog extends StatelessWidget {
             child: Column(
               children: [
                 TextFormField(
+                  textCapitalization: TextCapitalization.words,
                   decoration: InputDecoration(
                     labelText: 'Category',
                     hintText: 'Category',

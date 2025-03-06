@@ -42,7 +42,7 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
   bool _isProcessing = false;
   bool doesItHaveExpiryDate = false;
 
-  int _quantity = 0;
+  late int _quantity;
 
   late Set<String> selected;
 
@@ -89,6 +89,7 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
+                  textCapitalization: TextCapitalization.words,
                   decoration: InputDecoration(
                     labelText: 'Name',
                     hintText: 'Name',
@@ -100,6 +101,7 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
+                  textCapitalization: TextCapitalization.words,
                   onChanged: (value) {
                     setState(() {
                       _quantityController.value = TextEditingValue(text: _quantityController.text.replaceFirst(RegExp(r'^0+'), ''));
@@ -212,7 +214,7 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
                         children: [
                           Text('(Optional)', style: TextStyle(fontSize: 18, color: Colors.blue.shade700)),
                           IconButton(
-                            icon: Icon(Icons.add_a_photo_rounded, color: Colors.blue.shade700, size: 20),
+                            icon: Icon(Icons.add_a_photo_rounded, color: Colors.blue.shade700, size: 24),
                             onPressed: () async {
                               final pickedFile = await picker.pickImage(
                                 source: ImageSource.camera,
@@ -251,7 +253,7 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
                             )
                           ),
                           IconButton(
-                            icon: Icon(Icons.delete_outline_rounded, color: Colors.blue.shade700, size: 20),
+                            icon: Icon(Icons.delete_outline_rounded, color: Colors.red.shade700, size: 24),
                             onPressed: () {
                               setState(() {
                                 widget.productInfo.imageURL = '';

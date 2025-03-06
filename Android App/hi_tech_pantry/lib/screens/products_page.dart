@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../screens/profile_page.dart';
+import 'profile_page.dart';
 
 import '../utils/database.dart';
 import '../utils/app_state.dart';

@@ -43,6 +43,7 @@ class _ReauthenticateUserDialogState extends State<ReauthenticateUserDialog> {
             child: Column(
               children: [
                 TextFormField(
+                  textCapitalization: TextCapitalization.words,
                   obscureText: !_passwordVisible,
                   decoration: InputDecoration(
                     labelText: 'Password',

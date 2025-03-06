@@ -41,6 +41,7 @@ class _ChangeUsernameDialogState extends State<ChangeUsernameDialog> {
             child: Column(
               children: [
                 TextFormField(
+                  textCapitalization: TextCapitalization.words,
                   decoration: InputDecoration(
                     labelText: 'Username',
                     hintText: 'Username',

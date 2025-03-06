@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hi_tech_pantry/screens/products_page.dart';
 
+import 'products_page.dart';
 import 'register_page.dart';
 import 'forgot_password_page.dart';
 
@@ -61,6 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   children: <Widget>[
                     TextFormField(
+                      textCapitalization: TextCapitalization.words,
                       controller: _emailTextController,
                       focusNode: _focusEmail,
                       validator: (value) => Validator.validateEmail(
@@ -74,6 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 16.0),
                     TextFormField(
+                      textCapitalization: TextCapitalization.words,
                       controller: _passwordTextController,
                       focusNode: _focusPassword,
                       obscureText: !_passwordVisible,

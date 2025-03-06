@@ -62,6 +62,7 @@ class _NewPasswordDialogState extends State<NewPasswordDialog> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextFormField(
+                      textCapitalization: TextCapitalization.words,
                       obscureText: !_newPasswordVisible,
                       onChanged: (value) {
                         setState(() {
@@ -122,6 +123,7 @@ class _NewPasswordDialogState extends State<NewPasswordDialog> {
                     Visibility(
                       visible: _allRequirementsMet,
                       child: TextFormField(
+                        textCapitalization: TextCapitalization.words,
                         obscureText: !_confirmNewPasswordVisible,
                         decoration: InputDecoration(
                           labelText: 'Confirm Password',

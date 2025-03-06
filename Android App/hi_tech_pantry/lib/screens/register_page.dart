@@ -81,6 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Column(
                       children: [
                         TextFormField(
+                          textCapitalization: TextCapitalization.words,
                           controller: _usernameTextController,
                           focusNode: _focusUsername,
                           validator: (value) => Validator.validateUsername(
@@ -94,6 +95,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         const SizedBox(height: 16.0),
                         TextFormField(
+                          textCapitalization: TextCapitalization.words,
                           controller: _emailTextController,
                           focusNode: _focusEmail,
                           validator: (value) => Validator.validateEmail(
@@ -107,6 +109,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         const SizedBox(height: 16.0),
                         TextFormField(
+                          textCapitalization: TextCapitalization.words,
                           controller: _passwordTextController,
                           focusNode: _focusPassword,
                           obscureText: !_passwordVisible,
@@ -167,6 +170,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         Visibility(
                           visible: _allRequirementsMet,
                           child: TextFormField(
+                            textCapitalization: TextCapitalization.words,
                             controller: _confirmPasswordTextController,
                             focusNode: _focusConfirmPassword,
                             obscureText: !_confirmPasswordVisible,
