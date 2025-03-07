@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,8 +11,11 @@ import '../utils/app_state.dart';
 import '../utils/notification_services.dart';
 
 import '../widgets/product_card.dart';
+import '../widgets/filter_modal_sheet.dart';
 import '../widgets/confirmation_dialog.dart';
 import '../widgets/edit_product_info_dialog.dart';
+
+import '../data_classes/product_info.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -35,6 +39,10 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
 
   bool _isSelecting = false;
   final Set<String> _selectedItems = {};
+
+  Set<String> _selectedCategories = {};
+  Set<int> _selectedExpiryDates = {};
+  Set<int> _selectedQuantities = {};
 
   @override
   void initState() {
@@ -97,7 +105,78 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
       resizeToAvoidBottomInset: false,
       body: Consumer<ApplicationState>(
         builder: (context, appState, _) {
-          final filteredProducts = appState.isConnectedToPantry ? appState.productInfo.where((product) => product.name.toLowerCase().contains(_searchQuery)).toList() : [];
+          List<ProductInfo> filteredProducts = appState.isConnectedToPantry ? appState.productInfo : [];
+
+          if (_searchQuery.isNotEmpty) {
+            filteredProducts = appState.productInfo.where((product) => product.name.toLowerCase().contains(_searchQuery)).toList();
+          }
+
+          if (_selectedExpiryDates.isNotEmpty) {
+            if (_selectedExpiryDates.length == 1) {
+              if (_selectedExpiryDates.contains(0)) {
+                filteredProducts = filteredProducts.where((product) => product.isExpired).toList();
+              } else if (_selectedExpiryDates.contains(1)) {
+                filteredProducts = filteredProducts.where((product) {
+                  final isAfter = product.expiryDate!.isAfter(
+                    DateFormat('dd/MM/yyyy').parse(
+                      DateFormat('dd/MM/yyyy').format(DateTime.now().add(Duration(days: 3)))
+                    )
+                  );
+
+                  return !product.isExpired && !isAfter;
+                }).toList();
+              } else if (_selectedExpiryDates.contains(2)) {
+                filteredProducts = filteredProducts.where((product) {
+                  final isAfter = product.expiryDate!.isAfter(
+                    DateFormat('dd/MM/yyyy').parse(
+                      DateFormat('dd/MM/yyyy').format(DateTime.now().add(Duration(days: 3)))
+                    )
+                  );
+
+                  return !product.isExpired && isAfter;
+                }).toList();
+              }
+            } else if (_selectedExpiryDates.length == 2) {
+              if (_selectedExpiryDates.contains(0) && _selectedExpiryDates.contains(1)) {
+                filteredProducts = filteredProducts.where((product) {
+                  final isAfter = product.expiryDate!.isAfter(
+                    DateFormat('dd/MM/yyyy').parse(
+                      DateFormat('dd/MM/yyyy').format(DateTime.now().add(Duration(days: 3)))
+                    )
+                  );
+
+                  return product.isExpired || !isAfter;
+                }).toList();
+              } else if (_selectedExpiryDates.contains(0) && _selectedExpiryDates.contains(2)) {
+                filteredProducts = filteredProducts.where((product) {
+                  final isAfter = product.expiryDate!.isAfter(
+                    DateFormat('dd/MM/yyyy').parse(
+                      DateFormat('dd/MM/yyyy').format(DateTime.now().add(Duration(days: 3)))
+                    )
+                  );
+
+                  return product.isExpired || isAfter;
+                }).toList();
+              } else if (_selectedExpiryDates.contains(1) && _selectedExpiryDates.contains(2)) {
+                filteredProducts = filteredProducts.where((product) => !product.isExpired).toList();
+              }
+            }
+          }
+
+          if (_selectedCategories.isNotEmpty) {
+            filteredProducts = filteredProducts.where((product) => product.categories.any((category) => _selectedCategories.contains(category))).toList();
+          }
+
+          if (_selectedQuantities.isNotEmpty) {
+            if (_selectedQuantities.length == 1) {
+              if (_selectedQuantities.contains(0)) {
+                filteredProducts = filteredProducts.where((product) => product.quantity <= 3).toList();
+              } else if (_selectedQuantities.contains(1)) {
+                filteredProducts = filteredProducts.where((product) => product.quantity > 3).toList();
+              }
+            }
+          }
+
           switch (selectedSortOption) {
             case 0:
               filteredProducts.sort((a, b) {
@@ -232,37 +311,77 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
                     actions: [
                       Visibility(
                         visible: appState.isConnectedToPantry && appState.productInfo.isNotEmpty && !_isSelecting,
-                        child: MenuAnchor(
-                          controller: _menuController,
-                          alignmentOffset: const Offset(-50, 0),
-                          builder: (context, controller, child) {
-                            return IconButton(
-                              tooltip: 'Sort Products',
+                        child: Row(
+                          children: [
+                            IconButton(
+                              tooltip: 'Filter products',
                               icon: Icon(
-                                Icons.swap_vert_rounded,
+                                Icons.tune_rounded,
                                 size: 27,
                               ),
-                              onPressed: () {
-                                _menuController.isOpen ? _menuController.close() : _menuController.open();
+                              onPressed: () async {
+                                final result = await showModalBottomSheet(
+                                  context: context,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20),
+                                    ),
+                                  ),
+                                  builder: (context) => FilterModalSheet(
+                                    selectedCategories: _selectedCategories,
+                                    selectedExpiryDates: _selectedExpiryDates,
+                                    selectedQuantities: _selectedQuantities,
+                                  ),
+                                );
+
+                                if(result[0] == true) {
+                                  setState(() {
+                                    _selectedExpiryDates = {...result[1]};
+                                    _selectedCategories = {...result[2]};
+                                    _selectedQuantities = {...result[3]};
+                                  });
+                                } else if (result[0] == false) {
+                                  setState(() {
+                                    _selectedExpiryDates.clear();
+                                    _selectedCategories.clear();
+                                    _selectedQuantities.clear();
+                                  });
+                                }
                               },
-                            );
-                          },
-                          menuChildren: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                _buildCustomMenuItem(Icons.arrow_upward_rounded, 'Expiry Date', 0, isDarkMode),
-                                _buildCustomMenuItem(Icons.arrow_downward_rounded, 'Expiry Date', 1, isDarkMode),
-                                PopupMenuDivider(height: 5),
-                                _buildCustomMenuItem(Icons.arrow_upward_rounded, 'Name', 2, isDarkMode),
-                                _buildCustomMenuItem(Icons.arrow_downward_rounded, 'Name', 3, isDarkMode),
-                                PopupMenuDivider(height: 5),
-                                _buildCustomMenuItem(Icons.arrow_upward_rounded, 'Quantity', 4, isDarkMode),
-                                _buildCustomMenuItem(Icons.arrow_downward_rounded, 'Quantity', 5, isDarkMode),
-                              ],
                             ),
-                          ]
+                            MenuAnchor(
+                              controller: _menuController,
+                              alignmentOffset: const Offset(-50, 0),
+                              builder: (context, controller, child) {
+                                return IconButton(
+                                  tooltip: 'Sort Products',
+                                  icon: Icon(
+                                    Icons.swap_vert_rounded,
+                                    size: 27,
+                                  ),
+                                  onPressed: () {
+                                    _menuController.isOpen ? _menuController.close() : _menuController.open();
+                                  },
+                                );
+                              },
+                              menuChildren: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    _buildCustomMenuItem(Icons.arrow_upward_rounded, 'Expiry Date', 0, isDarkMode),
+                                    _buildCustomMenuItem(Icons.arrow_downward_rounded, 'Expiry Date', 1, isDarkMode),
+                                    PopupMenuDivider(height: 5),
+                                    _buildCustomMenuItem(Icons.arrow_upward_rounded, 'Name', 2, isDarkMode),
+                                    _buildCustomMenuItem(Icons.arrow_downward_rounded, 'Name', 3, isDarkMode),
+                                    PopupMenuDivider(height: 5),
+                                    _buildCustomMenuItem(Icons.arrow_upward_rounded, 'Quantity', 4, isDarkMode),
+                                    _buildCustomMenuItem(Icons.arrow_downward_rounded, 'Quantity', 5, isDarkMode),
+                                  ],
+                                ),
+                              ]
+                            ),
+                          ],
                         ),
                       ),
                       Padding(
