@@ -50,29 +50,32 @@ class ProductCard extends StatelessWidget {
                     child: SizedBox(
                       width: double.infinity,
                       height: 30,
-                      child: ListView.builder(
-                        itemCount: productInfo.categories.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: Colors.blue.shade700, width: 2)
-                              ),
-                              child: Text(
-                                productInfo.categories[index],
-                                style: TextStyle(
-                                  color: Colors.blue.shade700,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: ListView.builder(
+                          itemCount: productInfo.categories.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(color: Colors.blue.shade700, width: 2)
+                                ),
+                                child: Text(
+                                  productInfo.categories[index],
+                                  style: TextStyle(
+                                    color: Colors.blue.shade700,
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -114,29 +117,32 @@ class ProductCard extends StatelessWidget {
                   child: SizedBox(
                     width: double.infinity,
                     height: 30,
-                    child: ListView.builder(
-                      itemCount: productInfo.categories.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.blue.shade700, width: 2)
-                            ),
-                            child: Text(
-                              productInfo.categories[index],
-                              style: TextStyle(
-                                color: Colors.blue.shade700,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: ListView.builder(
+                        itemCount: productInfo.categories.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(color: Colors.blue.shade700, width: 2)
+                              ),
+                              child: Text(
+                                productInfo.categories[index],
+                                style: TextStyle(
+                                  color: Colors.blue.shade700,
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -169,29 +175,32 @@ class ProductCard extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   height: 30,
-                  child: ListView.builder(
-                    itemCount: productInfo.categories.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.blue.shade700, width: 2)
-                          ),
-                          child: Text(
-                            productInfo.categories[index],
-                            style: TextStyle(
-                              color: Colors.blue.shade700,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: ListView.builder(
+                      itemCount: productInfo.categories.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: Colors.blue.shade700, width: 2)
+                            ),
+                            child: Text(
+                              productInfo.categories[index],
+                              style: TextStyle(
+                                color: Colors.blue.shade700,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),

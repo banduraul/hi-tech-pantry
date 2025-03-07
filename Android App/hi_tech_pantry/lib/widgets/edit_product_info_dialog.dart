@@ -180,7 +180,7 @@ class _EditProductInfoDialogState extends State<EditProductInfoDialog> {
                 TextFormField(
                   enabled: doesItHaveExpiryDate,
                   decoration: InputDecoration(
-                    labelText: 'Expiry Date',
+                    labelText: doesItHaveExpiryDate ? 'Expiry Date' : 'No Expiry Date',
                     hintText: 'Expiry Date',
                     prefixIcon: const Icon(Icons.calendar_today_rounded, size: 24),
                   ),

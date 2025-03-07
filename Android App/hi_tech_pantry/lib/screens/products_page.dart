@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -26,10 +26,11 @@ class ProductsPage extends StatefulWidget {
   State<ProductsPage> createState() => _ProductsPageState();
 }
 
-class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderStateMixin {
+class _ProductsPageState extends State<ProductsPage> {
   bool _isSearching = false;
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
+  final _searchFocusNode = FocusNode();
 
   late final AppLifecycleListener _appLifecycleListener;
 
@@ -257,6 +258,7 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
                           ? TextField(
                               key: ValueKey('searchField'),
                               controller: _searchController,
+                              focusNode: _searchFocusNode,
                               onChanged: (value) {
                                 setState(() {
                                   _searchQuery = value;
@@ -302,6 +304,7 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
                           setState(() {
                             _isSearching = !_isSearching;
                             if (!_isSearching) {
+                              _searchController.clear();
                               _searchQuery = '';
                             }
                           });
@@ -320,6 +323,7 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
                                 size: 27,
                               ),
                               onPressed: () async {
+                                _searchFocusNode.unfocus();
                                 final result = await showModalBottomSheet(
                                   context: context,
                                   shape: const RoundedRectangleBorder(
@@ -360,6 +364,7 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
                                     size: 27,
                                   ),
                                   onPressed: () {
+                                    _searchFocusNode.unfocus();
                                     _menuController.isOpen ? _menuController.close() : _menuController.open();
                                   },
                                 );
@@ -510,7 +515,7 @@ class _ProductsPageState extends State<ProductsPage> with SingleTickerProviderSt
                         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                         child: Text(!appState.isConnectedToPantry 
                           ? 'You are not connected to your pantry.\nGo to the profile page and connect in order to see your products'
-                          : _isSearching
+                          : _isSearching || _selectedCategories.isNotEmpty || _selectedExpiryDates.isNotEmpty || _selectedQuantities.isNotEmpty
                             ? 'No products match your search criteria'
                             : 'You have no products in your pantry',
                           style: TextStyle(
