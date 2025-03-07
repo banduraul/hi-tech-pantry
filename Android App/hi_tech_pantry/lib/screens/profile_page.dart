@@ -15,7 +15,7 @@ import '../utils/theme_provider.dart';
 import '../utils/notification_services.dart';
 
 import '../widgets/qr_code_dialog.dart';
-import '../widgets/bottom_modal_sheet.dart';
+import '../widgets/change_profile_picture_modal_sheet.dart';
 import '../widgets/change_theme_dialog.dart';
 import '../widgets/confirmation_dialog.dart';
 import '../widgets/delete_account_dialog.dart';
@@ -140,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   top: Radius.circular(20),
                                 ),
                               ),
-                              builder: (context) => BottomModalSheet()
+                              builder: (context) => ChangeProfilePictureModalSheet()
                             );
                           },
                           child: appState.userPhotoUrl.isEmpty

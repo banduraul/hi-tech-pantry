@@ -7,8 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../utils/database.dart';
 
-class BottomModalSheet extends StatelessWidget {
-  BottomModalSheet({super.key});
+class ChangeProfilePictureModalSheet extends StatelessWidget {
+  ChangeProfilePictureModalSheet({super.key});
 
   final picker = ImagePicker();
 
