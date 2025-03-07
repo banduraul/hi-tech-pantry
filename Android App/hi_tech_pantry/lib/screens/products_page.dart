@@ -316,42 +316,59 @@ class _ProductsPageState extends State<ProductsPage> {
                         visible: appState.isConnectedToPantry && appState.productInfo.isNotEmpty && !_isSelecting,
                         child: Row(
                           children: [
-                            IconButton(
-                              tooltip: 'Filter products',
-                              icon: Icon(
-                                Icons.tune_rounded,
-                                size: 27,
-                              ),
-                              onPressed: () async {
-                                _searchFocusNode.unfocus();
-                                final result = await showModalBottomSheet(
-                                  context: context,
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(20),
+                            Stack(
+                              children: [
+                                IconButton(
+                                  tooltip: 'Filter products',
+                                  icon: Icon(
+                                    Icons.tune_rounded,
+                                    size: 27,
+                                  ),
+                                  onPressed: () async {
+                                    _searchFocusNode.unfocus();
+                                    final result = await showModalBottomSheet(
+                                      context: context,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(20),
+                                        ),
+                                      ),
+                                      builder: (context) => FilterModalSheet(
+                                        selectedCategories: _selectedCategories,
+                                        selectedExpiryDates: _selectedExpiryDates,
+                                        selectedQuantities: _selectedQuantities,
+                                      ),
+                                    );
+                                
+                                    if(result[0] == true) {
+                                      setState(() {
+                                        _selectedExpiryDates = {...result[1]};
+                                        _selectedCategories = {...result[2]};
+                                        _selectedQuantities = {...result[3]};
+                                      });
+                                    } else if (result[0] == false) {
+                                      setState(() {
+                                        _selectedExpiryDates.clear();
+                                        _selectedCategories.clear();
+                                        _selectedQuantities.clear();
+                                      });
+                                    }
+                                  },
+                                ),
+                                if (_selectedExpiryDates.isNotEmpty || _selectedCategories.isNotEmpty || _selectedQuantities.isNotEmpty)
+                                  Positioned(
+                                    right: 6,
+                                    top: 6,
+                                    child: Container(
+                                      width: 10,
+                                      height: 10,
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue.shade700,
+                                        shape: BoxShape.circle,
+                                      ),
                                     ),
                                   ),
-                                  builder: (context) => FilterModalSheet(
-                                    selectedCategories: _selectedCategories,
-                                    selectedExpiryDates: _selectedExpiryDates,
-                                    selectedQuantities: _selectedQuantities,
-                                  ),
-                                );
-
-                                if(result[0] == true) {
-                                  setState(() {
-                                    _selectedExpiryDates = {...result[1]};
-                                    _selectedCategories = {...result[2]};
-                                    _selectedQuantities = {...result[3]};
-                                  });
-                                } else if (result[0] == false) {
-                                  setState(() {
-                                    _selectedExpiryDates.clear();
-                                    _selectedCategories.clear();
-                                    _selectedQuantities.clear();
-                                  });
-                                }
-                              },
+                              ],
                             ),
                             MenuAnchor(
                               controller: _menuController,
