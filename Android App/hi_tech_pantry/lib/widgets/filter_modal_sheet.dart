@@ -25,7 +25,7 @@ class _FilterModalSheetState extends State<FilterModalSheet> {
   late Set<int> selectedExpiryDates;
   late Set<int> selectedQuantities;
 
-  Set<String> availableExpiryDates = {'Expired', 'Expiring Soon (within 3 days)', 'Expires Later (more than 3 days)'};
+  Set<String> availableExpiryDates = {'Expired', 'Expiring Soon (within 3 days)', 'Expires Later (more than 3 days)', 'No Expiry Date'};
   Set<String> availableQuantities = {'1 - 3', '4+'};
 
   @override
@@ -66,7 +66,7 @@ class _FilterModalSheetState extends State<FilterModalSheet> {
               runSpacing: 5,
               spacing: 5,
               children: [
-                for (int i = 0; i <= 2; i++)
+                for (int i = 0; i <= 3; i++)
                   GestureDetector(
                     onTap: () {
                       setState(() {

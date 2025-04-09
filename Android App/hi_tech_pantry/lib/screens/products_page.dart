@@ -118,6 +118,7 @@ class _ProductsPageState extends State<ProductsPage> {
                 filteredProducts = filteredProducts.where((product) => product.isExpired).toList();
               } else if (_selectedExpiryDates.contains(1)) {
                 filteredProducts = filteredProducts.where((product) {
+                  if (product.expiryDate == null) return false;
                   final isAfter = product.expiryDate!.isAfter(
                     DateFormat('dd/MM/yyyy').parse(
                       DateFormat('dd/MM/yyyy').format(DateTime.now().add(Duration(days: 3)))
@@ -128,6 +129,7 @@ class _ProductsPageState extends State<ProductsPage> {
                 }).toList();
               } else if (_selectedExpiryDates.contains(2)) {
                 filteredProducts = filteredProducts.where((product) {
+                  if (product.expiryDate == null) return false;
                   final isAfter = product.expiryDate!.isAfter(
                     DateFormat('dd/MM/yyyy').parse(
                       DateFormat('dd/MM/yyyy').format(DateTime.now().add(Duration(days: 3)))
@@ -136,10 +138,13 @@ class _ProductsPageState extends State<ProductsPage> {
 
                   return !product.isExpired && isAfter;
                 }).toList();
+              } else if (_selectedExpiryDates.contains(3)) {
+                filteredProducts = filteredProducts.where((product) => product.expiryDate == null).toList();
               }
             } else if (_selectedExpiryDates.length == 2) {
               if (_selectedExpiryDates.contains(0) && _selectedExpiryDates.contains(1)) {
                 filteredProducts = filteredProducts.where((product) {
+                  if (product.expiryDate == null) return false;
                   final isAfter = product.expiryDate!.isAfter(
                     DateFormat('dd/MM/yyyy').parse(
                       DateFormat('dd/MM/yyyy').format(DateTime.now().add(Duration(days: 3)))
@@ -150,6 +155,7 @@ class _ProductsPageState extends State<ProductsPage> {
                 }).toList();
               } else if (_selectedExpiryDates.contains(0) && _selectedExpiryDates.contains(2)) {
                 filteredProducts = filteredProducts.where((product) {
+                  if (product.expiryDate == null) return false;
                   final isAfter = product.expiryDate!.isAfter(
                     DateFormat('dd/MM/yyyy').parse(
                       DateFormat('dd/MM/yyyy').format(DateTime.now().add(Duration(days: 3)))
@@ -158,8 +164,49 @@ class _ProductsPageState extends State<ProductsPage> {
 
                   return product.isExpired || isAfter;
                 }).toList();
+              } else if (_selectedExpiryDates.contains(0) && _selectedExpiryDates.contains(3)) {
+                filteredProducts = filteredProducts.where((product) => product.isExpired || product.expiryDate == null).toList(); 
               } else if (_selectedExpiryDates.contains(1) && _selectedExpiryDates.contains(2)) {
-                filteredProducts = filteredProducts.where((product) => !product.isExpired).toList();
+                filteredProducts = filteredProducts.where((product) => !product.isExpired && product.expiryDate != null).toList();
+              } else if (_selectedExpiryDates.contains(1) && _selectedExpiryDates.contains(3)) {
+                filteredProducts = filteredProducts.where((product) {
+                  if (product.expiryDate == null) return true;
+                  final isAfter = product.expiryDate!.isAfter(
+                    DateFormat('dd/MM/yyyy').parse(
+                      DateFormat('dd/MM/yyyy').format(DateTime.now().add(Duration(days: 3)))
+                    )
+                  );
+
+                  return !product.isExpired && !isAfter;
+                }).toList();
+              } else if (_selectedExpiryDates.contains(2) && _selectedExpiryDates.contains(3)) {
+                filteredProducts = filteredProducts.where((product) {
+                  if (product.expiryDate == null) return true;
+                  final isAfter = product.expiryDate!.isAfter(
+                    DateFormat('dd/MM/yyyy').parse(
+                      DateFormat('dd/MM/yyyy').format(DateTime.now().add(Duration(days: 3)))
+                    )
+                  );
+
+                  return !product.isExpired && isAfter;
+                }).toList();
+              }
+            } else if (_selectedExpiryDates.length == 3) {
+              if (_selectedExpiryDates.contains(0) && _selectedExpiryDates.contains(1) && _selectedExpiryDates.contains(2)) {
+                filteredProducts = filteredProducts.where((product) => product.expiryDate != null).toList();
+              } else if (_selectedExpiryDates.contains(0) && _selectedExpiryDates.contains(1) && _selectedExpiryDates.contains(3)) {
+                filteredProducts = filteredProducts.where((product) {
+                  if (product.expiryDate == null) return true;
+                  final isAfter = product.expiryDate!.isAfter(
+                    DateFormat('dd/MM/yyyy').parse(
+                      DateFormat('dd/MM/yyyy').format(DateTime.now().add(Duration(days: 3)))
+                    )
+                  );
+
+                  return product.isExpired || !isAfter;
+                }).toList();
+              } else if (_selectedExpiryDates.contains(1) && _selectedExpiryDates.contains(2) && _selectedExpiryDates.contains(3)) {
+                filteredProducts = filteredProducts.where((product) => !product.isExpired || product.expiryDate == null).toList();
               }
             }
           }
