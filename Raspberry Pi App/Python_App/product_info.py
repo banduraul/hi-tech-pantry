@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional, Dict
 from datetime import datetime
 
@@ -9,6 +9,7 @@ class ProductInfo:
     finishedEditing: bool = False
     isExpired: bool = False
     imageURL: str = ''
+    categories: list = field(default_factory=list)
     quantity: int = 1
     expiryDate: Optional[datetime] = None
 
@@ -18,6 +19,7 @@ class ProductInfo:
             'name': self.name,
             'finishedEditing': self.finishedEditing,
             'isExpired': self.isExpired,
+            'categories': self.categories,
             'imageURL': self.imageURL,
             'quantity': self.quantity,
             'expiryDate': self.expiryDate
