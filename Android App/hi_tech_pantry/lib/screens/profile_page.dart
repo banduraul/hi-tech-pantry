@@ -50,7 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
       switch (message.data['type']) {
         case 'newProduct':
           NotificationServices.showNotification(
-            title: message.data['name'],
+            title: (message.data['name'] as String).isEmpty ? 'Unknown Product' : message.data['name'],
             content: 'New product added',
             channelInfo: NotificationServices.newProductsChannel,
           );
