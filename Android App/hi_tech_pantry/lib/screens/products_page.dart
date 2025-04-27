@@ -228,6 +228,13 @@ class _ProductsPageState extends State<ProductsPage> {
           switch (selectedSortOption) {
             case 0:
               filteredProducts.sort((a, b) {
+                if (a.finishedEditing == false && b.finishedEditing == false) {
+                  return 0;
+                } else if (a.finishedEditing == false) {
+                  return -1;
+                } else if (b.finishedEditing == false) {
+                  return 1;
+                }
                 if (a.expiryDate == null && b.expiryDate == null) {
                   return 0;
                 } else if (a.expiryDate == null) {
@@ -241,6 +248,13 @@ class _ProductsPageState extends State<ProductsPage> {
               break;
             case 1:
               filteredProducts.sort((a, b) {
+                if (a.finishedEditing == false && b.finishedEditing == false) {
+                  return 0;
+                } else if (a.finishedEditing == false) {
+                  return -1;
+                } else if (b.finishedEditing == false) {
+                  return 1;
+                }
                 if (a.expiryDate == null && b.expiryDate == null) {
                   return 0;
                 } else if (a.expiryDate == null) {
@@ -253,16 +267,52 @@ class _ProductsPageState extends State<ProductsPage> {
               });
               break;
             case 2:
-              filteredProducts.sort((a, b) => a.name.compareTo(b.name));
+              filteredProducts.sort((a, b) {
+                if (a.finishedEditing == false && b.finishedEditing == false) {
+                  return 0;
+                } else if (a.finishedEditing == false) {
+                  return -1;
+                } else if (b.finishedEditing == false) {
+                  return 1;
+                }
+                return a.name.compareTo(b.name);
+              });
               break;
             case 3:
-              filteredProducts.sort((a, b) => b.name.compareTo(a.name));
+              filteredProducts.sort((a, b) {
+                if (a.finishedEditing == false && b.finishedEditing == false) {
+                  return 0;
+                } else if (a.finishedEditing == false) {
+                  return -1;
+                } else if (b.finishedEditing == false) {
+                  return 1;
+                }
+                return b.name.compareTo(a.name);
+              });
               break;
             case 4:
-              filteredProducts.sort((a, b) => a.quantity.compareTo(b.quantity));
+              filteredProducts.sort((a, b) {
+                if (a.finishedEditing == false && b.finishedEditing == false) {
+                  return 0;
+                } else if (a.finishedEditing == false) {
+                  return -1;
+                } else if (b.finishedEditing == false) {
+                  return 1;
+                }
+                return a.quantity.compareTo(b.quantity);
+              });
               break;
             case 5:
-              filteredProducts.sort((a, b) => b.quantity.compareTo(a.quantity));
+              filteredProducts.sort((a, b) {
+                if (a.finishedEditing == false && b.finishedEditing == false) {
+                  return 0;
+                } else if (a.finishedEditing == false) {
+                  return -1;
+                } else if (b.finishedEditing == false) {
+                  return 1;
+                }
+                return b.quantity.compareTo(a.quantity);
+              });
               break;
           }
           return Column(
